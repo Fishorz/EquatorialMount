@@ -47,8 +47,7 @@ void loop()
 {
   unsigned long currentTs = millis();
   bool shouldUp = (lastUpTime == 0 || currentTs >= lastDownTime + idleDuration) && state == 1;
-  bool shouldDown = (lastUpTime != 0 && currentTs >= lastUpTime + exposureDuration) && state == 0;
-  Serial.print("Debug1");
+  bool shouldDown = (currentTs >= lastUpTime + exposureDuration) && state == 0;
   if (shouldUp || shouldDown)
   {
     if (shouldUp)
