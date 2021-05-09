@@ -42,22 +42,28 @@ void loop()
 
   if (millis() >= exposureTime + mills_INTERVAL_exposureTimeS)
   {
+    if (state == 0)
+    {
       exposureTime += mills_INTERVAL_exposureTimeS;
       //trigger the shutter up
       print_time(exposureTime);
       Serial.println("trigger the shutter up");
       Serial.println("state" + state);
       trigger_The_Shutter();
+      state = 1;
+    }
   }
 
   if (millis() >= intervalTime + mills_INTERVAL_TimeS)
   {
+    if (state == 1)
       intervalTime += mills_INTERVAL_TimeS;
-      //trigger the shutter down
-      print_time(intervalTime);
-      Serial.println("trigger the shutter down");
-      Serial.println("state" + state);
-      trigger_The_Shutter();
+    //trigger the shutter down
+    print_time(intervalTime);
+    Serial.println("trigger the shutter down");
+    Serial.println("state" + state);
+    trigger_The_Shutter();
+    state = 0;
   }
 }
 
