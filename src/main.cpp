@@ -51,6 +51,14 @@ void loop()
   Serial.print("Debug1");
   if (shouldUp || shouldDown)
   {
+    if (shouldUp)
+    {
+      lastUpTime = currentTs;
+    }
+    if (shouldDown)
+    {
+      lastDownTime = currentTs;
+    }
     Serial.print("Debug2");
     trigger_The_Shutter();
     state = state == 1 ? 0 : 1;
