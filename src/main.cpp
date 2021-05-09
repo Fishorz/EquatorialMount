@@ -48,8 +48,13 @@ void loop()
   unsigned long currentTs = millis();
   bool shouldUp = (lastUpTime == 0 || currentTs >= lastDownTime + idleDuration) && state == 1;
   bool shouldDown = (currentTs >= lastUpTime + exposureDuration) && state == 0;
+
+  delay(1000);
+  Serial.print(currentTs);
+
   if (shouldUp || shouldDown)
   {
+    Serial.print(shouldUp ? "UP" : "DOWN");
     if (shouldUp)
     {
       lastUpTime = currentTs;
