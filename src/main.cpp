@@ -2,9 +2,11 @@
 #define irLED 5
 #define Dir_Pin 6
 #define Step_Pin 7
-unsigned long mills_INTERVAL_exposureTimeS = 2000;
-unsigned long mills_INTERVAL_TimeS = 5000;
-unsigned long exposureTime;
+unsigned long exposureDuration = 2000;
+unsigned long idleDuration = 5000;
+unsigned long lastUpTime = 0;
+unsigned long lastDownTime = 0;
+
 unsigned long intervalTime;
 bool state = 0; //1 = shutter down ; 0 = shutter up
 void print_time(unsigned long time_millis);
@@ -39,33 +41,14 @@ void stepperMotorControl()
 
 void loop()
 {
+  unsigned long currentTs = millis();
+  bool shouldUp = (lastUpTime == 0 || currentTs >= lastDownTime + idleDuration) && state == 1;
+  bool shouldDown = (lastUpTime != 0 && currentTs >= lastUpTime + exposureDuration) && state == 0;
 
-  if (millis() >= exposureTime + mills_INTERVAL_exposureTimeS)
+  if (shouldUp || shouldDown)
   {
-    if (state == 0)
-    {
-      exposureTime += mills_INTERVAL_exposureTimeS;
-      //trigger the shutter up
-      print_time(exposureTime);
-      Serial.println("trigger the shutter up");
-      Serial.println("state" + state);
-      trigger_The_Shutter();
-      state = 1;
-    }
-  }
-
-  if (millis() >= intervalTime + mills_INTERVAL_TimeS)
-  {
-    if (state == 1)
-    {
-      intervalTime += mills_INTERVAL_TimeS;
-      //trigger the shutter down
-      print_time(intervalTime);
-      Serial.println("trigger the shutter down");
-      Serial.println("state" + state);
-      trigger_The_Shutter();
-      state = 0;
-    }
+    trigger_The_Shutter();
+    state = state == 1 ? 0 : 1;
   }
 }
 
