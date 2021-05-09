@@ -57,13 +57,15 @@ void loop()
   if (millis() >= intervalTime + mills_INTERVAL_TimeS)
   {
     if (state == 1)
+    {
       intervalTime += mills_INTERVAL_TimeS;
-    //trigger the shutter down
-    print_time(intervalTime);
-    Serial.println("trigger the shutter down");
-    Serial.println("state" + state);
-    trigger_The_Shutter();
-    state = 0;
+      //trigger the shutter down
+      print_time(intervalTime);
+      Serial.println("trigger the shutter down");
+      Serial.println("state" + state);
+      trigger_The_Shutter();
+      state = 0;
+    }
   }
 }
 
