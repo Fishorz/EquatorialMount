@@ -34,7 +34,11 @@ void trigger_The_Shutter()
     digitalWrite(irLED, LOW);
     delayMicroseconds(11);
   }
+  Serial.println("Shutting");
+  Serial.print("Time=");
+  Serial.println(millis());
 }
+
 void stepperMotorControl()
 {
 }
@@ -44,9 +48,10 @@ void loop()
   unsigned long currentTs = millis();
   bool shouldUp = (lastUpTime == 0 || currentTs >= lastDownTime + idleDuration) && state == 1;
   bool shouldDown = (lastUpTime != 0 && currentTs >= lastUpTime + exposureDuration) && state == 0;
-
+  Serial.print("Debug1");
   if (shouldUp || shouldDown)
   {
+    Serial.print("Debug2");
     trigger_The_Shutter();
     state = state == 1 ? 0 : 1;
   }
