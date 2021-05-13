@@ -1,7 +1,6 @@
 #include <Arduino.h>
-#define irLED 5
-#define Dir_Pin 6
-#define Step_Pin 7
+#include "pin.h"
+
 unsigned long exposureDuration = 2000;
 unsigned long idleDuration = 5000;
 unsigned long lastUpTime = 0;
