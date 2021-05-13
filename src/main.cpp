@@ -9,6 +9,14 @@ int rotateSpeed = 1;
 int maxRotateSpeed = 20;
 int minRotateSpeed = 1;
 
+int counter = 0;
+int aState;
+int aLastState;
+int counterBeark = 0;
+bool wasButtonPress = false;
+
+bool wasTakingPhoto = false;
+
 unsigned long intervalTime;
 bool state = 0; //1 = bottom down ; 0 = bottom up
 void print_time(unsigned long time_millis);
@@ -18,6 +26,10 @@ void setup()
   Serial.begin(9600);
   pinMode(Step_Pin, OUTPUT);
   pinMode(Dir_Pin, OUTPUT);
+  pinMode(outputA, INPUT_PULLUP);
+  pinMode(outputB, INPUT_PULLUP);
+  pinMode(Button, INPUT_PULLUP);
+  aLastState = digitalRead(outputA);
   Serial.println("start");
 }
 
@@ -102,7 +114,47 @@ void Timelapse()
   }
 }
 
+void encoder()
+{
+  aState = digitalRead(outputA); // Reads the "current" state of the outputA
+  // If the previous and the current state of the outputA are different, that means a Pulse has occured
+  if (aState != aLastState)
+  {
+    counterBeark++;
+    // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
+    if (digitalRead(outputB) != aState && counterBeark == 1)
+    {
+      counter++;
+      counterBeark++;
+    }
+    else if (digitalRead(outputB) == aState && counterBeark == 1)
+    {
+      counter--;
+      counterBeark++;
+    }
+
+    // Serial.print("counterBeark=");
+    // Serial.println(counterBeark);
+  }
+  if (counterBeark == 3)
+  {
+    counterBeark = 0;
+    // Serial.print("clean counterBeark");
+    Serial.print("Position: ");
+    Serial.println(counter);
+  }
+  aLastState = aState; // Updates the previous state of the outputA with the current state
+}
+
 void loop()
 {
-  Timelapse();
+  if (wasButtonPress == false)
+  {
+  }
+  if (wasTakingPhoto == true)
+  {
+    Timelapse();
+  }
+
+  encoder();
 }
