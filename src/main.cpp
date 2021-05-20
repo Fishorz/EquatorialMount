@@ -26,25 +26,122 @@ int counterBeark = 0;
 unsigned long intervalTime;
 bool state = 0; //1 = bottom down ; 0 = bottom up
 void print_time(unsigned long time_millis);
-void trigger_The_Shutter();
 
 bool LEDstate = LOW;
 
+int lastMeun;
+int meun = 0;
+bool wasMeunUpdated = false;
+bool isTakingPhoto = false;
 OneButton button(Button, true);
 
-void doubleClickTest()
+void updateMeun()
 {
-  Serial.println("x2");
+  wasMeunUpdated = true;
+  lcd.clear();
+  // Serial.print("lcd.clear()");
+  switch (meun)
+  {
+  case 0:
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("Interval Time");
+    lcd.setCursor(1, 1);
+    lcd.print(idleDuration / 1000);
+    lcd.print("sec");
+    Serial.println("Interval Time");
+    // lastIdleDuration = idleDuration;
+    break;
+  }
+
+  case 1:
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("Exposure Time");
+    lcd.setCursor(1, 1);
+    lcd.print(exposureDuration / 1000);
+    lcd.print("sec");
+    Serial.println("Exposure Time");
+    // lastExposureDuration = exposureDuration;
+    break;
+  }
+
+  case 2:
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("Rotate On/Off");
+    lcd.setCursor(0, 1);
+    if (isRotating == true)
+    {
+      lcd.print("Rotate On");
+    }
+    else
+    {
+      lcd.print("Rotate Stop");
+    }
+    Serial.println("Rotate On/Off");
+    break;
+  }
+
+  case 3:
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("taking Photo");
+    lcd.setCursor(0, 1);
+    lcd.print("photo number");
+    lcd.print(photoNumber);
+    Serial.println("TakingPhoto");
+    break;
+  }
+  }
 }
 
-void attachLongPressStartTest()
+void takePhotocontrol() //long click
 {
   Serial.println("LongPress");
+  lcd.clear();
+  wasMeunUpdated = false;
+  // counter = 0;
+  isTakingPhoto = !isTakingPhoto;
+  if (isTakingPhoto == true)
+  {
+    lastMeun = meun;
+    Serial.println("TakingPhoto");
+    meun = 3;
+  }
+  else
+  {
+    meun = lastMeun;
+    photoNumber = 0;
+    Serial.println("StopTakingPhoto");
+  }
+  Serial.println("meun=");
+  Serial.println(meun);
 }
-void attachClickTest()
+
+void nextMeun() //one click
 {
-  Serial.println("Click");
+  Serial.println("Short Press");
+  wasMeunUpdated = false;
+  // counter = 0;
+  if (isTakingPhoto == false)
+  {
+    Serial.println("Click");
+    lcd.clear();
+    meun++;
+    if (meun > 2)
+    {
+      meun = 0;
+    }
+    Serial.println("meun=");
+    Serial.println(meun);
+  }
+  else
+  {
+    return;
+  }
 }
+
 void trigger_The_Shutter()
 {
   for (int i = 0; i < 16; i++)
@@ -137,6 +234,7 @@ void encoder()
   // If the previous and the current state of the outputA are different, that means a Pulse has occured
   if (aState != aLastState)
   {
+    wasMeunUpdated = false;
     counterBeark++;
     // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
     if (digitalRead(outputB) != aState && counterBeark == 1)
