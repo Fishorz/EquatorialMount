@@ -151,11 +151,44 @@ void encoder()
   if (counterBeark == 3)
   {
     counterBeark = 0;
+    wasMeunUpdated = false;
     // Serial.print("clean counterBeark");
-    Serial.print("Position: ");
+    Serial.print("counter: ");
     Serial.println(counter);
   }
   aLastState = aState; // Updates the previous state of the outputA with the current state
+  if (counter <= 0)
+  {
+    counter = 0;
+  }
+  else if (counter >= 200)
+  {
+    counter = 200;
+  }
+}
+
+void timeChange()
+{
+  switch (meun)
+  {
+  case 0:
+    encoder();
+    idleDuration = counter * 1000;
+    break;
+  case 1:
+    encoder();
+    exposureDuration = counter * 1000;
+    break;
+  case 2:
+    int lastCounter = 0;
+    lastCounter = counter;
+    encoder();
+    if (lastCounter != counter)
+    {
+      isRotating = !isRotating;
+    }
+    break;
+  }
 }
 
 void setup()
