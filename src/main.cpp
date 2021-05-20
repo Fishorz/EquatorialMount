@@ -62,9 +62,10 @@ void trigger_The_Shutter()
     digitalWrite(irLED, LOW);
     delayMicroseconds(11);
   }
-  Serial.println("Shutting");
-  Serial.print("Time=");
-  Serial.println(millis());
+  // Serial.println("Shutting");
+  // Serial.print("Time=");
+  // Serial.println(millis());
+  // Serial.println("TakingPhoto");
 }
 
 void stepperMotorControl()
