@@ -7,7 +7,7 @@
 
 // encoder
 #define outputA 3
-#define outputB 8
+#define outputB 2
 #define Button 5
 
 // LED
