@@ -181,6 +181,11 @@ void loop()
 {
   // Timelapse();
   button.tick();
-  encoder();
+  if (wasMeunUpdated == false)
+  {
+    updateMeun();
+  }
+  timeChange();
+  Timelapse();
   // Serial.println(digitalRead(Button));
 }
