@@ -1,5 +1,8 @@
 #include <Arduino.h>
+#include <OneButton.h>
+#include <LiquidCrystal_I2C.h>
 #include "pin.h"
+#include "LCD_setup.h"
 
 unsigned long exposureDuration = 2000;
 unsigned long idleDuration = 5000;
@@ -13,26 +16,29 @@ int counter = 0;
 int aState;
 int aLastState;
 int counterBeark = 0;
-bool wasButtonPress = false;
-
-bool wasTakingPhoto = false;
 
 unsigned long intervalTime;
 bool state = 0; //1 = bottom down ; 0 = bottom up
 void print_time(unsigned long time_millis);
 void trigger_The_Shutter();
-void setup()
+
+bool LEDstate = LOW;
+
+OneButton button(Button, true);
+
+void doubleClickTest()
 {
-  Serial.begin(9600);
-  pinMode(Step_Pin, OUTPUT);
-  pinMode(Dir_Pin, OUTPUT);
-  pinMode(outputA, INPUT_PULLUP);
-  pinMode(outputB, INPUT_PULLUP);
-  pinMode(Button, INPUT_PULLUP);
-  aLastState = digitalRead(outputA);
-  Serial.println("start");
+  Serial.println("x2");
 }
 
+void attachLongPressStartTest()
+{
+  Serial.println("LongPress");
+}
+void attachClickTest()
+{
+  Serial.println("Click");
+}
 void trigger_The_Shutter()
 {
   for (int i = 0; i < 16; i++)
@@ -146,15 +152,29 @@ void encoder()
   aLastState = aState; // Updates the previous state of the outputA with the current state
 }
 
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(Step_Pin, OUTPUT);
+  pinMode(Dir_Pin, OUTPUT);
+  pinMode(outputA, INPUT_PULLUP);
+  pinMode(outputB, INPUT_PULLUP);
+  pinMode(Button, INPUT_PULLUP);
+
+  pinMode(PIN_LED, OUTPUT);
+  aLastState = digitalRead(outputA);
+  Serial.println("start");
+  button.attachDoubleClick(doubleClickTest);
+  button.attachLongPressStart(attachLongPressStartTest);
+  button.attachClick(attachClickTest);
+
+  _LcdSetup();
+}
+
 void loop()
 {
-  if (wasButtonPress == false)
-  {
-  }
-  if (wasTakingPhoto == true)
-  {
-    Timelapse();
-  }
-
+  // Timelapse();
+  button.tick();
   encoder();
+  // Serial.println(digitalRead(Button));
 }
