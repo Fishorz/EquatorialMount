@@ -170,9 +170,8 @@ void setup()
   pinMode(PIN_LED, OUTPUT);
   aLastState = digitalRead(outputA);
   Serial.println("start");
-  button.attachDoubleClick(doubleClickTest);
-  button.attachLongPressStart(attachLongPressStartTest);
-  button.attachClick(attachClickTest);
+  button.attachLongPressStart(takePhotocontrol);
+  button.attachClick(nextMeun);
 
   _LcdSetup();
 }
