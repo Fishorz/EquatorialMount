@@ -107,22 +107,26 @@ void Timelapse()
 
   delay(10);
   // Serial.println(currentTs);
-
-  if (shouldUp || shouldDown)
+  if (isTakingPhoto == true)
   {
-    Serial.println(shouldUp ? "UP" : "DOWN");
-    if (shouldUp)
+    if (shouldUp || shouldDown)
     {
-      lastUpTime = currentTs;
+      // Serial.println(shouldUp ? "UP" : "DOWN");
+      if (shouldUp)
+      {
+        lastUpTime = currentTs;
+      }
+      if (shouldDown)
+      {
+        lastDownTime = currentTs;
+        photoNumber++;
+        wasMeunUpdated = false;
+      }
+      // Serial.print("Debug2");
+      trigger_The_Shutter();
+      state = state == 1 ? 0 : 1;
+      // Serial.println("");
     }
-    if (shouldDown)
-    {
-      lastDownTime = currentTs;
-    }
-    // Serial.print("Debug2");
-    trigger_The_Shutter();
-    state = state == 1 ? 0 : 1;
-    Serial.println("");
   }
 }
 
