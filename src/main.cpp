@@ -4,13 +4,19 @@
 #include "pin.h"
 #include "LCD_setup.h"
 
-unsigned long exposureDuration = 2000;
-unsigned long idleDuration = 5000;
+unsigned long lastExposureDuration = 0;
+unsigned long exposureDuration = 1000;
+unsigned long lastIdleDuration = 0;
+unsigned long idleDuration = 500;
 unsigned long lastUpTime = 0;
 unsigned long lastDownTime = 0;
 int rotateSpeed = 1;
 int maxRotateSpeed = 20;
 int minRotateSpeed = 1;
+
+int photoNumber = 0;
+
+bool isRotating = false;
 
 int counter = 0;
 int aState;
