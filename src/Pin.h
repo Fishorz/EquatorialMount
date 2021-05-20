@@ -7,5 +7,16 @@
 
 // encoder
 #define outputA 3
-#define outputB 4
+#define outputB 8
 #define Button 5
+
+// LED
+#define PIN_LED 4
+
+/*
+LCD I2C Pin
+A4 SDA
+A5 SCL
+VCC
+GND
+*/
