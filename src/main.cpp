@@ -19,11 +19,6 @@ int photoNumber = 0;
 
 bool isRotating = false;
 
-int counter = 0;
-int aState;
-int aLastState;
-int counterBeark = 0;
-
 unsigned long intervalTime;
 bool state = 0; //1 = bottom down ; 0 = bottom up
 void print_time(unsigned long time_millis);
