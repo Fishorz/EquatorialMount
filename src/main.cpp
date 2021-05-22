@@ -71,12 +71,14 @@ void updateMeun()
     if (isRotating == true)
     {
       lcd.print("Rotate On");
+      Serial.println("Rotate On");
     }
     else
     {
       lcd.print("Rotate Stop");
+      Serial.println("Rotate Stop");
     }
-    Serial.println("Rotate On/Off");
+
     break;
   }
 
@@ -119,7 +121,7 @@ void takePhotocontrol() //long click
     photoNumber = 0;
     Serial.println("StopTakingPhoto");
   }
-  Serial.println("meun=");
+  Serial.print("meun=");
   Serial.println(meun);
 }
 
@@ -130,14 +132,14 @@ void nextMeun() //one click
   // counter = 0;
   if (isTakingPhoto == false)
   {
-    Serial.println("Click");
+    // Serial.println("Click");
     lcd.clear();
     meun++;
     if (meun > 2)
     {
       meun = 0;
     }
-    Serial.println("meun=");
+    Serial.print("meun=");
     Serial.println(meun);
   }
   else
