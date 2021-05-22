@@ -47,7 +47,7 @@ void updateMeun()
     lcd.print(idleDuration);
     lcd.print("sec");
     Serial.println("Interval Time");
-    // lastIdleDuration = idleDuration;
+    lastIdleDuration = idleDuration;
     break;
   }
 
@@ -59,7 +59,7 @@ void updateMeun()
     lcd.print(exposureDuration);
     lcd.print("sec");
     Serial.println("Exposure Time");
-    // lastExposureDuration = exposureDuration;
+    lastExposureDuration = exposureDuration;
     break;
   }
 
@@ -141,6 +141,21 @@ void nextMeun() //one click
     }
     Serial.print("meun=");
     Serial.println(meun);
+
+    switch (meun)
+    {
+    case 0:
+      myEnc.write(lastIdleDuration);
+      break;
+    case 1:
+      myEnc.write(lastExposureDuration);
+      break;
+    default:
+      break;
+    }
+
+    {
+    }
   }
   else
   {
@@ -211,40 +226,38 @@ void Timelapse()
 
   delay(10);
   // Serial.println(currentTs);
-  if (isTakingPhoto == true)
+  if (shouldUp || shouldDown)
   {
-    if (shouldUp || shouldDown)
+    // Serial.println(shouldUp ? "UP" : "DOWN");
+    if (shouldUp)
     {
-      // Serial.println(shouldUp ? "UP" : "DOWN");
-      if (shouldUp)
-      {
-        lastUpTime = currentTs;
-      }
-      if (shouldDown)
-      {
-        lastDownTime = currentTs;
-        photoNumber++;
-        wasMeunUpdated = false;
-      }
-      // Serial.print("Debug2");
-      trigger_The_Shutter();
-      state = state == 1 ? 0 : 1;
-      // Serial.println("");
+      lastUpTime = currentTs;
+      photoNumber++;
+      wasMeunUpdated = false;
     }
+    if (shouldDown)
+    {
+      lastDownTime = currentTs;
+      wasMeunUpdated = false;
+    }
+    // Serial.print("Debug2");
+    trigger_The_Shutter();
+    state = state == 1 ? 0 : 1;
+    // Serial.println("");
   }
 }
 
 void limTime(long num)
 {
-  if (num > 200)
+  if (num > Max_Time_Limit)
   {
-    num = 200;
+    num = Max_Time_Limit;
     myEnc.write(num);
     // Serial.print("Max Num");
   }
-  if (num < 0)
+  if (num < Min_Time_Limit)
   {
-    num = 0;
+    num = Min_Time_Limit;
     myEnc.write(num);
     // Serial.print("Min Num");
   }
@@ -324,6 +337,8 @@ void setup()
   button.attachLongPressStart(takePhotocontrol);
   button.attachClick(nextMeun);
 
+  myEnc.write(10);
+
   lcd.begin(16, 2);
   lcd.backlight();
   // _LcdSetup();
@@ -336,7 +351,15 @@ void loop()
   {
     updateMeun();
   }
-  timeChange();
-  Timelapse();
+
+  if (isTakingPhoto == true)
+  {
+    Timelapse();
+  }
+  else
+  {
+    timeChange();
+  }
+
   // Serial.println(digitalRead(Button));
 }
