@@ -288,17 +288,25 @@ void timeChange()
       Serial.print("exposureDuration=");
       Serial.println(exposureDuration);
     }
+    break;
   }
-  // exposureDuration = myEnc.read();
-  break;
+
   case 2:
-    int rotatingState = 0;
+  {
+    long rotatingState;
+    long oldRotatingState;
+    oldRotatingState = rotatingState;
     rotatingState = myEnc.read();
-    if (rotatingState != myEnc.read())
+    if (rotatingState != oldRotatingState)
     {
       isRotating = !isRotating;
+      myEnc.write(oldRotatingState);
       wasMeunUpdated = false;
     }
+    break;
+  }
+
+  default:
     break;
   }
 }
