@@ -331,7 +331,6 @@ void setup()
 
 void loop()
 {
-  // Timelapse();
   button.tick();
   if (wasMeunUpdated == false)
   {
