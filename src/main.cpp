@@ -2,13 +2,13 @@
 #include <OneButton.h>
 #include <LiquidCrystal_I2C.h>
 #include <Encoder.h>
-#include "pin.h"
+#include "ConfigFile.h"
 #include "LCD_setup.h"
 
 unsigned long lastExposureDuration = 0;
 unsigned long exposureDuration = 1; //second
 unsigned long lastIdleDuration = 0;
-unsigned long idleDuration = 3; //second
+unsigned long idleDuration = 1; //second
 unsigned long lastUpTime = 0;
 unsigned long lastDownTime = 0;
 int rotateSpeed = 1;
