@@ -316,12 +316,10 @@ void setup()
   Serial.begin(9600);
   pinMode(Step_Pin, OUTPUT);
   pinMode(Dir_Pin, OUTPUT);
-  pinMode(outputA, INPUT_PULLUP);
-  pinMode(outputB, INPUT_PULLUP);
   pinMode(Button, INPUT_PULLUP);
 
-  pinMode(PIN_LED, OUTPUT);
-  aLastState = digitalRead(outputA);
+  // pinMode(PIN_LED, OUTPUT);
+
   Serial.println("start");
   button.attachLongPressStart(takePhotocontrol);
   button.attachClick(nextMeun);
