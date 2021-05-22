@@ -85,8 +85,15 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("taking Photo");
     lcd.setCursor(0, 1);
-    lcd.print("photo number");
+    lcd.print("I");
+    lcd.print(idleDuration);
+    lcd.setCursor(5, 1);
+    lcd.print("E");
+    lcd.print(exposureDuration);
+    lcd.setCursor(10, 1);
+    lcd.print("N=");
     lcd.print(photoNumber);
+
     Serial.println("TakingPhoto");
     break;
   }
