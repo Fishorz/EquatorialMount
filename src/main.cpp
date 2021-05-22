@@ -1,13 +1,14 @@
 #include <Arduino.h>
 #include <OneButton.h>
 #include <LiquidCrystal_I2C.h>
+#include <Encoder.h>
 #include "pin.h"
 #include "LCD_setup.h"
 
 unsigned long lastExposureDuration = 0;
-unsigned long exposureDuration = 1000;
+unsigned long exposureDuration = 1; //second
 unsigned long lastIdleDuration = 0;
-unsigned long idleDuration = 500;
+unsigned long idleDuration = 3; //second
 unsigned long lastUpTime = 0;
 unsigned long lastDownTime = 0;
 int rotateSpeed = 1;
@@ -31,9 +32,10 @@ bool LEDstate = LOW;
 
 int lastMeun;
 int meun = 0;
-bool wasMeunUpdated = false;
+bool wasMeunUpdated = false; //Is updated the meun yet?
 bool isTakingPhoto = false;
 OneButton button(Button, true);
+Encoder myEnc(outputA, outputB);
 
 void updateMeun()
 {
@@ -47,7 +49,7 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("Interval Time");
     lcd.setCursor(1, 1);
-    lcd.print(idleDuration / 1000);
+    lcd.print(idleDuration);
     lcd.print("sec");
     Serial.println("Interval Time");
     // lastIdleDuration = idleDuration;
@@ -59,7 +61,7 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("Exposure Time");
     lcd.setCursor(1, 1);
-    lcd.print(exposureDuration / 1000);
+    lcd.print(exposureDuration);
     lcd.print("sec");
     Serial.println("Exposure Time");
     // lastExposureDuration = exposureDuration;
@@ -200,8 +202,8 @@ void Timelapse()
 {
   unsigned long currentTs = millis();
 
-  bool shouldDown = (currentTs >= lastUpTime + idleDuration) && state == 0;
-  bool shouldUp = (currentTs >= lastDownTime + exposureDuration) && state == 1;
+  bool shouldDown = (currentTs >= lastUpTime + (idleDuration * 1000)) && state == 0;
+  bool shouldUp = (currentTs >= lastDownTime + (exposureDuration * 1000)) && state == 1;
 
   delay(10);
   // Serial.println(currentTs);
@@ -228,67 +230,97 @@ void Timelapse()
   }
 }
 
-void encoder()
-{
-  aState = digitalRead(outputA); // Reads the "current" state of the outputA
-  // If the previous and the current state of the outputA are different, that means a Pulse has occured
-  if (aState != aLastState)
-  {
-    wasMeunUpdated = false;
-    counterBeark++;
-    // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
-    if (digitalRead(outputB) != aState && counterBeark == 1)
-    {
-      counter++;
-      counterBeark++;
-    }
-    else if (digitalRead(outputB) == aState && counterBeark == 1)
-    {
-      counter--;
-      counterBeark++;
-    }
+// void encoder()
+// {
+//   aState = digitalRead(outputA); // Reads the "current" state of the outputA
+//   // If the previous and the current state of the outputA are different, that means a Pulse has occured
+//   if (aState != aLastState)
+//   {
+//     wasMeunUpdated = false;
+//     counterBeark++;
+//     // If the outputB state is different to the outputA state, that means the encoder is rotating clockwise
+//     if (digitalRead(outputB) != aState && counterBeark == 1)
+//     {
+//       counter++;
+//       counterBeark++;
+//     }
+//     else if (digitalRead(outputB) == aState && counterBeark == 1)
+//     {
+//       counter--;
+//       counterBeark++;
+//     }
 
-    // Serial.print("counterBeark=");
-    // Serial.println(counterBeark);
-  }
-  if (counterBeark == 3)
-  {
-    counterBeark = 0;
-    wasMeunUpdated = false;
-    // Serial.print("clean counterBeark");
-    Serial.print("counter: ");
-    Serial.println(counter);
-  }
-  aLastState = aState; // Updates the previous state of the outputA with the current state
-  if (counter <= 0)
-  {
-    counter = 0;
-  }
-  else if (counter >= 200)
-  {
-    counter = 200;
-  }
-}
+//     // Serial.print("counterBeark=");
+//     // Serial.println(counterBeark);
+//   }
+//   if (counterBeark == 3)
+//   {
+//     counterBeark = 0;
+//     wasMeunUpdated = false;
+//     // Serial.print("clean counterBeark");
+//     Serial.print("counter: ");
+//     Serial.println(counter);
+//   }
+//   aLastState = aState; // Updates the previous state of the outputA with the current state
+//   if (counter <= 0)
+//   {
+//     counter = 0;
+//   }
+//   else if (counter >= 200)
+//   {
+//     counter = 200;
+//   }
+// }
 
 void timeChange()
 {
   switch (meun)
   {
   case 0:
-    encoder();
-    idleDuration = counter * 1000;
+    // encoder();
+    {
+      unsigned long OldIdleDuration = 0;
+      unsigned long encoderNum = myEnc.read();
+      if (encoderNum > 200)
+      {
+        encoderNum = 200;
+      }
+      OldIdleDuration = idleDuration;
+      idleDuration = encoderNum;
+      if (idleDuration != OldIdleDuration)
+      {
+        wasMeunUpdated = false;
+        Serial.print("idleDuration=");
+        Serial.println(idleDuration);
+      }
+    }
     break;
   case 1:
-    encoder();
-    exposureDuration = counter * 1000;
-    break;
+  {
+    unsigned long OldExposureDuration = 0;
+    unsigned long encoderNum = myEnc.read();
+    if (encoderNum > 200)
+    {
+      encoderNum = 200;
+    }
+    OldExposureDuration = idleDuration;
+    exposureDuration = encoderNum;
+    if (exposureDuration != OldExposureDuration)
+    {
+      wasMeunUpdated = false;
+      Serial.print("exposureDuration=");
+      Serial.println(exposureDuration);
+    }
+  }
+  // exposureDuration = myEnc.read();
+  break;
   case 2:
-    int lastCounter = 0;
-    lastCounter = counter;
-    encoder();
-    if (lastCounter != counter)
+    int rotatingState = 0;
+    rotatingState = myEnc.read();
+    if (rotatingState != myEnc.read())
     {
       isRotating = !isRotating;
+      wasMeunUpdated = false;
     }
     break;
   }
@@ -309,7 +341,9 @@ void setup()
   button.attachLongPressStart(takePhotocontrol);
   button.attachClick(nextMeun);
 
-  _LcdSetup();
+  lcd.begin(16, 2);
+  lcd.backlight();
+  // _LcdSetup();
 }
 
 void loop()
