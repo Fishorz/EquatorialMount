@@ -4,6 +4,10 @@
 #include <Encoder.h>
 #include "ConfigFile.h"
 #include "LCD_setup.h"
+#include <TMCStepper.h>
+
+unsigned long previousTime = 0;
+unsigned long stepperDelayTime = 25000; //microseconds
 
 unsigned long lastExposureDuration = 0;
 unsigned long exposureDuration = 1; //second
@@ -46,7 +50,7 @@ void updateMeun()
     lcd.setCursor(1, 1);
     lcd.print(idleDuration);
     lcd.print("sec");
-    Serial.println("Interval Time");
+    // Serial.println("Interval Time");
     lastIdleDuration = idleDuration;
     break;
   }
@@ -58,7 +62,7 @@ void updateMeun()
     lcd.setCursor(1, 1);
     lcd.print(exposureDuration);
     lcd.print("sec");
-    Serial.println("Exposure Time");
+    // Serial.println("Exposure Time");
     lastExposureDuration = exposureDuration;
     break;
   }
@@ -71,12 +75,12 @@ void updateMeun()
     if (isRotating == true)
     {
       lcd.print("Rotate On");
-      Serial.println("Rotate On");
+      // Serial.println("Rotate On");
     }
     else
     {
       lcd.print("Rotate Stop");
-      Serial.println("Rotate Stop");
+      // Serial.println("Rotate Stop");
     }
 
     break;
@@ -96,7 +100,7 @@ void updateMeun()
     lcd.print("N=");
     lcd.print(photoNumber);
 
-    Serial.println("TakingPhoto");
+    // Serial.println("TakingPhoto");
     break;
   }
   }
@@ -104,7 +108,7 @@ void updateMeun()
 
 void takePhotocontrol() //long click
 {
-  Serial.println("LongPress");
+  // Serial.println("LongPress");
   lcd.clear();
   wasMeunUpdated = false;
   // counter = 0;
@@ -112,22 +116,22 @@ void takePhotocontrol() //long click
   if (isTakingPhoto == true)
   {
     lastMeun = meun;
-    Serial.println("TakingPhoto");
+    // Serial.println("TakingPhoto");
     meun = 3;
   }
   else
   {
     meun = lastMeun;
     photoNumber = 0;
-    Serial.println("StopTakingPhoto");
+    // Serial.println("StopTakingPhoto");
   }
-  Serial.print("meun=");
-  Serial.println(meun);
+  // Serial.print("meun=");
+  // Serial.println(meun);
 }
 
 void nextMeun() //one click
 {
-  Serial.println("Short Press");
+  // Serial.println("Short Press");
   wasMeunUpdated = false;
   // counter = 0;
   if (isTakingPhoto == false)
@@ -139,8 +143,8 @@ void nextMeun() //one click
     {
       meun = 0;
     }
-    Serial.print("meun=");
-    Serial.println(meun);
+    // Serial.print("meun=");
+    // // Serial.println(meun);
 
     switch (meun)
     {
@@ -187,27 +191,19 @@ void trigger_The_Shutter()
 }
 
 void stepperMotorControl()
-/* -----------------------
-1 rev = 360 degrees
-Use 1/N steps resolution
-1 full step = 1.8 degrees
-1 step = 1.8/N degrees
-For gear ratio 1:60
-1 step(pulse) = (1/N)/60 degrees = 1/(60N) degrees
-
-24hr 360degrees ;
-1hr 15 degrees;
-1mins = 0.25 degrees;
-1s = 0.25/60 degrees;
-1/1000s = 0.25/6000 degrees;
-1/1000s = (0.25/6000)/( 1/(60N) ) steps = 0.64 steps
-1.5625 (1/1000)s = 1 steps
-*/
 {
-  digitalWrite(Step_Pin, HIGH);
-  delayMicroseconds(10); //control the speed
-  digitalWrite(Step_Pin, LOW);
-  delayMicroseconds(10);
+  unsigned long currentTime = micros();
+  if (currentTime - previousTime >= stepperDelayTime)
+  {
+    digitalWrite(Step_Pin, HIGH);
+    previousTime = currentTime;
+  }
+  //delay stepperDelayTime
+  if (currentTime - (previousTime + stepperDelayTime) >= stepperDelayTime)
+  {
+    digitalWrite(Step_Pin, LOW);
+  }
+  //delay stepperDelayTime
 }
 
 void print_time(unsigned long time_millis)
@@ -280,8 +276,8 @@ void timeChange()
     if (idleDuration != OldIdleDuration)
     {
       wasMeunUpdated = false;
-      Serial.print("idleDuration=");
-      Serial.println(idleDuration);
+      // Serial.print("idleDuration=");
+      // Serial.println(idleDuration);
     }
     break;
   }
@@ -298,8 +294,8 @@ void timeChange()
     if (exposureDuration != OldExposureDuration)
     {
       wasMeunUpdated = false;
-      Serial.print("exposureDuration=");
-      Serial.println(exposureDuration);
+      // Serial.print("exposureDuration=");
+      // Serial.println(exposureDuration);
     }
     break;
   }
@@ -360,6 +356,9 @@ void loop()
   {
     timeChange();
   }
-
+  if (isRotating == true)
+  {
+    stepperMotorControl();
+  }
   // Serial.println(digitalRead(Button));
 }
