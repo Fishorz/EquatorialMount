@@ -1,5 +1,4 @@
-
-// int rotateSpeed = 1;
+/*// int rotateSpeed = 1;
 // int maxRotateSpeed = 20;
 // int minRotateSpeed = 1;
 
@@ -19,10 +18,18 @@
 // 1/1000s = 0.25/6000 degrees;
 // 1/1000s = (0.25/6000)/( 1/(60N) ) steps = 0.64 steps
 // 1.5625 (1/1000)s = 1 steps
-// */
-// {
-//     digitalWrite(Step_Pin, HIGH);
-//     delayMicroseconds(10); //control the speed
-//     digitalWrite(Step_Pin, LOW);
-//     delayMicroseconds(10);
-// }
+
+For N = 16
+960 Step = 1 degrees
+1/1000s = 0.04 step
+1 s = 40 steps
+1/40 s = 1 step
+
+
+
+    digitalWrite(Step_Pin, HIGH);
+    delayMicroseconds(25000); //control the speed
+    digitalWrite(Step_Pin, LOW);
+    delayMicroseconds(10);
+}
+*/
