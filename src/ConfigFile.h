@@ -1,17 +1,17 @@
 #pragma once
-#define irLED 5
+#define irLED 8
 
 // Stepper Motor Pin Define
 #define Dir_Pin 6
-#define Step_Pin 7
+#define Step_Pin 5
 
 // Encoder Pin Define
 #define outputA 3
 #define outputB 2
-#define Button 5
+#define Button 7
 
 // LED
-#define PIN_LED 4
+// #define PIN_LED 4
 
 //Limit the Exponsure time and Interval Time
 #define Max_Time_Limit 200
