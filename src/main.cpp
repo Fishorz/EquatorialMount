@@ -9,6 +9,14 @@
 unsigned long previousTime = 0;
 unsigned long stepperDelayTime = 25000; //microseconds
 
+enum Menu
+{
+  intervalSetup = 0,
+  exposureDurationSetup,
+  rotateEnable,
+  takePhoto,
+};
+
 unsigned long lastExposureDuration = 0;
 unsigned long exposureDuration = 1; //second
 unsigned long lastIdleDuration = 0;
@@ -29,8 +37,8 @@ void print_time(unsigned long time_millis);
 
 bool LEDstate = LOW;
 
-int lastMeun;
-int meun = 0;
+int lastMeun = Menu::intervalSetup;
+int meun = Menu::intervalSetup;
 bool wasMeunUpdated = false; //Is updated the meun yet?
 bool isTakingPhoto = false;
 OneButton button(Button, true);
@@ -43,7 +51,7 @@ void updateMeun()
   // Serial.print("lcd.clear()");
   switch (meun)
   {
-  case 0:
+  case Menu::intervalSetup:
   {
     lcd.setCursor(0, 0);
     lcd.print("Interval Time");
@@ -55,7 +63,7 @@ void updateMeun()
     break;
   }
 
-  case 1:
+  case Menu::exposureDurationSetup:
   {
     lcd.setCursor(0, 0);
     lcd.print("Exposure Time");
@@ -67,7 +75,7 @@ void updateMeun()
     break;
   }
 
-  case 2:
+  case Menu::rotateEnable:
   {
     lcd.setCursor(0, 0);
     lcd.print("Rotate On/Off");
@@ -86,7 +94,7 @@ void updateMeun()
     break;
   }
 
-  case 3:
+  case Menu::takePhoto:
   {
     lcd.setCursor(0, 0);
     lcd.print("taking Photo");
@@ -117,7 +125,7 @@ void takePhotocontrol() //long click
   {
     lastMeun = meun;
     // Serial.println("TakingPhoto");
-    meun = 3;
+    meun = Menu::takePhoto;
   }
   else
   {
@@ -141,7 +149,7 @@ void nextMeun() //one click
     meun++;
     if (meun > 2)
     {
-      meun = 0;
+      meun = Menu::intervalSetup;
     }
     // Serial.print("meun=");
     // // Serial.println(meun);
@@ -167,7 +175,7 @@ void nextMeun() //one click
   }
 }
 
-void trigger_The_Shutter()
+void generateIrLEDSignal()
 {
   for (int i = 0; i < 16; i++)
   {
@@ -176,14 +184,13 @@ void trigger_The_Shutter()
     digitalWrite(irLED, LOW);
     delayMicroseconds(11);
   }
+}
+
+void trigger_The_Shutter()
+{
+  generateIrLEDSignal();
   delayMicroseconds(7330);
-  for (int i = 0; i < 16; i++)
-  {
-    digitalWrite(irLED, HIGH);
-    delayMicroseconds(11);
-    digitalWrite(irLED, LOW);
-    delayMicroseconds(11);
-  }
+  generateIrLEDSignal();
   // Serial.println("Shutting");
   // Serial.print("Time=");
   // Serial.println(millis());
@@ -264,7 +271,7 @@ void timeChange()
 {
   switch (meun)
   {
-  case 0:
+  case Menu::intervalSetup:
   {
     unsigned long OldIdleDuration = 0;
     long encoderNum = myEnc.read();
@@ -282,7 +289,7 @@ void timeChange()
     break;
   }
 
-  case 1:
+  case Menu::exposureDurationSetup:
   {
     unsigned long OldExposureDuration = 0;
     long encoderNum = myEnc.read();
@@ -300,7 +307,7 @@ void timeChange()
     break;
   }
 
-  case 2:
+  case Menu::rotateEnable:
   {
     long rotatingState;
     long oldRotatingState;
@@ -343,12 +350,12 @@ void setup()
 void loop()
 {
   button.tick();
-  if (wasMeunUpdated == false)
+  if (!wasMeunUpdated)
   {
     updateMeun();
   }
 
-  if (isTakingPhoto == true)
+  if (isTakingPhoto)
   {
     Timelapse();
   }
