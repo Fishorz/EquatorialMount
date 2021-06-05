@@ -1,4 +1,5 @@
 #pragma once
+//IR Pin
 #define irLED 8
 
 // Stepper Motor Pin Define
@@ -17,10 +18,16 @@
 #define Max_Time_Limit 200
 #define Min_Time_Limit 0
 
-/*
-LCD I2C Pin
-A4 SDA
-A5 SCL
-VCC
-GND
-*/
+//TMC2209 Pin Setup
+#define STALL_VALUE      50 // [0... 255]
+#define TOFF_VALUE        4 // [1... 15]
+
+#define EN_PIN            6 // Enable pin
+#define SW_RX             2 // SoftwareSerial receive pin
+#define SW_TX             3 // SoftwareSerial transmit pin
+//#define SERIAL_PORT Serial1 // HardwareSerial port
+#define DRIVER_ADDRESS 0b00 // TMC2209 Driver address according to MS1 and MS2
+#define R_SENSE 0.11f // Match to your driver
+#define RMS             400 //rms_current
+#define MICROSTEPS      256 //MICROSTEPS 1-256
+int32_t speed = 5000;
