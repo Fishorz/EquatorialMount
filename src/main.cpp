@@ -5,6 +5,7 @@
 #include "ConfigFile.h"
 #include "LCD_setup.h"
 #include <TMCStepper.h>
+#include "StepperMotor.h"
 
 unsigned long previousTime = 0;
 unsigned long stepperDelayTime = 25000; //microseconds
@@ -335,8 +336,8 @@ void setup()
   pinMode(Button, INPUT_PULLUP);
 
   // pinMode(PIN_LED, OUTPUT);
+  TMCstepperSetup();
 
-  Serial.println("start");
   button.attachLongPressStart(takePhotocontrol);
   button.attachClick(nextMeun);
 
@@ -344,6 +345,7 @@ void setup()
 
   lcd.begin(16, 2);
   lcd.backlight();
+  Serial.println("start");
   // _LcdSetup();
 }
 

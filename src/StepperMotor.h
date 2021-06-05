@@ -1,35 +1,45 @@
-/*// int rotateSpeed = 1;
-// int maxRotateSpeed = 20;
-// int minRotateSpeed = 1;
+#pragma once
+#include <TMCStepper.h>
+#include "ConfigFile.h"
 
-// void stepperMotorControl()
-// /* -----------------------
-// 1 rev = 360 degrees
-// Use 1/N steps resolution
-// 1 full step = 1.8 degrees
-// 1 step = 1.8/N degrees
-// For gear ratio 1:60
-// 1 step(pulse) = (1/N)/60 degrees = 1/(60N) degrees
+TMC2209Stepper driver(SW_RX, SW_TX, R_SENSE, DRIVER_ADDRESS);
+void TMCstepperSetup()
+{
+    driver.beginSerial(115200);
+    driver.begin();
+    driver.VACTUAL(speed);
+    driver.blank_time(24);
+    driver.rms_current(RMS); // mA
+    driver.microsteps(MICROSTEPS);
+    driver.semin(5);
+    driver.semax(2);
+    driver.sedn(0b01);
+    driver.SGTHRS(STALL_VALUE);
+    uint8_t result = driver.test_connection();
+    if (result)
+    {
+        Serial.println("failed!");
+        Serial.print("Likely cause: ");
 
-// 24hr 360degrees ;
-// 1hr 15 degrees;
-// 1mins = 0.25 degrees;
-// 1s = 0.25/60 degrees;
-// 1/1000s = 0.25/6000 degrees;
-// 1/1000s = (0.25/6000)/( 1/(60N) ) steps = 0.64 steps
-// 1.5625 (1/1000)s = 1 steps
+        switch (result)
+        {
+        case 1:
+            Serial.println("loose connection");
+            break;
+        case 2:
+            Serial.println("no power");
+            break;
+        }
 
-For N = 16
-960 Step = 1 degrees
-1/1000s = 0.04 step
-1 s = 40 steps
-1/40 s = 1 step
+        Serial.println("Fix the problem and reset board.");
 
+        // We need this delay or messages above don't get fully printed out
+        delay(100);
+        abort();
+    }
 
+    Serial.println("OK");
 
-    digitalWrite(Step_Pin, HIGH);
-    delayMicroseconds(25000); //control the speed
-    digitalWrite(Step_Pin, LOW);
-    delayMicroseconds(10);
+    pinMode(EN_PIN, OUTPUT);
+    digitalWrite(EN_PIN, LOW);
 }
-*/
