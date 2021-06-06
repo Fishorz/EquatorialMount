@@ -265,7 +265,7 @@ void limTime(long num)
     myEnc.write(num);
     // Serial.print("Min Num");
   }
-  num = num / 4;
+  num = num / 4; //cause the encoder have 4 pulse with 1 click
 }
 
 void timeChange()
