@@ -5,7 +5,7 @@
 #include "ConfigFile.h"
 #include "LCD_setup.h"
 #include <TMCStepper.h>
-#include "StepperMotor.h"
+#include "StepperMotorSetup.h"
 
 unsigned long previousTime = 0;
 unsigned long stepperDelayTime = 25000; //microseconds
@@ -200,18 +200,18 @@ void trigger_The_Shutter()
 
 void stepperMotorControl()
 {
-  unsigned long currentTime = micros();
-  if (currentTime - previousTime >= stepperDelayTime)
+  static uint32_t last_time = 0;
+  uint32_t ms = millis();
+  driver.VACTUAL(speed);
+  
+  if (isRotating)
   {
-    digitalWrite(Step_Pin, HIGH);
-    previousTime = currentTime;
+    digitalWrite(EN_PIN, LOW);
   }
-  //delay stepperDelayTime
-  if (currentTime - (previousTime + stepperDelayTime) >= stepperDelayTime)
+  else
   {
-    digitalWrite(Step_Pin, LOW);
+    digitalWrite(EN_PIN, HIGH);
   }
-  //delay stepperDelayTime
 }
 
 void print_time(unsigned long time_millis)
@@ -228,7 +228,7 @@ void Timelapse()
   bool shouldDown = (currentTs >= lastUpTime + (idleDuration * 1000)) && state == 0;
   bool shouldUp = (currentTs >= lastDownTime + (exposureDuration * 1000)) && state == 1;
 
-  delay(10);
+  // delay(10);
   // Serial.println(currentTs);
   if (shouldUp || shouldDown)
   {
@@ -337,6 +337,7 @@ void setup()
 
   // pinMode(PIN_LED, OUTPUT);
   TMCstepperSetup();
+  Serial.println("TMCstepperSetup--Done");
 
   button.attachLongPressStart(takePhotocontrol);
   button.attachClick(nextMeun);
@@ -345,8 +346,8 @@ void setup()
 
   lcd.begin(16, 2);
   lcd.backlight();
-  Serial.println("start");
-  // _LcdSetup();
+  _LcdSetup();
+  Serial.println("LcdSetup--Done");
 }
 
 void loop()
@@ -365,9 +366,6 @@ void loop()
   {
     timeChange();
   }
-  if (isRotating == true)
-  {
-    stepperMotorControl();
-  }
+  stepperMotorControl();
   // Serial.println(digitalRead(Button));
 }
