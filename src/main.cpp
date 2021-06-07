@@ -200,8 +200,6 @@ void trigger_The_Shutter()
 
 void stepperMotorControl()
 {
-  static uint32_t last_time = 0;
-  uint32_t ms = millis();
   driver.VACTUAL(speed);
   
   if (isRotating)
