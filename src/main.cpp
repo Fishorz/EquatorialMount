@@ -8,7 +8,7 @@
 #include "StepperMotorSetup.h"
 
 unsigned long previousTime = 0;
-unsigned long stepperDelayTime = 25000; //microseconds
+unsigned long stepperDelayTime = 28125; //microseconds
 
 enum Menu
 {
@@ -19,9 +19,9 @@ enum Menu
 };
 
 unsigned long lastExposureDuration = 0;
-unsigned long exposureDuration = 1; //second
+unsigned long exposureDuration = 10; //second
 unsigned long lastIdleDuration = 0;
-unsigned long idleDuration = 1; //second
+unsigned long idleDuration = 10; //second
 unsigned long lastUpTime = 0;
 unsigned long lastDownTime = 0;
 int rotateSpeed = 1;
@@ -364,7 +364,7 @@ void timeChange()
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   pinMode(Step_Pin, OUTPUT);
   pinMode(Dir_Pin, OUTPUT);
   pinMode(Button, INPUT_PULLUP);
@@ -380,7 +380,7 @@ void setup()
 
   lcd.begin(16, 2);
   lcd.backlight();
-  _LcdSetup();
+  // _LcdSetup();
   Serial.println("LcdSetup--Done");
 }
 

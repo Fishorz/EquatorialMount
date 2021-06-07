@@ -8,13 +8,13 @@ TMC2209Stepper driver(SW_RX, SW_TX, R_SENSE, DRIVER_ADDRESS);
 using namespace TMC2209_n;
 void TMCstepperSetup()
 {
-    Serial.begin(115200); // Init serial port and set baudrate
+    // Serial.begin(115200); // Init serial port and set baudrate
     while (!Serial)
         ; // Wait for serial port to connect
     Serial.println("\nStart...");
 
     //SERIAL_PORT.begin(115200);
-    driver.beginSerial(115200);
+    driver.beginSerial(BAUD_RATE);
     driver.begin();
 
     // Sets the slow decay time (off time) [1... 15]. This setting also limits
@@ -29,7 +29,7 @@ void TMCstepperSetup()
     // /=0: Motor moves with the velocity given by VACTUAL.
     // Step pulses can be monitored via INDEX output.
     // The motor direction is controlled by the sign of VACTUAL.
-    driver.VACTUAL(speed);
+    // driver.VACTUAL(speed);
 
     // Comparator blank time. This time needs to safely cover the switching
     // event and the duration of the ringing on the sense resistor. For most
