@@ -7,6 +7,8 @@
 #include <TMCStepper.h>
 #include "StepperMotorSetup.h"
 
+unsigned long updateMeunTime = 0; //update meun each second
+
 unsigned long previousTime = 0;
 unsigned long stepperDelayTime = 28125; //microseconds
 
@@ -18,10 +20,10 @@ enum Menu
   takePhoto,
 };
 
-unsigned long lastExposureDuration = 0;
-unsigned long exposureDuration = 10; //second
-unsigned long lastIdleDuration = 0;
-unsigned long idleDuration = 10; //second
+unsigned long lastMeunExposureDuration = 0;
+unsigned long exposureDuration = 10 * 1000; //second
+unsigned long lastMeunIdleDuration = 0;
+unsigned long idleDuration = 10 * 1000; //second
 unsigned long lastUpTime = 0;
 unsigned long lastDownTime = 0;
 int rotateSpeed = 1;
@@ -57,10 +59,10 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("Interval Time");
     lcd.setCursor(1, 1);
-    lcd.print(idleDuration);
+    lcd.print(idleDuration / 1000);
     lcd.print("sec");
     // Serial.println("Interval Time");
-    lastIdleDuration = idleDuration;
+    lastMeunIdleDuration = idleDuration / 1000;
     break;
   }
 
@@ -69,10 +71,10 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("Exposure Time");
     lcd.setCursor(1, 1);
-    lcd.print(exposureDuration);
+    lcd.print(exposureDuration / 1000);
     lcd.print("sec");
     // Serial.println("Exposure Time");
-    lastExposureDuration = exposureDuration;
+    lastMeunExposureDuration = exposureDuration / 1000;
     break;
   }
 
@@ -98,13 +100,21 @@ void updateMeun()
   case Menu::takePhoto:
   {
     lcd.setCursor(0, 0);
-    lcd.print("taking Photo");
+    if (isRotating)
+    {
+      lcd.print("Taking Photo(R)");
+    }
+    else
+    {
+      lcd.print("taking Photo");
+    }
     lcd.setCursor(0, 1);
     lcd.print("I");
-    lcd.print(idleDuration);
+    // lcd.print(idleDuration);
+    lcd.print((idleDuration - (millis() - lastUpTime)) / 1000);
     lcd.setCursor(5, 1);
     lcd.print("E");
-    lcd.print(exposureDuration);
+    lcd.print((exposureDuration - (millis() - lastDownTime)) / 1000);
     lcd.setCursor(10, 1);
     lcd.print("N=");
     lcd.print(photoNumber);
@@ -158,16 +168,13 @@ void nextMeun() //one click
     switch (meun)
     {
     case 0:
-      myEnc.write(lastIdleDuration);
+      myEnc.write(lastMeunIdleDuration);
       break;
     case 1:
-      myEnc.write(lastExposureDuration);
+      myEnc.write(lastMeunExposureDuration);
       break;
     default:
       break;
-    }
-
-    {
     }
   }
   else
@@ -259,8 +266,8 @@ void Timelapse()
 {
   unsigned long currentTs = millis();
 
-  bool shouldDown = (currentTs >= lastUpTime + (idleDuration * 1000)) && state == 0;
-  bool shouldUp = (currentTs >= lastDownTime + (exposureDuration * 1000)) && state == 1;
+  bool shouldDown = (currentTs - lastUpTime >= idleDuration) && state == 0;
+  bool shouldUp = (currentTs - lastDownTime >= exposureDuration) && state == 1;
 
   // delay(10);
   // Serial.println(currentTs);
@@ -283,6 +290,10 @@ void Timelapse()
     state = state == 1 ? 0 : 1;
     // Serial.println("");
   }
+  Serial.print("lastDownTime = ");
+  Serial.println(lastDownTime);
+  Serial.print("lastUpTime = ");
+  Serial.println(lastUpTime);
 }
 
 void limTime(long num)
@@ -314,7 +325,7 @@ void timeChange()
     //limit the max and min Num
     limTime(encoderNum);
     OldIdleDuration = idleDuration;
-    idleDuration = encoderNum;
+    idleDuration = encoderNum * 1000;
     if (idleDuration != OldIdleDuration)
     {
       wasMeunUpdated = false;
@@ -332,7 +343,7 @@ void timeChange()
     //limit the max and min Num
     limTime(encoderNum);
     OldExposureDuration = exposureDuration;
-    exposureDuration = encoderNum;
+    exposureDuration = encoderNum * 1000;
     if (exposureDuration != OldExposureDuration)
     {
       wasMeunUpdated = false;
@@ -370,7 +381,7 @@ void setup()
   pinMode(Button, INPUT_PULLUP);
 
   // pinMode(PIN_LED, OUTPUT);
-  TMCstepperSetup();
+  // TMCstepperSetup();
   Serial.println("TMCstepperSetup--Done");
 
   button.attachLongPressStart(takePhotocontrol);
@@ -386,6 +397,7 @@ void setup()
 
 void loop()
 {
+  unsigned long currentTime = millis();
   button.tick();
   if (!wasMeunUpdated)
   {
@@ -394,6 +406,11 @@ void loop()
 
   if (isTakingPhoto)
   {
+    if (currentTime - updateMeunTime >= 1000)
+    {
+      updateMeunTime = millis();
+      updateMeun();
+    }
     Timelapse();
   }
   else
@@ -401,5 +418,7 @@ void loop()
     timeChange();
   }
   stepperMotorControl();
+  //update meun each second
+
   // Serial.println(digitalRead(Button));
 }

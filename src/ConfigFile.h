@@ -17,7 +17,7 @@
 // #define PIN_LED 4
 
 //Limit the Exponsure time and Interval Time
-#define Max_Time_Limit 200
+#define Max_Time_Limit 200 * 1000 //ms
 #define Min_Time_Limit 0
 
 //TMC2209 Pin Setup
