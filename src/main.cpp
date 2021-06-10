@@ -21,11 +21,14 @@ enum Menu
 };
 
 unsigned long lastMeunExposureDuration = 0;
-unsigned long exposureDuration = 10 * 1000; //second
+unsigned long exposureDuration = 10; //second
 unsigned long lastMeunIdleDuration = 0;
-unsigned long idleDuration = 10 * 1000; //second
+unsigned long idleDuration = 10; //second
 unsigned long lastUpTime = 0;
 unsigned long lastDownTime = 0;
+
+unsigned long currentTimesMillis = 0;
+unsigned long currentTimeMicros = 0;
 int rotateSpeed = 1;
 int maxRotateSpeed = 20;
 int minRotateSpeed = 1;
@@ -34,7 +37,6 @@ int photoNumber = 0;
 
 bool isRotating = false;
 
-unsigned long intervalTime;
 bool state = 0; //1 = bottom down ; 0 = bottom up
 void print_time(unsigned long time_millis);
 
@@ -42,6 +44,7 @@ bool LEDstate = LOW;
 
 int lastMeun = Menu::intervalSetup;
 int meun = Menu::intervalSetup;
+unsigned long isTakingPhotoTime = 0;
 bool wasMeunUpdated = false; //Is updated the meun yet?
 bool isTakingPhoto = false;
 OneButton button(Button, true);
@@ -59,10 +62,10 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("Interval Time");
     lcd.setCursor(1, 1);
-    lcd.print(idleDuration / 1000);
+    lcd.print(idleDuration);
     lcd.print("sec");
     // Serial.println("Interval Time");
-    lastMeunIdleDuration = idleDuration / 1000;
+    lastMeunIdleDuration = idleDuration;
     break;
   }
 
@@ -71,10 +74,10 @@ void updateMeun()
     lcd.setCursor(0, 0);
     lcd.print("Exposure Time");
     lcd.setCursor(1, 1);
-    lcd.print(exposureDuration / 1000);
+    lcd.print(exposureDuration);
     lcd.print("sec");
     // Serial.println("Exposure Time");
-    lastMeunExposureDuration = exposureDuration / 1000;
+    lastMeunExposureDuration = exposureDuration;
     break;
   }
 
@@ -111,14 +114,33 @@ void updateMeun()
     lcd.setCursor(0, 1);
     lcd.print("I");
     // lcd.print(idleDuration);
-    lcd.print((idleDuration - (millis() - lastUpTime)) / 1000);
+    long idleDurationPrint = 0;
+    idleDurationPrint = (idleDuration * 1000 - (millis() - isTakingPhotoTime - lastUpTime)) / 1000;
+    long exposureDurationPrint = 0;
+    exposureDurationPrint = (exposureDuration * 1000 - (millis() - isTakingPhotoTime - lastDownTime)) / 1000;
+    lcd.print(idleDurationPrint);
+
     lcd.setCursor(5, 1);
     lcd.print("E");
-    lcd.print((exposureDuration - (millis() - lastDownTime)) / 1000);
+    lcd.print(exposureDurationPrint);
     lcd.setCursor(10, 1);
     lcd.print("N=");
     lcd.print(photoNumber);
-
+    Serial.println("---------taking photo debug---------");
+    Serial.print("idleDuration = ");
+    Serial.println(idleDuration);
+    Serial.print("exposureDuration = ");
+    Serial.println(exposureDuration);
+    Serial.print("millis = ");
+    Serial.println(millis());
+    Serial.print("lastUpTime = ");
+    Serial.println(lastUpTime);
+    Serial.print("idleDurationPrint = ");
+    Serial.println(idleDurationPrint);
+    Serial.print("exposureDurationPrint = ");
+    Serial.println(exposureDurationPrint);
+    Serial.print("isTakingPhotoTime = ");
+    Serial.println(isTakingPhotoTime);
     // Serial.println("TakingPhoto");
     break;
   }
@@ -131,7 +153,9 @@ void takePhotocontrol() //long click
   lcd.clear();
   wasMeunUpdated = false;
   // counter = 0;
+
   isTakingPhoto = !isTakingPhoto;
+
   if (isTakingPhoto == true)
   {
     lastMeun = meun;
@@ -237,14 +261,14 @@ For gear ratio 1:60
   {
     // Serial.print("rotating");
     digitalWrite(EN_PIN, LOW);
-    unsigned long currentTime = micros();
-    if (currentTime - previousTime >= stepperDelayTime)
+    // unsigned long currenTimeMicros = micros();
+    if (currentTimeMicros - previousTime >= stepperDelayTime)
     {
       digitalWrite(Step_Pin, HIGH);
-      previousTime = currentTime;
+      previousTime = currentTimeMicros;
     }
     //delay stepperDelayTime
-    if (currentTime - (previousTime + stepperDelayTime) >= stepperDelayTime)
+    if (currentTimeMicros - (previousTime + stepperDelayTime) >= stepperDelayTime)
     {
       digitalWrite(Step_Pin, LOW);
     }
@@ -264,10 +288,10 @@ void print_time(unsigned long time_millis)
 
 void Timelapse()
 {
-  unsigned long currentTs = millis();
+  // unsigned long currentTs = millis();
 
-  bool shouldDown = (currentTs - lastUpTime >= idleDuration) && state == 0;
-  bool shouldUp = (currentTs - lastDownTime >= exposureDuration) && state == 1;
+  bool shouldDown = (currentTimesMillis - lastUpTime >= (idleDuration * 1000)) && state == 0;
+  bool shouldUp = (currentTimesMillis - lastDownTime >= (exposureDuration * 1000)) && state == 1;
 
   // delay(10);
   // Serial.println(currentTs);
@@ -276,13 +300,13 @@ void Timelapse()
     // Serial.println(shouldUp ? "UP" : "DOWN");
     if (shouldUp)
     {
-      lastUpTime = currentTs;
+      lastUpTime = currentTimesMillis;
       photoNumber++;
       wasMeunUpdated = false;
     }
     if (shouldDown)
     {
-      lastDownTime = currentTs;
+      lastDownTime = currentTimesMillis;
       wasMeunUpdated = false;
     }
     // Serial.print("Debug2");
@@ -290,10 +314,10 @@ void Timelapse()
     state = state == 1 ? 0 : 1;
     // Serial.println("");
   }
-  Serial.print("lastDownTime = ");
-  Serial.println(lastDownTime);
-  Serial.print("lastUpTime = ");
-  Serial.println(lastUpTime);
+  // Serial.print("lastDownTime = ");
+  // Serial.println(lastDownTime);
+  // Serial.print("lastUpTime = ");
+  // Serial.println(lastUpTime);
 }
 
 void limTime(long num)
@@ -325,7 +349,7 @@ void timeChange()
     //limit the max and min Num
     limTime(encoderNum);
     OldIdleDuration = idleDuration;
-    idleDuration = encoderNum * 1000;
+    idleDuration = encoderNum;
     if (idleDuration != OldIdleDuration)
     {
       wasMeunUpdated = false;
@@ -343,7 +367,7 @@ void timeChange()
     //limit the max and min Num
     limTime(encoderNum);
     OldExposureDuration = exposureDuration;
-    exposureDuration = encoderNum * 1000;
+    exposureDuration = encoderNum;
     if (exposureDuration != OldExposureDuration)
     {
       wasMeunUpdated = false;
@@ -397,8 +421,13 @@ void setup()
 
 void loop()
 {
-  unsigned long currentTime = millis();
+  currentTimesMillis = millis();
+  currentTimeMicros = micros();
   button.tick();
+  if (isTakingPhoto == false)
+  {
+    isTakingPhotoTime = millis();
+  }
   if (!wasMeunUpdated)
   {
     updateMeun();
@@ -406,7 +435,7 @@ void loop()
 
   if (isTakingPhoto)
   {
-    if (currentTime - updateMeunTime >= 1000)
+    if (currentTimesMillis - updateMeunTime >= 1000)
     {
       updateMeunTime = millis();
       updateMeun();
