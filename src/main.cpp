@@ -24,11 +24,14 @@ unsigned long lastMeunExposureDuration = 0;
 unsigned long exposureDuration = 10; //second
 unsigned long lastMeunIdleDuration = 0;
 unsigned long idleDuration = 10; //second
-unsigned long lastUpTime = 0;
-unsigned long lastDownTime = 0;
+unsigned long lastTakePhotoTime = 0;
+unsigned long lastIdleTime = 0;
 
 unsigned long currentTimesMillis = 0;
 unsigned long currentTimeMicros = 0;
+
+long idleDurationPrint = 0;
+long exposureDurationPrint = 0;
 int rotateSpeed = 1;
 int maxRotateSpeed = 20;
 int minRotateSpeed = 1;
@@ -44,7 +47,8 @@ bool LEDstate = LOW;
 
 int lastMeun = Menu::intervalSetup;
 int meun = Menu::intervalSetup;
-unsigned long isTakingPhotoTime = 0;
+bool isStartTimelapse = false;
+unsigned long startTimelapseTime = 0;
 bool wasMeunUpdated = false; //Is updated the meun yet?
 bool isTakingPhoto = false;
 OneButton button(Button, true);
@@ -114,10 +118,7 @@ void updateMeun()
     lcd.setCursor(0, 1);
     lcd.print("I");
     // lcd.print(idleDuration);
-    long idleDurationPrint = 0;
-    idleDurationPrint = (idleDuration * 1000 - (millis() - isTakingPhotoTime - lastUpTime)) / 1000;
-    long exposureDurationPrint = 0;
-    exposureDurationPrint = (exposureDuration * 1000 - (millis() - isTakingPhotoTime - lastDownTime)) / 1000;
+
     lcd.print(idleDurationPrint);
 
     lcd.setCursor(5, 1);
@@ -133,14 +134,16 @@ void updateMeun()
     Serial.println(exposureDuration);
     Serial.print("millis = ");
     Serial.println(millis());
-    Serial.print("lastUpTime = ");
-    Serial.println(lastUpTime);
+    Serial.print("lastTakePhotoTime = ");
+    Serial.println(lastTakePhotoTime);
+    Serial.print("lastIdleTime = ");
+    Serial.println(lastIdleTime);
     Serial.print("idleDurationPrint = ");
     Serial.println(idleDurationPrint);
     Serial.print("exposureDurationPrint = ");
     Serial.println(exposureDurationPrint);
-    Serial.print("isTakingPhotoTime = ");
-    Serial.println(isTakingPhotoTime);
+    Serial.print("startTimelapseTime = ");
+    Serial.println(startTimelapseTime);
     // Serial.println("TakingPhoto");
     break;
   }
@@ -150,6 +153,7 @@ void updateMeun()
 void takePhotocontrol() //long click
 {
   // Serial.println("LongPress");
+
   lcd.clear();
   wasMeunUpdated = false;
   // counter = 0;
@@ -158,6 +162,7 @@ void takePhotocontrol() //long click
 
   if (isTakingPhoto == true)
   {
+    startTimelapseTime = millis();
     lastMeun = meun;
     // Serial.println("TakingPhoto");
     meun = Menu::takePhoto;
@@ -290,29 +295,45 @@ void Timelapse()
 {
   // unsigned long currentTs = millis();
 
-  bool shouldDown = (currentTimesMillis - lastUpTime >= (idleDuration * 1000)) && state == 0;
-  bool shouldUp = (currentTimesMillis - lastDownTime >= (exposureDuration * 1000)) && state == 1;
-
+  bool idle = (currentTimesMillis - lastIdleTime >= (idleDuration * 1000)) && state == 0;
+  bool takephoto = (currentTimesMillis - lastTakePhotoTime >= (exposureDuration * 1000)) && state == 1;
+  bool takingPhoto = true; // True is idlling, False is exposuring.
   // delay(10);
   // Serial.println(currentTs);
-  if (shouldUp || shouldDown)
+  if (takephoto || idle)
   {
     // Serial.println(shouldUp ? "UP" : "DOWN");
-    if (shouldUp)
+    if (takephoto)
     {
-      lastUpTime = currentTimesMillis;
+      lastTakePhotoTime = currentTimesMillis;
       photoNumber++;
-      wasMeunUpdated = false;
+      takingPhoto = true;
+      Serial.println("takephoto = true");
+      // wasMeunUpdated = false;
     }
-    if (shouldDown)
+    if (idle)
     {
-      lastDownTime = currentTimesMillis;
-      wasMeunUpdated = false;
+      lastIdleTime = currentTimesMillis;
+      takingPhoto = false;
+      Serial.println("idle = true");
+      // wasMeunUpdated = false;
     }
     // Serial.print("Debug2");
+
     trigger_The_Shutter();
     state = state == 1 ? 0 : 1;
     // Serial.println("");
+  }
+
+  if (takingPhoto == true)
+  {
+    // Serial.print("exposureDurationPrinting");
+    exposureDurationPrint = (exposureDuration * 1000 - (millis() - startTimelapseTime - lastTakePhotoTime)) / 1000;
+  }
+  else if (takingPhoto == false)
+  {
+    // Serial.print("idleDurationPrinting");
+    idleDurationPrint = (idleDuration * 1000 - (millis() - startTimelapseTime - lastIdleTime)) / 1000;
   }
   // Serial.print("lastDownTime = ");
   // Serial.println(lastDownTime);
@@ -424,10 +445,7 @@ void loop()
   currentTimesMillis = millis();
   currentTimeMicros = micros();
   button.tick();
-  if (isTakingPhoto == false)
-  {
-    isTakingPhotoTime = millis();
-  }
+
   if (!wasMeunUpdated)
   {
     updateMeun();
