@@ -282,8 +282,8 @@ void Timelapse()
 {
   unsigned long currentTs = millis();
 
-  bool idle = (currentTs - lastTakePhotoTime >= (idleDuration * 1000)) && state == 0;
-  bool takephoto = (currentTs - lastIdleTime >= (exposureDuration * 1000)) && state == 1;
+  bool idle = (currentTs - lastTakePhotoTime >= (idleDuration * 1000)) && state == 1;
+  bool takephoto = (currentTs - lastIdleTime >= (exposureDuration * 1000)) && state == 0;
   
   // delay(10);
   // Serial.println(currentTs);
