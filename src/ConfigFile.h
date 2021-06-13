@@ -2,22 +2,22 @@
 //
 #define BAUD_RATE 115200
 //IR Pin
-#define irLED 8
+#define irLED 3
 
 // Stepper Motor Pin Define
 #define Dir_Pin 6
-#define Step_Pin 5
+#define Step_Pin 7
 
 // Encoder Pin Define
-#define outputA 3
-#define outputB 2
-#define Button 7
+#define outputA 4
+#define outputB 5
+#define Button 2
 
 // LED
 // #define PIN_LED 4
 
 //Limit the Exponsure time and Interval Time
-#define Max_Time_Limit 200 //ms
+#define Max_Time_Limit 800 //s
 #define Min_Time_Limit 0
 
 //TMC2209 Pin Setup
