@@ -20,6 +20,12 @@ enum Menu
   takePhoto,
 };
 
+//LCD display parameter
+unsigned long takingPhotoBacklightControlTimes = 0;
+unsigned long displayIdlingControlTimes = 0;
+bool isBacklightOn = true;
+bool isDisplayIdling = false;
+
 unsigned long lastMeunExposureDuration = 0;
 unsigned long exposureDuration = 10; //second
 unsigned long lastMeunIdleDuration = 0;
@@ -249,18 +255,19 @@ For gear ratio 1:60
   // {
   //   digitalWrite(EN_PIN, HIGH);
   // }
+  unsigned long currentTs = micros();
   if (isRotating)
   {
     // Serial.print("rotating");
     digitalWrite(EN_PIN, LOW);
     // unsigned long currenTimeMicros = micros();
-    if (currentTimeMicros - previousTime >= stepperDelayTime)
+    if (currentTs - previousTime >= stepperDelayTime)
     {
       digitalWrite(Step_Pin, HIGH);
-      previousTime = currentTimeMicros;
+      previousTime = currentTs;
     }
     //delay stepperDelayTime
-    if (currentTimeMicros - (previousTime + stepperDelayTime) >= stepperDelayTime)
+    if (currentTs - (previousTime + stepperDelayTime) >= stepperDelayTime)
     {
       digitalWrite(Step_Pin, LOW);
     }
@@ -411,6 +418,50 @@ void timeChange()
   }
 }
 
+void displayBacklightControl()
+{
+  unsigned long currentTs = millis();
+
+  // define the display is idling or not
+  long idlingState;
+  long oldIdlingState;
+  oldIdlingState = idlingState;
+  idlingState = myEnc.read();
+  if (idlingState != oldIdlingState)
+  {
+    isDisplayIdling = false;
+    myEnc.write(oldIdlingState);
+  }
+
+  //when taking photo than turn off displaylight after DISPLAY_BACKLIGHT_TIMES
+  if (takingPhoto == true && isBacklightOn == true)
+  {
+    if (currentTs - (DISPLAY_BACKLIGHT_TIMES * 1000) >= takingPhotoBacklightControlTimes)
+    {
+      lcd.noBacklight();
+      isBacklightOn = false;
+    }
+  }
+  else if (takingPhoto == false)
+  {
+    takingPhotoBacklightControlTimes = millis();
+  }
+
+  //when display idling than turn off displaylight after DISPLAY_BACKLIGHT_TIMES
+  if (currentTs - (DISPLAY_BACKLIGHT_TIMES * 1000) >= displayIdlingControlTimes)
+  {
+    if (isDisplayIdling == true && isBacklightOn == true)
+    {
+      lcd.noBacklight();
+      isBacklightOn = false;
+    }
+  }
+  else if (isDisplayIdling == false)
+  {
+    displayIdlingControlTimes = millis();
+  }
+}
+
 void setup()
 {
   Serial.begin(BAUD_RATE);
@@ -446,7 +497,7 @@ void loop()
 
   if (isTakingPhoto)
   {
-    if (currentTimesMillis - updateMeunTime >= 1000)
+    if (currentTimesMillis - updateMeunTime >= 1000) //update meun each second, when taking photo
     {
       updateMeunTime = millis();
       updateMeun();
@@ -476,7 +527,5 @@ void loop()
     timeChange();
   }
   stepperMotorControl();
-  //update meun each second
-
-  //Serial.println(digitalRead(Button));
+  displayBacklightControl();
 }
