@@ -50,7 +50,7 @@ int meun = Menu::intervalSetup;
 bool isStartTimelapse = false;
 
 unsigned long startTimelapseTime = 0; //to count the display idle or exposuring time.
-bool takingPhoto = true; // True is idlling, False is exposuring.
+bool takingPhoto = true;              // True is idlling, False is exposuring.
 
 bool wasMeunUpdated = false; //Is updated the meun yet?
 bool isTakingPhoto = false;
@@ -284,7 +284,7 @@ void Timelapse()
 
   bool idle = (currentTs - lastTakePhotoTime >= (idleDuration * 1000)) && state == 1;
   bool takephoto = (currentTs - lastIdleTime >= (exposureDuration * 1000)) && state == 0;
-  
+
   // delay(10);
   // Serial.println(currentTs);
   if (takephoto || idle)
@@ -296,14 +296,14 @@ void Timelapse()
       lastTakePhotoTime = currentTs;
       photoNumber++;
       takingPhoto = true;
-      Serial.println("takephoto = true");
+      // Serial.println("takephoto = true");
       // wasMeunUpdated = false;
     }
     if (idle)
     {
       lastIdleTime = currentTs;
       takingPhoto = false;
-      Serial.println("idle = true");
+      // Serial.println("idle = true");
       // wasMeunUpdated = false;
     }
     // Serial.print("Debug2");
@@ -419,8 +419,6 @@ void setup()
   pinMode(Button, INPUT_PULLUP);
 
   // pinMode(PIN_LED, OUTPUT);
-  // TMCstepperSetup();
-  Serial.println("TMCstepperSetup--Done");
 
   button.attachLongPressStart(takePhotocontrol);
   button.attachClick(nextMeun);
@@ -431,6 +429,8 @@ void setup()
   lcd.backlight();
   // _LcdSetup();
   Serial.println("LcdSetup--Done");
+  TMCstepperSetup();
+  Serial.println("TMCstepperSetup--Done");
 }
 
 void loop()
@@ -451,23 +451,23 @@ void loop()
       updateMeunTime = millis();
       updateMeun();
 
-      Serial.println("---------taking photo debug---------");
-      Serial.print("idleDuration = ");
-      Serial.println(idleDuration);
-      Serial.print("exposureDuration = ");
-      Serial.println(exposureDuration);
-      Serial.print("lastTakePhotoTime = ");
-      Serial.println(lastTakePhotoTime);
-      Serial.print("lastIdleTime = ");
-      Serial.println(lastIdleTime);
-      Serial.print("idleDurationPrint = ");
-      Serial.println(idleDurationPrint);
-      Serial.print("exposureDurationPrint = ");
-      Serial.println(exposureDurationPrint);
-      Serial.print("millis = ");
-      Serial.println(currentTimesMillis);
-      Serial.print("startTimelapseTime = ");
-      Serial.println(startTimelapseTime);
+      // Serial.println("---------taking photo debug---------");
+      // Serial.print("idleDuration = ");
+      // Serial.println(idleDuration);
+      // Serial.print("exposureDuration = ");
+      // Serial.println(exposureDuration);
+      // Serial.print("lastTakePhotoTime = ");
+      // Serial.println(lastTakePhotoTime);
+      // Serial.print("lastIdleTime = ");
+      // Serial.println(lastIdleTime);
+      // Serial.print("idleDurationPrint = ");
+      // Serial.println(idleDurationPrint);
+      // Serial.print("exposureDurationPrint = ");
+      // Serial.println(exposureDurationPrint);
+      // Serial.print("millis = ");
+      // Serial.println(currentTimesMillis);
+      // Serial.print("startTimelapseTime = ");
+      // Serial.println(startTimelapseTime);
     }
     Timelapse();
   }
@@ -478,5 +478,5 @@ void loop()
   stepperMotorControl();
   //update meun each second
 
-  // Serial.println(digitalRead(Button));
+  //Serial.println(digitalRead(Button));
 }

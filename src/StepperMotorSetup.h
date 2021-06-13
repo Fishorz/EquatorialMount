@@ -85,6 +85,8 @@ void TMCstepperSetup()
         Serial.println("Fix the problem and reset board.");
 
         // We need this delay or messages above don't get fully printed out
+        lcd.setCursor(0, 0);
+        lcd.print("TMC Error");
         delay(100);
         abort();
     }
