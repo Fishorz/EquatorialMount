@@ -422,19 +422,8 @@ void displayBacklightControl()
 {
   unsigned long currentTs = millis();
 
-  // define the display is idling or not
-  long idlingState;
-  long oldIdlingState;
-  oldIdlingState = idlingState;
-  idlingState = myEnc.read();
-  if (idlingState != oldIdlingState)
-  {
-    isDisplayIdling = false;
-    myEnc.write(oldIdlingState);
-  }
-
   //when taking photo than turn off displaylight after DISPLAY_BACKLIGHT_TIMES
-  if (takingPhoto == true && isBacklightOn == true)
+  if (isTakingPhoto == true && isBacklightOn == true)
   {
     if (currentTs - (DISPLAY_BACKLIGHT_TIMES * 1000) >= takingPhotoBacklightControlTimes)
     {
@@ -442,24 +431,49 @@ void displayBacklightControl()
       isBacklightOn = false;
     }
   }
-  else if (takingPhoto == false)
+  else if (isTakingPhoto == false)
   {
+    lcd.backlight();
+    isBacklightOn = true;
     takingPhotoBacklightControlTimes = millis();
   }
 
   //when display idling than turn off displaylight after DISPLAY_BACKLIGHT_TIMES
-  if (currentTs - (DISPLAY_BACKLIGHT_TIMES * 1000) >= displayIdlingControlTimes)
-  {
-    if (isDisplayIdling == true && isBacklightOn == true)
-    {
-      lcd.noBacklight();
-      isBacklightOn = false;
-    }
-  }
-  else if (isDisplayIdling == false)
-  {
-    displayIdlingControlTimes = millis();
-  }
+  // if (currentTs - (DISPLAY_BACKLIGHT_TIMES * 1000) >= displayIdlingControlTimes)
+  // {
+  //   isDisplayIdling = true;
+  //   if (isDisplayIdling == true && isBacklightOn == true)
+  //   {
+  //     lcd.noBacklight();
+  //     isBacklightOn = false;
+  //   }
+  // }
+  // else if (isDisplayIdling == false)
+  // {
+  //   lcd.backlight();
+  //   isBacklightOn = true;
+  //   displayIdlingControlTimes = millis();
+
+  //   // when display not idle than define the display when is idling.
+  //   long idlingState;
+  //   long oldIdlingState;
+  //   oldIdlingState = idlingState;
+  //   idlingState = myEnc.read();
+  //   if (idlingState != oldIdlingState)
+  //   {
+  //     isDisplayIdling = false;
+  //     myEnc.write(oldIdlingState);
+  //   }
+  // }
+
+  // Serial.print("isTakingPhoto = ");
+  // Serial.println(isTakingPhoto? "Ture" : "False");
+  // Serial.print("isBacklightOn = ");
+  // Serial.println(isBacklightOn ? "Ture" : "False");
+  // Serial.print("millis = ");
+  // Serial.println(currentTs);
+  // Serial.print("takingPhotoBacklightControlTimes = ");
+  // Serial.println(takingPhotoBacklightControlTimes);
 }
 
 void setup()
@@ -489,7 +503,8 @@ void loop()
   currentTimesMillis = millis();
   currentTimeMicros = micros();
   button.tick();
-
+  displayBacklightControl();
+  stepperMotorControl();
   if (!wasMeunUpdated)
   {
     updateMeun();
@@ -526,6 +541,4 @@ void loop()
   {
     timeChange();
   }
-  stepperMotorControl();
-  displayBacklightControl();
 }
