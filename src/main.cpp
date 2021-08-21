@@ -12,12 +12,15 @@ unsigned long updateMeunTime = 0; //update meun each second
 unsigned long previousTime = 0;
 unsigned long stepperDelayTime = 28125; //microseconds
 
+bool RotateMode = true; //Ture is always rotate; false is rotate when idling
+
 enum Menu
 {
   intervalSetup = 0,
   exposureDurationSetup,
   rotateEnable,
   takePhoto,
+  modeSelection,
 };
 
 //LCD display parameter
@@ -70,6 +73,25 @@ void updateMeun()
   // Serial.print("lcd.clear()");
   switch (meun)
   {
+
+  case Menu::modeSelection:
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("Mode");
+    lcd.setCursor(1, 1);
+    if (RotateMode == true)
+    {
+      lcd.print("Always Rotate");
+      //always rotate
+    }
+    else
+    {
+      lcd.print("Rotate in Idle");
+    }
+
+    break;
+  }
+
   case Menu::intervalSetup:
   {
     lcd.setCursor(0, 0);
