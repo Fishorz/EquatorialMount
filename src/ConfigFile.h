@@ -2,7 +2,7 @@
 //
 #define BAUD_RATE 115200
 //IR Pin
-#define irLED 3
+#define irLED 2
 
 // Stepper Motor Pin Define
 #define Dir_Pin 6
@@ -11,7 +11,7 @@
 // Encoder Pin Define
 #define outputA 4
 #define outputB 5
-#define Button 2
+#define Button 3
 
 // LED
 // #define PIN_LED 4
