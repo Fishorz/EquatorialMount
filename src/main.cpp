@@ -317,7 +317,7 @@ For gear ratio 1:60
   }
   else
   {
-    digitalWrite(EN_PIN, HIGH);
+    digitalWrite(EN_PIN, LOW);
   }
 }
 
