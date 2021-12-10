@@ -116,24 +116,24 @@ void updateMeun()
     break;
   }
 
-  case Menu::rotateEnable:
-  {
-    lcd.setCursor(0, 0);
-    lcd.print("Rotate On/Off");
-    lcd.setCursor(0, 1);
-    if (isRotating == true)
-    {
-      lcd.print("Rotate On");
-      // Serial.println("Rotate On");
-    }
-    else
-    {
-      lcd.print("Rotate Stop");
-      // Serial.println("Rotate Stop");
-    }
+  // case Menu::rotateEnable:
+  // {
+  //   lcd.setCursor(0, 0);
+  //   lcd.print("Rotate On/Off");
+  //   lcd.setCursor(0, 1);
+  //   if (isRotating == true)
+  //   {
+  //     lcd.print("Rotate On");
+  //     // Serial.println("Rotate On");
+  //   }
+  //   else
+  //   {
+  //     lcd.print("Rotate Stop");
+  //     // Serial.println("Rotate Stop");
+  //   }
 
-    break;
-  }
+  //   break;
+  // }
 
   case Menu::takePhoto:
   {
@@ -526,7 +526,7 @@ void loop()
   currentTimeMicros = micros();
   button.tick();
   displayBacklightControl();
-  stepperMotorControl();
+  // stepperMotorControl();
   if (!wasMeunUpdated)
   {
     updateMeun();
