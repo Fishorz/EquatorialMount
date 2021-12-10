@@ -16,7 +16,7 @@
 // LED
 // #define PIN_LED 4
 //When  idling, The time about display auto turn off
-#define DISPLAY_BACKLIGHT_TIMES 200 //s
+#define DISPLAY_BACKLIGHT_TIMES 10 //s
 //Limit the Exponsure time and Interval Time
 #define Max_Time_Limit 800 //s
 #define Min_Time_Limit 0
