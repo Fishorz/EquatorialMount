@@ -30,9 +30,9 @@ bool isBacklightOn = true;
 bool isDisplayIdling = false;
 
 unsigned long lastMeunExposureDuration = 0;
-unsigned long exposureDuration = 10; //second
+unsigned long exposureDuration = 10; //0.1 second
 unsigned long lastMeunIdleDuration = 0;
-unsigned long idleDuration = 10; //second
+unsigned long idleDuration = 10; // 0.1 second
 unsigned long lastTakePhotoTime = 0;
 unsigned long lastIdleTime = 0;
 
@@ -311,8 +311,8 @@ void Timelapse()
 {
   unsigned long currentTs = millis();
 
-  bool idle = (currentTs - lastTakePhotoTime >= (idleDuration * 1000)) && state == 1;
-  bool takephoto = (currentTs - lastIdleTime >= (exposureDuration * 1000)) && state == 0;
+  bool idle = (currentTs - lastTakePhotoTime >= (idleDuration * 100)) && state == 1;
+  bool takephoto = (currentTs - lastIdleTime >= (exposureDuration * 100)) && state == 0;
 
   // delay(10);
   // Serial.println(currentTs);
@@ -345,13 +345,13 @@ void Timelapse()
   if (takingPhoto == true)
   {
     // Serial.print("exposureDurationPrinting");
-    idleDurationPrint = (idleDuration * 1000 - (currentTs - startTimelapseTime)) / 1000;
+    idleDurationPrint = (idleDuration * 100 - (currentTs - startTimelapseTime)) / 1000;
     exposureDurationPrint = exposureDuration;
   }
   else if (takingPhoto == false)
   {
     // Serial.print("idleDurationPrinting");
-    exposureDurationPrint = (exposureDuration * 1000 - (currentTs - startTimelapseTime)) / 1000;
+    exposureDurationPrint = (exposureDuration * 100 - (currentTs - startTimelapseTime)) / 1000;
     idleDurationPrint = idleDuration;
   }
   // Serial.print("lastDownTime = ");
@@ -516,7 +516,7 @@ void setup()
   lcd.backlight();
   // _LcdSetup();
   Serial.println("LcdSetup--Done");
-  TMCstepperSetup();
+  // TMCstepperSetup();
   Serial.println("TMCstepperSetup--Done");
 }
 
