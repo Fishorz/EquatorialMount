@@ -8,9 +8,14 @@
 #include "StepperMotorSetup.h"
 
 unsigned long updateMeunTime = 0; //update meun each second
-
 unsigned long previousTime = 0;
-unsigned long stepperDelayTime = 28125; //microseconds
+unsigned int stepperDelayTime = 28125; //microseconds
+
+bool triggerTheShutterFirstTimeState = false;
+bool triggerTheShutterSecondTimeState = false;
+bool triggerTheShutterDone = false;
+unsigned long triggerTheShutterPreviousTime = millis();
+unsigned int triggerTheShutterintervalTime = 7330; //(ms)
 
 bool RotateMode = true; //Ture is always rotate; false is rotate when idling
 
@@ -240,9 +245,25 @@ void generateIrLEDSignal()
 
 void trigger_The_Shutter()
 {
-  generateIrLEDSignal();
-  delayMicroseconds(7330);
-  generateIrLEDSignal();
+  unsigned long currentTs = micros();
+  if (triggerTheShutterFirstTimeState == false)
+  {
+    triggerTheShutterPreviousTime = currentTs;
+    generateIrLEDSignal();
+    triggerTheShutterFirstTimeState = true;
+  }
+  if (currentTs - triggerTheShutterPreviousTime >= triggerTheShutterintervalTime)
+  {
+    generateIrLEDSignal();
+    triggerTheShutterSecondTimeState = true;
+  }
+
+  if (triggerTheShutterFirstTimeState && triggerTheShutterSecondTimeState == true)
+  {
+    triggerTheShutterFirstTimeState = false;
+    triggerTheShutterSecondTimeState = false;
+    triggerTheShutterDone = true;
+  }
   // Serial.println("Shutting");
   // Serial.print("Time=");
   // Serial.println(millis());
@@ -447,7 +468,7 @@ void displayBacklightControl()
   //when taking photo than turn off displaylight after DISPLAY_BACKLIGHT_TIMES
   if (isTakingPhoto == true && isBacklightOn == true)
   {
-    if (currentTs - (DISPLAY_BACKLIGHT_TIMES * 1000) >= takingPhotoBacklightControlTimes)
+    if (currentTs - takingPhotoBacklightControlTimes >= (DISPLAY_BACKLIGHT_TIMES * 1000))
     {
       lcd.noBacklight();
       isBacklightOn = false;
