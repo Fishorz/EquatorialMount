@@ -32,7 +32,7 @@ bool isDisplayIdling = false;
 unsigned long lastMeunExposureDuration = 0;
 unsigned long exposureDuration = 10; //0.1 second
 unsigned long lastMeunIdleDuration = 0;
-unsigned long idleDuration = 10; // 0.1 second
+unsigned long idleDuration = 50; // 0.1 second
 unsigned long lastTakePhotoTime = 0;
 unsigned long lastIdleTime = 0;
 
