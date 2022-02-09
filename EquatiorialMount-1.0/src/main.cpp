@@ -1,6 +1,5 @@
 #include <Arduino.h>
-#include "TakePhoto.hpp"
-
+#include "TimeLapseControl.hpp"
 kickTrigger Triggertest;
 
 bool istrigger = false;
