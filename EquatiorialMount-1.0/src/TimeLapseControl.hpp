@@ -10,10 +10,11 @@ private:
     int _intervalTime;
     int _exposureTime;
     int _number;
+    int _pin;
     kickTrigger takePhoto;
     Logger logger;
     bool isTriggerDone = false;
-    bool isExposuring = fasle;
+    bool isExposuring = false;
     bool waitingExposure = false;
     unsigned long _previousStartTakePhotoTime;
     unsigned long _previousEndTakePhotoTime;
@@ -23,7 +24,11 @@ public:
     setTimes(int intervalTime, int exposureTime);
     void setNumbers(int number);
     void runTimelapse();
-    void setpin() { takePhoto.setPin(32); }
+    void setpin(int pin)
+    {
+        _pin = pin;
+        takePhoto.setPin(_pin);
+    }
 };
 
 void timeLapseControl::setTimes(int intervalTime, int exposureTime)
@@ -41,7 +46,7 @@ void timeLapseControl::runTimelapse()
 {
     unsigned long currentTimes = millis();
     unsigned long exposureTime = _exposureTime;
-    insigned long intervalTime = _intervalTime;
+    unsigned long intervalTime = _intervalTime;
     if (currentTimes - _previousStartTakePhotoTime > exposureTime && isExposuring == true) // to control exposure
     {
         if (isTriggerDone == false)
@@ -53,10 +58,10 @@ void timeLapseControl::runTimelapse()
         {
             isExposuring = false;
             isTriggerDone = false;
-            waitingExposure = ture; //go to idle a intervalTimes
+            waitingExposure = true; // go to idle a intervalTimes
         }
     }
-    if (currentTimes - _previousEndTakePhotoTime > intervalTime && waitingExposure == ture) // to control idle status
+    if (currentTimes - _previousEndTakePhotoTime > intervalTime && waitingExposure == true) // to control idle status
     {
         if (isTriggerDone == false)
         {
@@ -67,7 +72,7 @@ void timeLapseControl::runTimelapse()
         {
             waitingExposure = false;
             isTriggerDone = false;
-            isExposuring = ture; //next go to exposure
+            isExposuring = true; // next go to exposure
         }
     }
 }
