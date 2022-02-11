@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "TimeLapseControl.hpp"
+#include "manual.hpp"
 
 void setup()
 {
