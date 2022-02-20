@@ -7,6 +7,7 @@ class meun
 private:
     byte _buttomNums = 4 - 1;
     byte _lastMeun;
+    int _meunState = 0; // 0 is at main meun; 1 is at sub meun
     byte _mainMeunIntex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
@@ -14,12 +15,14 @@ private:
     bool _rotateDirection;                     // ture is clockwise, false is anti-clockwise
     bool _rotateAtPhotoingStatus;              // ture is take photos with rotate, false is take photo without rotate
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
-    int _buttomPin[3];
-    bool _buttomStatus[3];
-    byte _buttomIndex[3];
+    int _buttomPin[4];
+    bool _buttomStatus[4];
+    byte _buttomIndex[4];
+    int _mainMeun;
 
     enum mainMenu
     {
+        mainMeun,
         intervalTimeControl,
         exposureTimeControl,
         rotateEnableControl,
@@ -32,6 +35,7 @@ private:
 public:
     void getButtomStatus();
     void getButtomPin(int buttomPin[]);
+    void mainMeunButtomControl();
     meun();
 };
 
@@ -57,8 +61,43 @@ void meun::getButtomStatus()
     }
 }
 
-meun::meun()
+void meun::mainMeunButtomControl()
 {
     getButtomStatus();
+    switch (_meunState)
+    {
+    case /* constant-expression */:
+        /* code */
+        break;
     
+    default:
+        break;
+    }
+    if (_buttomStatus[0])
+    {
+        // 0{back to main meun/pervious}
+        logger.println("back to main meun");
+    }
+
+    if (_buttomStatus[1])
+    {
+        // 1{i-- / meun-}
+        logger.println("i-- / meun-");
+    }
+
+    if (_buttomStatus[2])
+    {
+        // 2{i++ / meun+}
+        logger.println("i++ / meun+");
+    }
+
+    if (_buttomStatus[3])
+    {
+        // 3{select/start-stop take photo}
+        logger.println("select/start-stop take photo");
+    }
+}
+
+meun::meun()
+{
 }
