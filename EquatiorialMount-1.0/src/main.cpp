@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "TimeLapseControl.hpp"
+#include "meun.hpp"
 kickTrigger Triggertest;
 
 bool istrigger = false;
