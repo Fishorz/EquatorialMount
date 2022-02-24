@@ -2,6 +2,39 @@
 #include <Arduino.h>
 #include "Logger.hpp"
 
+/*meun description------------------------------------------------------------------
+--mainMeun--
+        interval Time Control
+        exposure Time Control
+        rotate Control
+        mode Selection
+        auto aim polar alignment //自動對準極軸
+
+--sub meun--
+interval Time Control     >>interval_mins
+                          >>interval_sec
+                          >>interval_millisec
+exposure Time Control     >>exposure_mins
+                          >>exposure_sec
+                          >>exposure_millisec
+rotate Control            >>clockwise (CW)
+                          >>counterclockwise (CCW)
+mode Selection            >>Enable Rotate             //control rotatetion at taking photo
+                          >>Disable Rotate
+auto aim polar alignment  >>call auto aim polar function.
+
+
+about the buttom(s) 
+0{pervious meun} 
+1{i-- / meun-}  // time++ or meun++
+2{i++ / meun+}  //time-- or meun--
+3{select/start-stop take photo} 
+
+------------example---------------
+selecting main meun interval Time Control, if press 1 to change select
+exposure Time Control. if press 3 go to sub meun and select interval_mins
+
+*/
 class meun
 {
 private:
@@ -22,20 +55,34 @@ private:
 
     enum mainMenu
     {
-        mainMeun,
-        intervalTimeControl,
-        exposureTimeControl,
-        rotateEnableControl,
-        takePhoto,
-        modeSelection,
+        intervalTimeControl_mainMenu,
+        exposureTimeControl_mainMenu,
+        rotateEnableControl_mainMenu,
+        modeSelection_mainMenu,
+        autoAimPolarAlignment,
     };
 
-    // about the buttom(s) 0{back to main meun/pervious} 1{i-- / meun-} 2{i++ / meun+} 3{select/start-stop take photo}
+    enum intervalTimeControlMeun
+    {
+        interval_mins,
+        interval_sec,
+        interval_millisec,
+    };
+
+    enum exposureTimeControl
+    {
+        exposure_mins,
+        exposure_sec,
+        exposure_millisec,
+    };
+
+   
 
 public:
     void getButtomStatus();
     void getButtomPin(int buttomPin[]);
     void mainMeunButtomControl();
+    void subMeunButtomControl();
     meun();
 };
 
@@ -59,20 +106,7 @@ void meun::getButtomStatus()
     {
         _buttomStatus[i] = digitalRead(_buttomPin[i]);
     }
-}
 
-void meun::mainMeunButtomControl()
-{
-    getButtomStatus();
-    switch (_meunState)
-    {
-    case /* constant-expression */:
-        /* code */
-        break;
-    
-    default:
-        break;
-    }
     if (_buttomStatus[0])
     {
         // 0{back to main meun/pervious}
@@ -95,6 +129,77 @@ void meun::mainMeunButtomControl()
     {
         // 3{select/start-stop take photo}
         logger.println("select/start-stop take photo");
+    }
+}
+
+void meun::mainMeunButtomControl()
+{
+    getButtomStatus();
+
+    if (_buttomStatus[2])
+    {
+        _mainMeunIntex++;
+    }
+    else if (_buttomStatus[1])
+    {
+        _mainMeunIntex--;
+    }
+    // according to main meun index to switch show which meun is selected
+    switch (_mainMeunIntex)
+    {
+    case (1):
+        _mainMeun = mainMenu::intervalTimeControl_mainMenu;
+        // show selecting intervalTimeControl
+        break;
+    case (2):
+        _mainMeun = mainMenu::exposureTimeControl_mainMenu;
+        // show selecting intervalTimeControl
+        break;
+    case (3):
+        _mainMeun = mainMenu::rotateEnableControl_mainMenu;
+        // show selecting intervalTimeControl
+        break;
+    default:
+        break;
+    }
+}
+
+void meun::subMeunButtomControl()
+{
+    getButtomStatus();
+    // according to sub meun index to switch show which sub meun was selected
+    switch (_mainMeun)
+    {
+    case (mainMenu::intervalTimeControl_mainMenu):
+        switch (_subMeunIntex)
+        {
+        case (intervalTimeControlMeun::interval_mins):
+            break;
+        case (intervalTimeControlMeun::interval_sec):
+            break;
+        case (intervalTimeControlMeun::interval_millisec):
+            break;
+        default:
+            break;
+        }
+        break;
+    case (mainMenu::exposureTimeControl_mainMenu):
+        switch (_subMeunIntex)
+        {
+        case (exposureTimeControl::exposure_mins):
+            break;
+        case (exposureTimeControl::exposure_sec):
+            break;
+        case (exposureTimeControl::exposure_millisec):
+            break;
+        default:
+            break;
+        }
+        break;
+    case (mainMenu::rotateEnableControl_mainMenu):
+        break;
+    default:
+        break;
     }
 }
 
