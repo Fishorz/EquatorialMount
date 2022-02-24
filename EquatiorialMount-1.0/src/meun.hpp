@@ -3,15 +3,9 @@
 #include "Logger.hpp"
 
 /*meun description------------------------------------------------------------------
---mainMeun--
-        interval Time Control
-        exposure Time Control
-        rotate Control
-        mode Selection
-        auto aim polar alignment //自動對準極軸
 
---sub meun--
-interval Time Control     >>interval_mins
+--mainMeun--              --sub meun--    
+interval Time Control     >>interval_mins 
                           >>interval_sec
                           >>interval_millisec
 exposure Time Control     >>exposure_mins
@@ -21,7 +15,7 @@ rotate Control            >>clockwise (CW)
                           >>counterclockwise (CCW)
 mode Selection            >>Enable Rotate             //control rotatetion at taking photo
                           >>Disable Rotate
-auto aim polar alignment  >>call auto aim polar function.
+auto aim polar alignment  >>call auto aim polar function. //自動對準極軸
 
 
 about the buttom(s) 
