@@ -15,6 +15,7 @@
 #include "TimeLapseControl.hpp"
 #include "kickTrigger.hpp"
 #include "meun.hpp"
+#include "buttom.hpp"
 kickTrigger Triggertest;
 
 void setup()
