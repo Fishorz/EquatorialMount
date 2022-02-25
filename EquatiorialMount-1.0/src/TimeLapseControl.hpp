@@ -1,5 +1,5 @@
 #pragma once
-#include "TakePhoto.hpp"
+#include "kickTrigger.hpp"
 #include "Logger.hpp"
 
 class timeLapseControl
@@ -20,8 +20,7 @@ private:
     unsigned long _previousEndTakePhotoTime;
 
 public:
-    void
-    setTimes(int intervalTime, int exposureTime);
+    void setTimes(int intervalTime, int exposureTime);
     void setNumbers(int number);
     void runTimelapse();
     void setpin(int pin)
