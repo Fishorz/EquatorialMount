@@ -13,7 +13,7 @@ exposure Time Control     >>exposure_mins
                           >>exposure_millisec
 rotate Control            >>clockwise (CW)
                           >>counterclockwise (CCW)
-mode Selection            >>Enable Rotate             //control rotatetion at taking photo
+mode Selection            >>Enable Rotate             //control rotation at taking photo
                           >>Disable Rotate
 auto aim polar alignment  >>call auto aim polar function. //自動對準極軸
 
