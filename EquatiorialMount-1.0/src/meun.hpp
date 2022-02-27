@@ -20,7 +20,7 @@ about the buttom(s)
 0{pervious meun}
 1{i-- / meun-}  // time++ or meun++
 2{i++ / meun+}  //time-- or meun--
-3{select/start-stop take photo} 
+3{select/start-stop take photo}
 
 ------------example---------------
 selecting main meun interval Time Control, if press 1 to change select
@@ -30,7 +30,6 @@ exposure Time Control. if press 3 go to sub meun and select interval_mins
 class meun
 {
 private:
-    byte _buttomNums = 4 - 1;
     byte _lastMeun;
     int _meunState = 0; // 0 is at main meun; 1 is at sub meun
     byte _mainMeunIntex = 0;
@@ -40,10 +39,8 @@ private:
     bool _rotateDirection;                     // ture is clockwise, false is anti-clockwise
     bool _rotateAtPhotoingStatus;              // ture is take photos with rotate, false is take photo without rotate
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
-    int _buttomPin[4];
-    bool _buttomStatus[4];
-    byte _buttomIndex[4];
     int _mainMeun;
+    int _buttomFunction;
 
     enum mainMenu
     {
@@ -68,72 +65,43 @@ private:
         exposure_millisec,
     };
 
+    enum buttomFunction
+    {
+        perviousMeun,
+        increase,
+        decrease,
+        select,
+        start,
+        idle,
+    };
+
 public:
-    void getButtomStatus();
-    void getButtomPin(int buttomPin[]);
-    void mainMeunButtomControl();
-    void subMeunButtomControl();
+    void mainMeunFunctioonControl();
+    void subMeunFunctionControl();
+    void getFunction(int getbuttomFunction)
+    {
+        _buttomFunction = getbuttomFunction;
+    };
     meun();
 };
 
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
 
-void meun::getButtomPin(int buttomPin[])
+void meun::mainMeunFunctioonControl()
 {
-    for (size_t i = 0; i < _buttomNums; i++)
+    switch (_buttomFunction)
     {
-        _buttomPin[i] = buttomPin[i];
-        logger.println("Set Buttom pin = ");
-        logger.print(i);
-        logger.print(_buttomPin[i]);
-    }
-}
-
-void meun::getButtomStatus()
-{
-    for (size_t i = 0; i < _buttomNums; i++)
-    {
-        _buttomStatus[i] = digitalRead(_buttomPin[i]);
-    }
-
-    if (_buttomStatus[0])
-    {
-        // 0{back to main meun/pervious}
-        logger.println("back to main meun");
-    }
-
-    if (_buttomStatus[1])
-    {
-        // 1{i-- / meun-}
-        logger.println("i-- / meun-");
-    }
-
-    if (_buttomStatus[2])
-    {
-        // 2{i++ / meun+}
-        logger.println("i++ / meun+");
-    }
-
-    if (_buttomStatus[3])
-    {
-        // 3{select/start-stop take photo}
-        logger.println("select/start-stop take photo");
-    }
-}
-
-void meun::mainMeunButtomControl()
-{
-    getButtomStatus();
-
-    if (_buttomStatus[2])
-    {
+    case (buttomFunction::increase):
         _mainMeunIntex++;
-    }
-    else if (_buttomStatus[1])
-    {
+        break;
+    case (buttomFunction::decrease):
         _mainMeunIntex--;
+        break;
+    default:
+        break;
     }
+
     // according to main meun index to switch show which meun is selected
     switch (_mainMeunIntex)
     {
@@ -154,9 +122,8 @@ void meun::mainMeunButtomControl()
     }
 }
 
-void meun::subMeunButtomControl()
+void meun::subMeunFunctionControl()
 {
-    getButtomStatus();
     // according to sub meun index to switch show which sub meun was selected
     switch (_mainMeun)
     {

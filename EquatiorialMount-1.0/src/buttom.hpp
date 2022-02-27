@@ -13,11 +13,22 @@ private:
     bool _numIncreaseButtomStatus;
     bool _numDecreaseButtomStatus;
     bool _selectButtomStatus;
+    int _command;
 
 public:
     void getButtomPin(byte a, byte b, byte c, byte d);
     void getButtomStatus();
-    char command();
+    int commandHandler();
+
+    enum buttomFunction
+    {
+        perviousMeun,
+        increase,
+        decrease,
+        select,
+        start,
+        idle,
+    };
     // ButtomPin.ButtomPin();
 };
 
@@ -37,11 +48,37 @@ void Buttom::getButtomStatus()
     _selectButtomStatus = digitalRead(_selectButtomPin);
 }
 
-char Buttom::command()
+int Buttom::commandHandler()
 {
+    getButtomStatus();
     if (_perviousButtomStatus && _selectButtomStatus)
     {
-        char start = 'START_';
-        return (start);
+        _command = buttomFunction::start;
+        return (_command);
     }
+
+    if (_numIncreaseButtomStatus)
+    {
+        _command = buttomFunction::increase;
+        return (_command);
+    }
+
+    if (_numDecreaseButtomStatus)
+    {
+        _command = buttomFunction::decrease;
+        return (_command);
+    }
+
+    if (_perviousButtomStatus)
+    {
+        _command = buttomFunction::perviousMeun;
+        return (_command);
+    }
+
+    if (_selectButtomStatus)
+    {
+        _command = buttomFunction::select;
+        return (_command);
+    }
+    return(buttomFunction::idle);
 }
