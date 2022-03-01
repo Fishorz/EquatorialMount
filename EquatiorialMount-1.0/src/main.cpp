@@ -16,6 +16,7 @@
 #include "kickTrigger.hpp"
 #include "meun.hpp"
 #include "buttom.hpp"
+#include"Time.hpp"
 kickTrigger Triggertest;
 
 void setup()
