@@ -31,7 +31,7 @@ class meun
 {
 private:
     byte _lastMeun;
-    int _meunState = 0; // 0 is at main meun; 1 is at sub meun
+    int _atMainMeun = 0; // 0 is at main meun; 1 is at sub meun
     byte _mainMeunIntex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
@@ -76,8 +76,9 @@ private:
     };
 
 public:
-    void mainMeunFunctioonControl();
+    void mainMeunFunctionControl();
     void subMeunFunctionControl();
+    void meunSwitch();
     void getFunction(int getbuttomFunction)
     {
         _buttomFunction = getbuttomFunction;
@@ -88,7 +89,25 @@ public:
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
 
-void meun::mainMeunFunctioonControl()
+void meun::meunSwitch()
+{
+    if (_atMainMeun)
+    { // controlling main meun
+        if (_buttomFunction == buttomFunction::select)
+        {
+            _atMainMeun = false;
+        }
+    }
+    else
+    { // controllig sub meun
+        if (_buttomFunction == buttomFunction::perviousMeun)
+        {
+            _atMainMeun = ture;
+        }
+    }
+}
+
+void meun::mainMeunFunctionControl()
 {
     switch (_buttomFunction)
     {

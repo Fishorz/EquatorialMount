@@ -14,10 +14,10 @@ public:
     void mins(int mins);
     void oneTenthSec(int oneTenthSec);
     int calculateMillisecTime(int mins, int sec, int oneTenthSec);
-    int getTime();
+    int getMillisecTime();
 };
 
-int Time::getTime()
+int Time::getMillisecTime()
 {
     sec(_sec);
     mins(_mins);
@@ -44,6 +44,7 @@ void Time::oneTenthSec(int oneTenthSec)
         oneTenthSec = 0;
     }
     _oneTenthSec = oneTenthSec;
+    // return (_oneTenthSec);
 }
 
 void Time::mins(int mins)
@@ -57,6 +58,7 @@ void Time::mins(int mins)
         mins = 0;
     }
     _mins = mins;
+    // return (_mins);
 }
 
 void Time::sec(int sec)
@@ -70,4 +72,5 @@ void Time::sec(int sec)
         sec = 0;
     }
     _sec = sec;
+    // return (_sec);
 }
