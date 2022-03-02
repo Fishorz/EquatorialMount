@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include "Logger.hpp"
+#include "Time.hpp"
 
 /*meun description------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ private:
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
     int _mainMeun;
     int _buttomFunction;
+    Time intervalTime;
+    Time exposureTime;
 
     enum mainMenu
     {
@@ -76,7 +79,7 @@ private:
     };
 
 public:
-    void mainMeunFunctionControl();
+    // void mainMeunFunctionControl();
     void subMeunFunctionControl();
     void meunSwitch();
     void getFunction(int getbuttomFunction)
@@ -92,54 +95,68 @@ public:
 void meun::meunSwitch()
 {
     if (_atMainMeun)
-    { // controlling main meun
+    { // At Main meun
         if (_buttomFunction == buttomFunction::select)
         {
-            _atMainMeun = false;
+            _atMainMeun = false; // go to sub meun
+        }
+
+        switch (_buttomFunction)
+        {
+        case (buttomFunction::increase):
+            _mainMeunIntex++;
+            break;
+        case (buttomFunction::decrease):
+            _mainMeunIntex--;
+            break;
+        default:
+            break;
         }
     }
     else
-    { // controllig sub meun
+    { // At Sub meun
         if (_buttomFunction == buttomFunction::perviousMeun)
         {
-            _atMainMeun = ture;
+            _subMeunIntex = 0; // recovery sub meun intex to 0 order
+            _atMainMeun = true;
+        }
+
+        switch (_buttomFunction)
+        {
+        case (buttomFunction::increase):
+            _subMeunIntex++;
+            break;
+        case (buttomFunction::decrease):
+            _subMeunIntex--;
+            break;
+        default:
+            break;
         }
     }
 }
 
-void meun::mainMeunFunctionControl()
-{
-    switch (_buttomFunction)
-    {
-    case (buttomFunction::increase):
-        _mainMeunIntex++;
-        break;
-    case (buttomFunction::decrease):
-        _mainMeunIntex--;
-        break;
-    default:
-        break;
-    }
+// void meun::mainMeunFunctionControl()
+// {
 
-    // according to main meun index to switch show which meun is selected
-    switch (_mainMeunIntex)
-    {
-    case (1):
-        _mainMeun = mainMenu::intervalTimeControl_mainMenu;
-        // show selecting intervalTimeControl
-        break;
-    case (2):
-        _mainMeun = mainMenu::exposureTimeControl_mainMenu;
-        // show selecting intervalTimeControl
-        break;
-    case (3):
-        _mainMeun = mainMenu::rotateEnableControl_mainMenu;
-        // show selecting intervalTimeControl
-        break;
-    default:
-        break;
-    }
-}
+//     // according to main meun index to switch show which meun is selected
+//     switch (_mainMeunIntex)
+//     {
+//     case (1):
+//         _mainMeun = mainMenu::intervalTimeControl_mainMenu;
+//         // show selecting intervalTimeControl
+//         break;
+//     case (2):
+//         _mainMeun = mainMenu::exposureTimeControl_mainMenu;
+//         // show selecting exposureTimeControl
+//         break;
+//     case (3):
+//         _mainMeun = mainMenu::rotateEnableControl_mainMenu;
+//         // show selecting rotateEnableControl
+//         break;
+//     default:
+//         break;
+//     }
+// }
 
 void meun::subMeunFunctionControl()
 {
@@ -150,6 +167,15 @@ void meun::subMeunFunctionControl()
         switch (_subMeunIntex)
         {
         case (intervalTimeControlMeun::interval_mins):
+            switch (_buttomFunction)
+            {
+            case (buttomFunction::increase):
+                intervalTime.mins(1);
+                 break;
+
+            default:
+                break;
+            }
             break;
         case (intervalTimeControlMeun::interval_sec):
             break;
