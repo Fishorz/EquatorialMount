@@ -28,7 +28,7 @@ selecting main meun interval Time Control, if press 1 to change select
 exposure Time Control. if press 3 go to sub meun and select interval_mins
 
 */
-class meun
+class Meun
 {
 private:
     byte _lastMeun;
@@ -86,13 +86,12 @@ public:
     {
         _buttomFunction = getbuttomFunction;
     };
-    meun();
 };
 
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
 
-void meun::meunSwitch()
+void Meun::meunSwitch()
 {
     if (_atMainMeun)
     { // At Main meun
@@ -158,7 +157,7 @@ void meun::meunSwitch()
 //     }
 // }
 
-void meun::subMeunFunctionControl()
+void Meun::subMeunFunctionControl()
 {
     // according to sub meun index to switch show which sub meun was selected
     switch (_mainMeun)
@@ -171,7 +170,7 @@ void meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 intervalTime.mins(1);
-                 break;
+                break;
 
             default:
                 break;
@@ -205,6 +204,7 @@ void meun::subMeunFunctionControl()
     }
 }
 
-meun::meun()
-{
-}
+// Meun::Meun()
+// {
+//     getFunction();
+// }
