@@ -11,7 +11,9 @@ private:
     byte _stepPin;
     const int _speedBelongPolarAilgnment = 1000;
     void rotateFollowPolarAilgnmentWithTakingPhoto();
-    int _stepIntervalTime = _speed;
+    void rotateFollowInputWithoutTakingPhoto();
+    int _stepIntervalTimeInputSpeed = _speed;
+    const int _stepIntervalTimePolarAilgnmentSpeed = _speedBelongPolarAilgnment;
     unsigned long _stepPreviousTime = 0;
 
 public:
@@ -40,6 +42,7 @@ void motorControl::setDirection(bool direction)
 void motorControl::setMode(bool mode)
 {
     _mode = mode;
+    (mode) ? rotateFollowPolarAilgnmentWithTakingPhoto() : rotateFollowInputWithoutTakingPhoto();
 }
 
 void motorControl::setPin(byte dir, byte step)
@@ -50,8 +53,22 @@ void motorControl::setPin(byte dir, byte step)
 
 void motorControl::rotateFollowPolarAilgnmentWithTakingPhoto()
 {
+    digitalWrite(_dirPin, _direction);
     unsigned long currentTimes = micros();
-    if (currentTimes - _stepIntervalTime > _stepPreviousTime)
+    if (currentTimes - _stepIntervalTimePolarAilgnmentSpeed > _stepPreviousTime)
+    {
+        // stepper motor move half step.
+        _stepPreviousTime = micros();
+        (_stepperHigh) ? digitalWrite(_stepPin, HIGH) : digitalWrite(_stepPin, LOW);
+        _stepperHigh = !_stepperHigh;
+    }
+}
+
+void motorControl::rotateFollowInputWithoutTakingPhoto()
+{
+    digitalWrite(_dirPin, _direction);
+    unsigned long currentTimes = micros();
+    if (currentTimes - _stepIntervalTimeInputSpeed > _stepPreviousTime)
     {
         // stepper motor move half step.
         _stepPreviousTime = micros();
