@@ -169,17 +169,45 @@ void Meun::subMeunFunctionControl()
             switch (_buttomFunction)
             {
             case (buttomFunction::increase):
-                intervalTime.mins(1);
+                // intervalTime.mins(1);
+                intervalTime.minsChange(HIGH);
                 break;
-
+            case (buttomFunction::decrease):
+                intervalTime.minsChange(LOW);
+                break;
             default:
                 break;
             }
             break;
         case (intervalTimeControlMeun::interval_sec):
+            switch (_buttomFunction)
+            {
+            case (buttomFunction::increase):
+                // intervalTime.mins(1);
+                intervalTime.secChange(HIGH);
+                break;
+            case (buttomFunction::decrease):
+                intervalTime.secChange(LOW);
+                break;
+            default:
+                break;
+            }
             break;
         case (intervalTimeControlMeun::interval_millisec):
+            switch (_buttomFunction)
+            {
+            case (buttomFunction::increase):
+                // intervalTime.mins(1);
+                intervalTime.oneTenthSecChange(HIGH);
+                break;
+            case (buttomFunction::decrease):
+                intervalTime.oneTenthSecChange(LOW);
+                break;
+            default:
+                break;
+            }
             break;
+
         default:
             break;
         }
@@ -188,10 +216,46 @@ void Meun::subMeunFunctionControl()
         switch (_subMeunIntex)
         {
         case (exposureTimeControl::exposure_mins):
+            switch (_buttomFunction)
+            {
+            case (buttomFunction::increase):
+                // intervalTime.mins(1);
+                exposureTime.minsChange(HIGH);
+                break;
+            case (buttomFunction::decrease):
+                exposureTime.minsChange(LOW);
+                break;
+            default:
+                break;
+            }
             break;
         case (exposureTimeControl::exposure_sec):
+            switch (_buttomFunction)
+            {
+            case (buttomFunction::increase):
+                // intervalTime.mins(1);
+                exposureTime.secChange(HIGH);
+                break;
+            case (buttomFunction::decrease):
+                exposureTime.secChange(LOW);
+                break;
+            default:
+                break;
+            }
             break;
         case (exposureTimeControl::exposure_millisec):
+            switch (_buttomFunction)
+            {
+            case (buttomFunction::increase):
+                // intervalTime.mins(1);
+                exposureTime.oneTenthSecChange(HIGH);
+                break;
+            case (buttomFunction::decrease):
+                exposureTime.oneTenthSecChange(LOW);
+                break;
+            default:
+                break;
+            }
             break;
         default:
             break;

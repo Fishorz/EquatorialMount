@@ -8,14 +8,32 @@ private:
     int _mins;
     int _sec;
     int _oneTenthSec;
-
-public:
     void sec(int sec);
     void mins(int mins);
     void oneTenthSec(int oneTenthSec);
+
+public:
+    void minsChange(bool direction);
+    void secChange(bool direction);
+    void oneTenthSecChange(bool direction);
     int calculateMillisecTime(int mins, int sec, int oneTenthSec);
     int getMillisecTime();
 };
+
+void Time::minsChange(bool direction)
+{
+    (direction) ? _mins++ : _mins--;
+}
+
+void Time::secChange(bool direction)
+{
+    (direction) ? _sec++ : _sec--;
+}
+
+void Time::oneTenthSecChange(bool direction)
+{
+    (direction) ? _oneTenthSec++ : _oneTenthSec--;
+}
 
 int Time::getMillisecTime()
 {
