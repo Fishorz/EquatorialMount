@@ -18,14 +18,20 @@
 #include "buttom.hpp"
 #include "Time.hpp"
 #include "motorControl.hpp"
+#include "Logger.hpp"
 kickTrigger Triggertest;
-
+Logger logger;
+Buttom buttom;
+Meun meun;
 void setup()
 {
     Serial.begin(25000);
     delay(100);
+    logger.print("startUp");
 }
 
 void loop()
 {
+    int commandHandler = buttom.commandHandler();
+    meun.getFunction(commandHandler);
 }
