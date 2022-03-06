@@ -25,17 +25,36 @@
 
 class TFTLCD
 {
+private:
+public:
     Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-    void testdrawtext(char const *text, uint16_t color);
+    void showTest();
+    void setup();
 };
 
-void
-TFTLCD::testdrawtext(char const *text, uint16_t color)
+void TFTLCD::setup()
 {
-    tft.setCursor(0, 0);
-    tft.setTextColor(color);
-    tft.setTextWrap(true);
-    tft.print(text);
+    tft.initR(INITR_BLACKTAB); // Init ST7735S chip, black tab
+}
+
+void TFTLCD::showTest()
+{
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextWrap(false);
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setCursor(0, 30);
+    tft.setTextColor(ST77XX_RED);
+    tft.setTextSize(1);
+    tft.println("Hello World!");
+    tft.setTextColor(ST77XX_YELLOW);
+    tft.setTextSize(2);
+    tft.println("Hello World!");
+    tft.setTextColor(ST77XX_GREEN);
+    tft.setTextSize(3);
+    tft.println("Hello World!");
+    tft.setTextColor(ST77XX_BLUE);
+    tft.setTextSize(4);
+    tft.print(1234.567);
 }
 
 /*
