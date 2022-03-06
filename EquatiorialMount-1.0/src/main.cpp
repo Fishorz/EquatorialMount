@@ -19,6 +19,7 @@
 #include "Time.hpp"
 #include "motorControl.hpp"
 #include "Logger.hpp"
+#include "TFTLCD.hpp"
 kickTrigger Triggertest;
 Logger logger;
 Buttom buttom;
