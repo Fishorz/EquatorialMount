@@ -24,17 +24,18 @@ kickTrigger Triggertest;
 Logger logger;
 Buttom buttom;
 Meun meun;
-TFTLCD tft;
+TFTLCD display;
 void setup()
 {
     Serial.begin(25000);
     delay(100);
     logger.print("startUp");
-    tft.setup();
+    display.setup();
+    display.showStartMeun();
 }
 
 void loop()
 {
-    tft.showTest();
+    display.showTest();
     delay(5000);
 }

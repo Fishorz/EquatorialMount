@@ -30,7 +30,18 @@ public:
     Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
     void showTest();
     void setup();
+    void showStartMeun();
 };
+
+void TFTLCD::showStartMeun()
+{
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextWrap(false);
+    tft.setCursor(0, 30);
+    tft.setTextSize(2);
+    tft.println("EQ Mount V0.1");
+    delay(1000);
+}
 
 void TFTLCD::setup()
 {
