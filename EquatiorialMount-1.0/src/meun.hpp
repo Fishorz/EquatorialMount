@@ -82,6 +82,8 @@ public:
     // void mainMeunFunctionControl();
     void subMeunFunctionControl();
     void meunSwitch();
+    int getMainMeunOrder();
+    int getSubMeunOrder();
     void getFunction(int getbuttomFunction)
     {
         _buttomFunction = getbuttomFunction;
@@ -132,6 +134,18 @@ void Meun::meunSwitch()
             break;
         }
     }
+}
+
+int Meun::getMainMeunOrder()
+{
+    int MainMeunOrder = _mainMeunIntex;
+    return (MainMeunOrder);
+}
+
+int Meun::getSubMeunOrder()
+{
+    int subMeunOrder = _subMeunIntex;
+    return (subMeunOrder);
 }
 
 // void meun::mainMeunFunctionControl()

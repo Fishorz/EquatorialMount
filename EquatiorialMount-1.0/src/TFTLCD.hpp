@@ -26,15 +26,60 @@
 class TFTLCD
 {
 private:
+    enum mainMenu
+    {
+        intervalTimeControl_mainMenu,
+        exposureTimeControl_mainMenu,
+        rotateEnableControl_mainMenu,
+        modeSelection_mainMenu,
+        autoAimPolarAlignment,
+    };
+
 public:
     Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
     void showTest();
     void setup();
+    void showPerviousTime(int mins, int sec, int oneTenthSec);
+    void showMainMeun(int mainMeunOrder);
 };
 
 void TFTLCD::setup()
 {
     tft.initR(INITR_BLACKTAB); // Init ST7735S chip, black tab
+}
+
+void TFTLCD::showMainMeun(int mainMeunOrder)
+{
+    mainMenu = mainMeunOrder;
+    int selected_X = 30;
+    int align_X = 20;
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextWrap(false);
+    tft.setCursor(20, 30);
+    tft.setTextSize(3);
+    tft.setTextColor(ST77XX_YELLOW);
+    switch (mainMenu)
+    {
+    case mainMenu::intervalTimeControl_mainMenu:
+        /* code */
+        break;
+
+    default:
+        break;
+    }
+    tft.println("Interval Time");
+    tft.setCursor(20, 50);
+    tft.println("Exposure Time");
+    tft.setCursor(20, 70);
+    tft.println("Rotate Speed");
+    tft.setCursor(20, 90);
+    tft.println("Mode Selection");
+    tft.setCursor(20, 110);
+    tft.println("Auto Aim Polar Alignment");
+}
+
+void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
+{
 }
 
 void TFTLCD::showTest()
