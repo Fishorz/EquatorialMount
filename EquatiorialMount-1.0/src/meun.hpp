@@ -84,6 +84,7 @@ public:
     void meunSwitch();
     int getMainMeunOrder();
     int getSubMeunOrder();
+    bool getMeunState();
     void getFunction(int getbuttomFunction)
     {
         _buttomFunction = getbuttomFunction;
@@ -92,6 +93,11 @@ public:
 
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
+
+bool Meun::getMeunState()
+{
+    return (_atMainMeun);
+}
 
 void Meun::meunSwitch()
 {

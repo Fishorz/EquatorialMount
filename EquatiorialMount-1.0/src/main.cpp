@@ -25,6 +25,16 @@ Logger logger;
 Buttom buttom;
 Meun meun;
 TFTLCD tft;
+
+enum mainMenu
+{
+    intervalTimeControl_mainMenu,
+    exposureTimeControl_mainMenu,
+    rotateEnableControl_mainMenu,
+    modeSelection_mainMenu,
+    autoAimPolarAlignment,
+};
+
 void setup()
 {
     Serial.begin(25000);
@@ -35,6 +45,5 @@ void setup()
 
 void loop()
 {
-    tft.showTest();
-    delay(5000);
+    (meun.getMeunState()) ? tft.showMainMeun(meun.getMainMeunOrder()) : tft.showTest();
 }

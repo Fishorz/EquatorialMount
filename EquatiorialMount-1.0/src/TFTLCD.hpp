@@ -26,6 +26,12 @@
 class TFTLCD
 {
 private:
+public:
+    Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+    void showTest();
+    void setup();
+    void showPerviousTime(int mins, int sec, int oneTenthSec);
+    void showMainMeun(int mainMeunOrder);
     enum mainMenu
     {
         intervalTimeControl_mainMenu,
@@ -34,13 +40,6 @@ private:
         modeSelection_mainMenu,
         autoAimPolarAlignment,
     };
-
-public:
-    Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-    void showTest();
-    void setup();
-    void showPerviousTime(int mins, int sec, int oneTenthSec);
-    void showMainMeun(int mainMeunOrder);
 };
 
 void TFTLCD::setup()
@@ -50,7 +49,6 @@ void TFTLCD::setup()
 
 void TFTLCD::showMainMeun(int mainMeunOrder)
 {
-    mainMenu = mainMeunOrder;
     int selected_X = 30;
     int align_X = 20;
     tft.fillScreen(ST77XX_BLACK);
@@ -58,24 +56,43 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
     tft.setCursor(20, 30);
     tft.setTextSize(3);
     tft.setTextColor(ST77XX_YELLOW);
-    switch (mainMenu)
+
+    tft.setCursor(align_X, 30);
+    tft.println("Interval Time");
+    tft.setCursor(align_X, 50);
+    tft.println("Exposure Time");
+    tft.setCursor(align_X, 70);
+    tft.println("Rotate Speed");
+    tft.setCursor(align_X, 90);
+    tft.println("Mode Selection");
+    tft.setCursor(align_X, 110);
+    tft.println("Auto Aim Polar Alignment");
+
+    switch (mainMeunOrder)
     {
     case mainMenu::intervalTimeControl_mainMenu:
-        /* code */
+        tft.setCursor(selected_X, 30);
+        tft.println("Interval Time");
         break;
-
+    case mainMenu::exposureTimeControl_mainMenu:
+        tft.setCursor(selected_X, 50);
+        tft.println("Exposure Time");
+        break;
+    case mainMenu::rotateEnableControl_mainMenu:
+        tft.setCursor(selected_X, 70);
+        tft.println("Rotate Speed");
+        break;
+    case mainMenu::modeSelection_mainMenu:
+        tft.setCursor(selected_X, 90);
+        tft.println("Mode Selection");
+        break;
+    case mainMenu::autoAimPolarAlignment:
+        tft.setCursor(selected_X, 110);
+        tft.println("Auto Aim Polar Alignment");
+        break;
     default:
         break;
     }
-    tft.println("Interval Time");
-    tft.setCursor(20, 50);
-    tft.println("Exposure Time");
-    tft.setCursor(20, 70);
-    tft.println("Rotate Speed");
-    tft.setCursor(20, 90);
-    tft.println("Mode Selection");
-    tft.setCursor(20, 110);
-    tft.println("Auto Aim Polar Alignment");
 }
 
 void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
