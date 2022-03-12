@@ -42,6 +42,7 @@ void Buttom::getButtomPin(byte a, byte b, byte c, byte d)
 
 void Buttom::getButtomStatus()
 {
+    logger.print("getButtomStatus");
     _perviousButtomStatus = digitalRead(_perviousButtomPin);
     _numIncreaseButtomStatus = digitalRead(_numIncreaseButtomPin);
     _numDecreaseButtomStatus = digitalRead(_numDecreaseButtomPin);

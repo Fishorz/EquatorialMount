@@ -40,11 +40,14 @@ void setup()
     Serial.begin(25000);
     delay(100);
     logger.print("startUp");
-    display.setup();
-    display.showStartMeun();
+    tft.showStartMeun();
 }
 
 void loop()
 {
+    int command = buttom.commandHandler();
+    Serial.print("command = ");
+    Serial.println(command);
+    meun.getFunction(command);
     (meun.getMeunState()) ? tft.showMainMeun(meun.getMainMeunOrder()) : tft.showTest();
 }
