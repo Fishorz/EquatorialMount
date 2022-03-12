@@ -82,6 +82,9 @@ public:
     // void mainMeunFunctionControl();
     void subMeunFunctionControl();
     void meunSwitch();
+    int getMainMeunOrder();
+    int getSubMeunOrder();
+    bool getMeunState();
     void getFunction(int getbuttomFunction)
     {
         _buttomFunction = getbuttomFunction;
@@ -90,6 +93,11 @@ public:
 
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
+
+bool Meun::getMeunState()
+{
+    return (_atMainMeun);
+}
 
 void Meun::meunSwitch()
 {
@@ -132,6 +140,18 @@ void Meun::meunSwitch()
             break;
         }
     }
+}
+
+int Meun::getMainMeunOrder()
+{
+    int MainMeunOrder = _mainMeunIntex;
+    return (MainMeunOrder);
+}
+
+int Meun::getSubMeunOrder()
+{
+    int subMeunOrder = _subMeunIntex;
+    return (subMeunOrder);
 }
 
 // void meun::mainMeunFunctionControl()
