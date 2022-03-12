@@ -16,7 +16,7 @@ private:
     int _command;
 
 public:
-    void getButtomPin(byte a, byte b, byte c, byte d);
+    void setButtomPin(byte a, byte b, byte c, byte d);
     void getButtomStatus();
     int commandHandler();
 
@@ -32,7 +32,7 @@ public:
     // ButtomPin.ButtomPin();
 };
 
-void Buttom::getButtomPin(byte a, byte b, byte c, byte d)
+void Buttom::setButtomPin(byte a, byte b, byte c, byte d)
 {
     _perviousButtomPin = a;
     _numIncreaseButtomPin = b;
@@ -42,7 +42,7 @@ void Buttom::getButtomPin(byte a, byte b, byte c, byte d)
 
 void Buttom::getButtomStatus()
 {
-    logger.print("getButtomStatus");
+    // logger.println("getButtomStatus");
     _perviousButtomStatus = digitalRead(_perviousButtomPin);
     _numIncreaseButtomStatus = digitalRead(_numIncreaseButtomPin);
     _numDecreaseButtomStatus = digitalRead(_numDecreaseButtomPin);

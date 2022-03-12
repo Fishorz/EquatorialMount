@@ -32,7 +32,7 @@ class Meun
 {
 private:
     byte _lastMeun;
-    int _atMainMeun = 0; // 0 is at main meun; 1 is at sub meun
+    int _atMainMeun = true; // True is at main meun; False is at sub meun
     byte _mainMeunIntex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
@@ -44,6 +44,7 @@ private:
     int _buttomFunction;
     Time intervalTime;
     Time exposureTime;
+    void _indexLimit();
 
     enum mainMenu
     {
@@ -88,14 +89,35 @@ public:
     void getFunction(int getbuttomFunction)
     {
         _buttomFunction = getbuttomFunction;
+        meunSwitch();
+        if (_atMainMeun == false)
+        {
+            subMeunFunctionControl();
+        }
     };
 };
 
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
 
+void Meun::_indexLimit()
+{
+    if (_mainMeunIntex > 4)
+    {
+        _mainMeunIntex = 4;
+    }
+    if (_mainMeunIntex < 0)
+    {
+        _mainMeunIntex = 0;
+    }
+    logger.print("_mainMeunIntex =");
+    logger.println(_mainMeunIntex);
+}
+
 bool Meun::getMeunState()
 {
+    logger.print("_atMainMeun?");
+    logger.println(_atMainMeun);
     return (_atMainMeun);
 }
 
@@ -140,6 +162,7 @@ void Meun::meunSwitch()
             break;
         }
     }
+    _indexLimit();
 }
 
 int Meun::getMainMeunOrder()

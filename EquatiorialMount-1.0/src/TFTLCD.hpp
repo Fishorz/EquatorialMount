@@ -57,7 +57,7 @@ void TFTLCD::showStartMeun()
     tft.setCursor(0, 30);
     tft.setTextSize(2);
     tft.println("EQ Mount V0.1");
-    delay(1000);
+    delay(200);
 }
 
 void TFTLCD::showSubMeun(int subMeunOrder)
@@ -68,7 +68,7 @@ void TFTLCD::showSubMeun(int subMeunOrder)
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextWrap(false);
     tft.setCursor(20, 30);
-    tft.setTextSize(3);
+    tft.setTextSize(2);
     tft.setTextColor(ST77XX_YELLOW);
 
     switch (subMeunOrder)
@@ -100,13 +100,14 @@ void TFTLCD::showSubMeun(int subMeunOrder)
 
 void TFTLCD::showMainMeun(int mainMeunOrder)
 {
-    logger.print("mainMeunOrder");
+    logger.println("mainMeunOrder");
     int selected_X = 30;
     int align_X = 20;
+    int textSize = 1;
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextWrap(false);
     tft.setCursor(20, 30);
-    tft.setTextSize(3);
+    tft.setTextSize(textSize);
     tft.setTextColor(ST77XX_YELLOW);
 
     tft.setCursor(align_X, 30);

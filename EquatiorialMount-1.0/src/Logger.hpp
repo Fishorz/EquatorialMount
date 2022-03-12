@@ -5,7 +5,7 @@
 class Logger : public Print
 {
 public:
-    Logger() : use_Serial(false), use_Serial1(false) {}
+    Logger() : use_Serial(true), use_Serial1(false) {}
     virtual size_t write(uint8_t c)
     {
         if (use_Serial)
