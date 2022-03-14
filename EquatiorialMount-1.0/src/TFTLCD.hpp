@@ -4,6 +4,7 @@
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
 #include <SPI.h>
 #include <Wire.h>
+#include <Time.hpp>
 
 #if defined(ARDUINO_FEATHER_ESP32) // Feather Huzzah32
 #define TFT_CS 14
@@ -30,14 +31,18 @@ private:
     Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
     int _lastMainMeunOrder;
     int _lastSubMeunOrder;
+    int _mins;
+    int _sec;
+    int _oneTenthSec;
     // bool reflashControl();
 
 public:
     void showTest();
     void showStartMeun();
-    void showPerviousTime(int mins, int sec, int oneTenthSec);
+    // void showPerviousTime(int mins, int sec, int oneTenthSec);
     void showMainMeun(int mainMeunOrder);
     void showSubMeun(int subMeunOrder);
+    void getTime(int mins, int sec, int oneTenthSec);
     enum mainMenu
     {
         intervalTimeControl_mainMenu,
@@ -47,6 +52,13 @@ public:
         autoAimPolarAlignment,
     };
 };
+
+void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
+{
+    _mins = mins;
+    _sec = sec;
+    _oneTenthSec = oneTenthSec;
+}
 void TFTLCD::setup()
 {
     tft.initR(INITR_BLACKTAB); // Init ST7735S chip, black tab
@@ -158,9 +170,9 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
     }
 }
 
-void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
-{
-}
+// void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
+// {
+// }
 
 void TFTLCD::showTest()
 {

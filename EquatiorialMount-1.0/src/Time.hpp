@@ -8,17 +8,33 @@ private:
     int _mins;
     int _sec;
     int _oneTenthSec;
-    void sec(int sec);
-    void mins(int mins);
-    void oneTenthSec(int oneTenthSec);
+    void secLimit(int sec);
+    void minsLimit(int mins);
+    void oneTenthSecLimit(int oneTenthSec);
 
 public:
     void minsChange(bool direction);
     void secChange(bool direction);
     void oneTenthSecChange(bool direction);
+    int getMins();
+    int getSec();
+    int getOneTenthSec();
     int calculateMillisecTime(int mins, int sec, int oneTenthSec);
     int getMillisecTime();
 };
+
+int Time::getMins()
+{
+    return (_mins);
+}
+int Time::getSec()
+{
+    return (_sec);
+}
+int Time::getOneTenthSec()
+{
+    return (_oneTenthSec);
+}
 
 void Time::minsChange(bool direction)
 {
@@ -37,9 +53,9 @@ void Time::oneTenthSecChange(bool direction)
 
 int Time::getMillisecTime()
 {
-    sec(_sec);
-    mins(_mins);
-    oneTenthSec(_oneTenthSec);
+    secLimit(_sec);
+    minsLimit(_mins);
+    oneTenthSecLimit(_oneTenthSec);
     int val = calculateMillisecTime(_mins, _sec, _oneTenthSec);
     return (val);
 }
@@ -51,7 +67,7 @@ int Time::calculateMillisecTime(int mins, int sec, int oneTenthSec)
     return (millisec);
 }
 
-void Time::oneTenthSec(int oneTenthSec)
+void Time::oneTenthSecLimit(int oneTenthSec)
 {
     if (oneTenthSec > 9)
     {
@@ -65,7 +81,7 @@ void Time::oneTenthSec(int oneTenthSec)
     // return (_oneTenthSec);
 }
 
-void Time::mins(int mins)
+void Time::minsLimit(int mins)
 {
     if (mins > 59)
     {
@@ -79,7 +95,7 @@ void Time::mins(int mins)
     // return (_mins);
 }
 
-void Time::sec(int sec)
+void Time::secLimit(int sec)
 {
     if (sec > 59)
     {

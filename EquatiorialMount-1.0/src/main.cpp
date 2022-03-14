@@ -50,5 +50,5 @@ void loop()
     // Serial.print("command = ");
     // Serial.println(command);
     meun.getFunction(command);
-    (meun.getMeunState()) ? tft.showMainMeun(meun.getMainMeunOrder()) : tft.showTest();
+    (meun.getMeunState()) ? tft.showMainMeun(meun.getMainMeunOrder()) : tft.showSubMeun(meun.getSubMeunOrder());
 }
