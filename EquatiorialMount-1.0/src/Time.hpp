@@ -53,11 +53,11 @@ int Time::calculateMillisecTime(int mins, int sec, int oneTenthSec)
 
 void Time::oneTenthSec(int oneTenthSec)
 {
-    if (oneTenthSec >> 9)
+    if (oneTenthSec > 9)
     {
         oneTenthSec = 9;
     }
-    else if (oneTenthSec << 0)
+    else if (oneTenthSec < 0)
     {
         oneTenthSec = 0;
     }
