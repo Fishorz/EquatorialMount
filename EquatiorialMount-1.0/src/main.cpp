@@ -26,6 +26,14 @@ Buttom buttom;
 Meun meun;
 TFTLCD tft;
 
+enum meunState
+{
+    atMainMeun,
+    atSubMeun, // selecing time, that mean selecting change sec or mins some else.
+    atTakingTimelapse,
+    changeTimeOrState, // selected sec or mins else, and here can increase or decrease sec or which sub meun selected.
+};
+
 enum mainMenu
 {
     intervalTimeControl_mainMenu,
@@ -50,5 +58,21 @@ void loop()
     // Serial.print("command = ");
     // Serial.println(command);
     meun.getFunction(command);
-    (meun.getMeunState()) ? tft.showMainMeun(meun.getMainMeunOrder()) : tft.showSubMeun(meun.getSubMeunOrder());
+
+    switch (meun.getMeunState())
+    {
+    case meunState::atMainMeun:
+        tft.showMainMeun(meun.getMainMeunOrder());
+        break;
+
+    case meunState::atSubMeun:
+        tft.showSubMeun(meun.getSubMeunOrder());
+        break;
+
+    case meunState::atTakingTimelapse:
+        tft.showTakingTimelapse();
+        break;
+    default:
+        break;
+    }
 }

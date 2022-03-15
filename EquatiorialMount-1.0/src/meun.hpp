@@ -50,8 +50,9 @@ private:
     enum meunState
     {
         atMainMeun,
-        atSubMeun,
+        atSubMeun, // selecing time, that mean selecting change sec or mins some else.
         atTakingTimelapse,
+        changeTimeOrState, // selected sec or mins else, and here can increase or decrease sec or which sub meun selected.
     };
 
     enum mainMenu
@@ -90,18 +91,18 @@ private:
 public:
     // void mainMeunFunctionControl();
     void subMeunFunctionControl();
-    void meunSwitch();
+    void meunControlor();
     int getMainMeunOrder();
     int getSubMeunOrder();
-    bool getMeunState();
+    int getMeunState();
     void getFunction(int getbuttomFunction)
     {
         _buttomFunction = getbuttomFunction;
-        meunSwitch();
-        if (_atMainMeun == meunState::atSubMeun)
-        {
-            subMeunFunctionControl();
-        }
+        meunControlor();
+        // if (_atMainMeun == meunState::atSubMeun)
+        // {
+        //     subMeunFunctionControl();
+        // }
     };
 };
 
@@ -122,7 +123,7 @@ void Meun::_indexLimit()
     logger.println(_mainMeunIntex);
 }
 
-bool Meun::getMeunState()
+int Meun::getMeunState()
 {
     logger.print("_atMainMeun?");
     switch (_atMainMeun)
@@ -144,10 +145,12 @@ bool Meun::getMeunState()
     return (_atMainMeun);
 }
 
-void Meun::meunSwitch()
+void Meun::meunControlor()
 {
-    if (_atMainMeun == meunState::atMainMeun)
-    { // At Main meun
+    switch (_atMainMeun)
+    {
+        //-----------------------------------at main meun
+    case meunState::atMainMeun:
         if (_buttomFunction == buttomFunction::select)
         {
             _atMainMeun = meunState::atSubMeun; // go to sub meun
@@ -164,13 +167,18 @@ void Meun::meunSwitch()
         default:
             break;
         }
-    }
-    else
-    { // At Sub meun
+        break;
+    //-----------------------------------at main meun
+    //------------------------------------at sub meun
+    case (meunState::atSubMeun):
         if (_buttomFunction == buttomFunction::perviousMeun)
         {
             _subMeunIntex = 0;                   // recovery sub meun intex to 0 order
             _atMainMeun = meunState::atMainMeun; // go to main meun
+        }
+        else if (_buttomFunction == buttomFunction::select)
+        {
+            _atMainMeun = meunState::changeTimeOrState;
         }
 
         switch (_buttomFunction)
@@ -184,6 +192,14 @@ void Meun::meunSwitch()
         default:
             break;
         }
+        //------------------------------------at sub meun
+        //------------------------------------at changeTimeOrState
+    case (meunState::changeTimeOrState):
+        subMeunFunctionControl();
+        break;
+        //------------------------------------at changeTimeOrState
+    default:
+        break;
     }
     _indexLimit();
 }
