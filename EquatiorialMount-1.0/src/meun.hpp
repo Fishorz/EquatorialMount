@@ -32,7 +32,8 @@ class Meun
 {
 private:
     byte _lastMeun;
-    int _atMainMeun = true; // True is at main meun; False is at sub meun
+    bool _atMainMeun = true; // True is at main meun; False is at sub meun
+    int _takingTimelapse;
     byte _mainMeunIntex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
