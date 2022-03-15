@@ -32,8 +32,8 @@ class Meun
 {
 private:
     byte _lastMeun;
-    bool _atMainMeun = true; // True is at main meun; False is at sub meun
-    int _takingTimelapse;
+    int _atMainMeun = meunState::atMainMeun; // True is at main meun; False is at sub meun
+    bool _takingTimelapse = false;           // True is taking timelapse, false is in setting.
     byte _mainMeunIntex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
@@ -46,6 +46,13 @@ private:
     Time intervalTime;
     Time exposureTime;
     void _indexLimit();
+
+    enum meunState
+    {
+        atMainMeun,
+        atSubMeun,
+        atTakingTimelapse,
+    };
 
     enum mainMenu
     {
@@ -91,7 +98,7 @@ public:
     {
         _buttomFunction = getbuttomFunction;
         meunSwitch();
-        if (_atMainMeun == false)
+        if (_atMainMeun == meunState::atSubMeun)
         {
             subMeunFunctionControl();
         }
@@ -118,17 +125,32 @@ void Meun::_indexLimit()
 bool Meun::getMeunState()
 {
     logger.print("_atMainMeun?");
-    logger.println(_atMainMeun);
+    switch (_atMainMeun)
+    {
+    case meunState::atMainMeun:
+        logger.println("At Main Meun");
+        break;
+    case meunState::atSubMeun:
+        logger.println("At Sub Meun");
+        break;
+    case meunState::atTakingTimelapse:
+        logger.println("Taking Timelapse");
+        break;
+
+    default:
+        break;
+    }
+
     return (_atMainMeun);
 }
 
 void Meun::meunSwitch()
 {
-    if (_atMainMeun)
+    if (_atMainMeun == meunState::atMainMeun)
     { // At Main meun
         if (_buttomFunction == buttomFunction::select)
         {
-            _atMainMeun = false; // go to sub meun
+            _atMainMeun = meunState::atSubMeun; // go to sub meun
         }
 
         switch (_buttomFunction)
@@ -147,8 +169,8 @@ void Meun::meunSwitch()
     { // At Sub meun
         if (_buttomFunction == buttomFunction::perviousMeun)
         {
-            _subMeunIntex = 0; // recovery sub meun intex to 0 order
-            _atMainMeun = true;
+            _subMeunIntex = 0;                   // recovery sub meun intex to 0 order
+            _atMainMeun = meunState::atMainMeun; // go to main meun
         }
 
         switch (_buttomFunction)
