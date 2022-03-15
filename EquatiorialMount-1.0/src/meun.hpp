@@ -1,7 +1,10 @@
-#pragma once
+#ifndef meun_h
+#define meun_h
+
 #include <Arduino.h>
 #include "Logger.hpp"
 #include "Time.hpp"
+#include "TFTLCD.hpp"
 
 /*meun description------------------------------------------------------------------
 
@@ -43,8 +46,9 @@ private:
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
     int _mainMeun;
     int _buttomFunction;
-    Time intervalTime;
-    Time exposureTime;
+    Time _intervalTimeController;
+    Time _exposureTimeController;
+    TFTLCD _display;
     void _indexLimit();
 
     enum meunState
@@ -114,28 +118,28 @@ void Meun::_indexLimit()
     if (_mainMeunIntex > 4)
     {
         _mainMeunIntex = 4;
+        logger.println("Main meun intex out of range, reset to 4");
     }
     if (_mainMeunIntex < 0)
     {
         _mainMeunIntex = 0;
+        logger.println("Main meun intex out of range, reset to 0");
     }
-    logger.print("_mainMeunIntex =");
-    logger.println(_mainMeunIntex);
 }
 
 int Meun::getMeunState()
 {
-    logger.print("_atMainMeun?");
+    logger.println("Meun state is ");
     switch (_atMainMeun)
     {
     case meunState::atMainMeun:
-        logger.println("At Main Meun");
+        logger.print("At Main Meun");
         break;
     case meunState::atSubMeun:
-        logger.println("At Sub Meun");
+        logger.print("At Sub Meun");
         break;
     case meunState::atTakingTimelapse:
-        logger.println("Taking Timelapse");
+        logger.print("Taking Timelapse");
         break;
 
     default:
@@ -154,6 +158,7 @@ void Meun::meunControlor()
         if (_buttomFunction == buttomFunction::select)
         {
             _atMainMeun = meunState::atSubMeun; // go to sub meun
+            _display.showSubMeun(_subMeunIntex);
         }
 
         switch (_buttomFunction)
@@ -175,6 +180,7 @@ void Meun::meunControlor()
         {
             _subMeunIntex = 0;                   // recovery sub meun intex to 0 order
             _atMainMeun = meunState::atMainMeun; // go to main meun
+            _display.showMainMeun(_mainMeunIntex);
         }
         else if (_buttomFunction == buttomFunction::select)
         {
@@ -252,10 +258,10 @@ void Meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 // intervalTime.mins(1);
-                intervalTime.minsChange(HIGH);
+                _intervalTimeController.minsChange(HIGH);
                 break;
             case (buttomFunction::decrease):
-                intervalTime.minsChange(LOW);
+                _intervalTimeController.minsChange(LOW);
                 break;
             default:
                 break;
@@ -266,10 +272,10 @@ void Meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 // intervalTime.mins(1);
-                intervalTime.secChange(HIGH);
+                _intervalTimeController.secChange(HIGH);
                 break;
             case (buttomFunction::decrease):
-                intervalTime.secChange(LOW);
+                _intervalTimeController.secChange(LOW);
                 break;
             default:
                 break;
@@ -280,10 +286,10 @@ void Meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 // intervalTime.mins(1);
-                intervalTime.oneTenthSecChange(HIGH);
+                _intervalTimeController.oneTenthSecChange(HIGH);
                 break;
             case (buttomFunction::decrease):
-                intervalTime.oneTenthSecChange(LOW);
+                _intervalTimeController.oneTenthSecChange(LOW);
                 break;
             default:
                 break;
@@ -302,10 +308,10 @@ void Meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 // intervalTime.mins(1);
-                exposureTime.minsChange(HIGH);
+                _exposureTimeController.minsChange(HIGH);
                 break;
             case (buttomFunction::decrease):
-                exposureTime.minsChange(LOW);
+                _exposureTimeController.minsChange(LOW);
                 break;
             default:
                 break;
@@ -316,10 +322,10 @@ void Meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 // intervalTime.mins(1);
-                exposureTime.secChange(HIGH);
+                _exposureTimeController.secChange(HIGH);
                 break;
             case (buttomFunction::decrease):
-                exposureTime.secChange(LOW);
+                _exposureTimeController.secChange(LOW);
                 break;
             default:
                 break;
@@ -330,10 +336,10 @@ void Meun::subMeunFunctionControl()
             {
             case (buttomFunction::increase):
                 // intervalTime.mins(1);
-                exposureTime.oneTenthSecChange(HIGH);
+                _exposureTimeController.oneTenthSecChange(HIGH);
                 break;
             case (buttomFunction::decrease):
-                exposureTime.oneTenthSecChange(LOW);
+                _exposureTimeController.oneTenthSecChange(LOW);
                 break;
             default:
                 break;
@@ -354,3 +360,4 @@ void Meun::subMeunFunctionControl()
 // {
 //     getFunction();
 // }
+#endif
