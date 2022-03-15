@@ -42,6 +42,7 @@ public:
     // void showPerviousTime(int mins, int sec, int oneTenthSec);
     void showMainMeun(int mainMeunOrder);
     void showSubMeun(int subMeunOrder);
+    void showTakingTimelapse();
     void getTime(int mins, int sec, int oneTenthSec);
     enum mainMenu
     {
@@ -58,6 +59,14 @@ void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
     _mins = mins;
     _sec = sec;
     _oneTenthSec = oneTenthSec;
+}
+
+void TFTLCD::showTakingTimelapse()
+{
+    logger.println("Display Taking Timelapse");
+    tft.setCursor(20, 30);
+    tft.setTextSize(2);
+    tft.println("Display Taking Timelapse");
 }
 void TFTLCD::setup()
 {
