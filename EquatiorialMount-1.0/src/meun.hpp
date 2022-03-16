@@ -50,6 +50,7 @@ private:
     Time _exposureTimeController;
     TFTLCD _display;
     void _indexLimit();
+    void subMeunFunctionControl();
 
     enum meunState
     {
@@ -94,7 +95,7 @@ private:
 
 public:
     // void mainMeunFunctionControl();
-    void subMeunFunctionControl();
+
     void meunControlor();
     int getMainMeunOrder();
     int getSubMeunOrder();
@@ -155,10 +156,12 @@ void Meun::meunControlor()
     {
         //-----------------------------------at main meun
     case meunState::atMainMeun:
+        _display.showMainMeun(_mainMeunIntex);
         if (_buttomFunction == buttomFunction::select)
         {
             _atMainMeun = meunState::atSubMeun; // go to sub meun
             _display.showSubMeun(_subMeunIntex);
+            logger.println("From Main Meun to Sub Meun.");
         }
 
         switch (_buttomFunction)
@@ -176,10 +179,12 @@ void Meun::meunControlor()
     //-----------------------------------at main meun
     //------------------------------------at sub meun
     case (meunState::atSubMeun):
+        _display.showSubMeun(_subMeunIntex);
         if (_buttomFunction == buttomFunction::perviousMeun)
         {
             _subMeunIntex = 0;                   // recovery sub meun intex to 0 order
             _atMainMeun = meunState::atMainMeun; // go to main meun
+            logger.println("From Sub Meun go to Main Meun.");
             _display.showMainMeun(_mainMeunIntex);
         }
         else if (_buttomFunction == buttomFunction::select)
@@ -257,7 +262,6 @@ void Meun::subMeunFunctionControl()
             switch (_buttomFunction)
             {
             case (buttomFunction::increase):
-                // intervalTime.mins(1);
                 _intervalTimeController.minsChange(HIGH);
                 break;
             case (buttomFunction::decrease):
