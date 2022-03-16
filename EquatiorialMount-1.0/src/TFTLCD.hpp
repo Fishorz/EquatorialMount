@@ -1,3 +1,5 @@
+#ifndef TFTLCD_h
+#define TFTLCD_h
 #include <Arduino.h>
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
@@ -219,3 +221,4 @@ tft.println("Hello World!");
 
 
 */
+#endif

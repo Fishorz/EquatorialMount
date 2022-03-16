@@ -59,20 +59,20 @@ void loop()
     // Serial.println(command);
     meun.getFunction(command);
 
-    switch (meun.getMeunState())
-    {
-    case meunState::atMainMeun:
-        tft.showMainMeun(meun.getMainMeunOrder());
-        break;
+    // switch (meun.getMeunState())
+    // {
+    // case meunState::atMainMeun:
+    //     tft.showMainMeun(meun.getMainMeunOrder());
+    //     break;
 
-    case meunState::atSubMeun:
-        tft.showSubMeun(meun.getSubMeunOrder());
-        break;
+    // case meunState::atSubMeun:
+    //     tft.showSubMeun(meun.getSubMeunOrder());
+    //     break;
 
-    case meunState::atTakingTimelapse:
-        tft.showTakingTimelapse();
-        break;
-    default:
-        break;
-    }
+    // case meunState::atTakingTimelapse:
+    //     tft.showTakingTimelapse();
+    //     break;
+    // default:
+    //     break;
+    // }
 }
