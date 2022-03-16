@@ -120,11 +120,13 @@ void Meun::_indexLimit()
     {
         _mainMeunIntex = 4;
         logger.println("Main meun intex out of range, reset to 4");
+        return;
     }
     if (_mainMeunIntex < 0)
     {
         _mainMeunIntex = 0;
         logger.println("Main meun intex out of range, reset to 0");
+        return;
     }
 }
 
