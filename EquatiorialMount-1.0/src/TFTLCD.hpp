@@ -47,7 +47,7 @@ public:
     void showMainMeun(int mainMeunOrder);
     void showSubMeun(int subMeunOrder);
 
-    void showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec);
+    void showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec); // function 01
     void showExposureTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec);
     void showRotateChange(); // speed change
 
@@ -136,7 +136,7 @@ void TFTLCD::showSubMeun(int subMeunOrder)
         break;
     }
 
-    _isDisplayReflash = true;
+    // _isDisplayReflash = true;
 }
 
 void TFTLCD::showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec)
@@ -190,60 +190,54 @@ void TFTLCD::showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, 
 
 void TFTLCD::showMainMeun(int mainMeunOrder)
 {
-    if (_lastMainMeunOrder != mainMeunOrder) // flash onec time when meun order change
+    logger.println("Show Main Meun.");
+    int selected_X = 30;
+    int align_X = 20;
+    int textSize = 1;
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextWrap(false);
+    tft.setCursor(20, 30);
+    tft.setTextSize(textSize);
+    tft.setTextColor(ST77XX_YELLOW);
+
+    tft.setCursor(align_X, 30);
+    tft.println("Interval Time");
+    tft.setCursor(align_X, 50);
+    tft.println("Exposure Time");
+    tft.setCursor(align_X, 70);
+    tft.println("Rotate Speed");
+    tft.setCursor(align_X, 90);
+    tft.println("Mode Selection");
+    tft.setCursor(align_X, 110);
+    tft.println("Auto Aim Polar Alignment");
+
+    switch (mainMeunOrder)
     {
-
-        logger.println("mainMeunOrder");
-        int selected_X = 30;
-        int align_X = 20;
-        int textSize = 1;
-        tft.fillScreen(ST77XX_BLACK);
-        tft.setTextWrap(false);
-        tft.setCursor(20, 30);
-        tft.setTextSize(textSize);
-        tft.setTextColor(ST77XX_YELLOW);
-
-        tft.setCursor(align_X, 30);
+    case mainMenu::intervalTimeControl_mainMenu:
+        tft.setCursor(selected_X, 30);
         tft.println("Interval Time");
-        tft.setCursor(align_X, 50);
+        break;
+    case mainMenu::exposureTimeControl_mainMenu:
+        tft.setCursor(selected_X, 50);
         tft.println("Exposure Time");
-        tft.setCursor(align_X, 70);
+        break;
+    case mainMenu::rotateEnableControl_mainMenu:
+        tft.setCursor(selected_X, 70);
         tft.println("Rotate Speed");
-        tft.setCursor(align_X, 90);
+        break;
+    case mainMenu::modeSelection_mainMenu:
+        tft.setCursor(selected_X, 90);
         tft.println("Mode Selection");
-        tft.setCursor(align_X, 110);
+        break;
+    case mainMenu::autoAimPolarAlignment:
+        tft.setCursor(selected_X, 110);
         tft.println("Auto Aim Polar Alignment");
-
-        switch (mainMeunOrder)
-        {
-        case mainMenu::intervalTimeControl_mainMenu:
-            tft.setCursor(selected_X, 30);
-            tft.println("Interval Time");
-            break;
-        case mainMenu::exposureTimeControl_mainMenu:
-            tft.setCursor(selected_X, 50);
-            tft.println("Exposure Time");
-            break;
-        case mainMenu::rotateEnableControl_mainMenu:
-            tft.setCursor(selected_X, 70);
-            tft.println("Rotate Speed");
-            break;
-        case mainMenu::modeSelection_mainMenu:
-            tft.setCursor(selected_X, 90);
-            tft.println("Mode Selection");
-            break;
-        case mainMenu::autoAimPolarAlignment:
-            tft.setCursor(selected_X, 110);
-            tft.println("Auto Aim Polar Alignment");
-            break;
-        default:
-            break;
-        }
-
-        _lastMainMeunOrder = mainMeunOrder;
+        break;
+    default:
+        break;
     }
-
     _isDisplayReflash = true;
+    logger.println("Finish to show main meun.");
 }
 
 // void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
