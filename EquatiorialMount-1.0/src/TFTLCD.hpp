@@ -36,9 +36,11 @@ private:
     int _mins;
     int _sec;
     int _oneTenthSec;
+    bool _isDisplayRefash = false; // is the display refash yet?
     // bool reflashControl();
 
 public:
+    void displayReflash();
     void showTest();
     void showStartMeun();
     // void showPerviousTime(int mins, int sec, int oneTenthSec);
@@ -55,6 +57,11 @@ public:
         autoAimPolarAlignment,
     };
 };
+
+void TFTLCD::displayReflash()
+{
+    _isDisplayRefash = false;
+}
 
 void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
 {
@@ -123,6 +130,8 @@ void TFTLCD::showSubMeun(int subMeunOrder)
     default:
         break;
     }
+
+    _isDisplayRefash = true;
 }
 
 void TFTLCD::showMainMeun(int mainMeunOrder)
@@ -179,6 +188,8 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
 
         _lastMainMeunOrder = mainMeunOrder;
     }
+
+    _isDisplayRefash = true;
 }
 
 // void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
