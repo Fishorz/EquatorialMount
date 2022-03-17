@@ -36,7 +36,7 @@ private:
     int _mins;
     int _sec;
     int _oneTenthSec;
-    bool _isDisplayRefash = false; // is the display refash yet?
+    bool _isDisplayReflash = false; // is the display refash yet?
     // bool reflashControl();
 
 public:
@@ -46,6 +46,11 @@ public:
     // void showPerviousTime(int mins, int sec, int oneTenthSec);
     void showMainMeun(int mainMeunOrder);
     void showSubMeun(int subMeunOrder);
+
+    void showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec);
+    void showExposureTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec);
+    void showRotateChange(); // speed change
+
     void showTakingTimelapse();
     void getTime(int mins, int sec, int oneTenthSec);
     enum mainMenu
@@ -60,7 +65,7 @@ public:
 
 void TFTLCD::displayReflash()
 {
-    _isDisplayRefash = false;
+    _isDisplayReflash = false;
 }
 
 void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
@@ -189,7 +194,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
         _lastMainMeunOrder = mainMeunOrder;
     }
 
-    _isDisplayRefash = true;
+    _isDisplayReflash = true;
 }
 
 // void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
