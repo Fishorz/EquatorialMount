@@ -136,7 +136,56 @@ void TFTLCD::showSubMeun(int subMeunOrder)
         break;
     }
 
-    _isDisplayRefash = true;
+    _isDisplayReflash = true;
+}
+
+void TFTLCD::showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec)
+{
+    int selected_Y = 50;
+    int align_Y = 40;
+    int textSize = 1;
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextWrap(false);
+    tft.setCursor(10, 10);
+    tft.setTextSize(textSize);
+    tft.setTextColor(ST77XX_YELLOW);
+    tft.println("Interval Time");
+
+    switch (timeOrder)
+    {
+    case 1:
+        // display interval time changing mins
+        tft.setCursor(20, selected_Y);
+        tft.println(inputmins);
+        tft.setCursor(50, align_Y);
+        tft.println(inputSec);
+        tft.setCursor(80, align_Y);
+        tft.println(oneTenthSec);
+        break;
+
+    case 2:
+        // display interval time changing sec
+        tft.setCursor(20, align_Y);
+        tft.println(inputmins);
+        tft.setCursor(50, selected_Y);
+        tft.println(inputSec);
+        tft.setCursor(80, align_Y);
+        tft.println(oneTenthSec);
+        break;
+
+    case 3:
+        // display interval time changing oneTenthSec
+        tft.setCursor(20, align_Y);
+        tft.println(inputmins);
+        tft.setCursor(50, align_Y);
+        tft.println(inputSec);
+        tft.setCursor(80, selected_Y);
+        tft.println(oneTenthSec);
+        break;
+
+    default:
+        break;
+    }
 }
 
 void TFTLCD::showMainMeun(int mainMeunOrder)
