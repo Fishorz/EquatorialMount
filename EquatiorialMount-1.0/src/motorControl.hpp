@@ -19,7 +19,7 @@ private:
 public:
     void setSpeed(int speed);
     void setDirection(bool direction);
-    void setMode(bool mode);
+    void setMode(bool mode); //if true rotate Follow Polar Ailgnment With TakingPhoto.
     void setPin(byte dir, byte step);
 
     // enum mode
