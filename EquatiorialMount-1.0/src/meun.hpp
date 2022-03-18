@@ -5,6 +5,7 @@
 #include "Logger.hpp"
 #include "Time.hpp"
 #include "TFTLCD.hpp"
+#include "motorControl.hpp"
 
 /*meun description------------------------------------------------------------------
 
@@ -49,6 +50,8 @@ private:
     Time _intervalTimeController;
     Time _exposureTimeController;
     TFTLCD _display;
+    motorControl _StepperMotor;
+    int _speed;
     void _indexLimit();
     void subMeunFunctionControl();
 
@@ -272,6 +275,7 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
+
             break;
         case (intervalTimeControlMeun::interval_sec):
             switch (_buttomFunction)
@@ -306,6 +310,7 @@ void Meun::subMeunFunctionControl()
             break;
         }
         break;
+
     case (mainMenu::exposureTimeControl_mainMenu):
         switch (_subMeunIntex)
         {
@@ -355,15 +360,43 @@ void Meun::subMeunFunctionControl()
             break;
         }
         break;
+
     case (mainMenu::rotateEnableControl_mainMenu):
+        switch (_buttomFunction)
+        {
+        case (buttomFunction::increase):
+            _speed++;
+            _StepperMotor.setSpeed(_speed);
+            break;
+        case (buttomFunction::decrease):
+            _speed--;
+            _StepperMotor.setSpeed(_speed);
+            break;
+        default:
+            break;
+        }
         break;
+
+    case (mainMenu::modeSelection_mainMenu):
+        switch (_buttomFunction)
+        {
+        case (buttomFunction::increase):
+            _StepperMotor.setMode(true);
+            break;
+        case (buttomFunction::decrease):
+            _StepperMotor.setMode(false);
+            break;
+        default:
+            break;
+        }
+        break;
+
+    case (mainMenu::autoAimPolarAlignment):
+        // run auto aim polar alignment
+        break;
+
     default:
         break;
     }
 }
-
-// Meun::Meun()
-// {
-//     getFunction();
-// }
 #endif
