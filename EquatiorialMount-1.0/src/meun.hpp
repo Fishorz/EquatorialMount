@@ -10,16 +10,16 @@
 /*meun description------------------------------------------------------------------
 
 --mainMeun--              --sub meun--
-interval Time Control     >>interval_mins
-                          >>interval_sec
-                          >>interval_millisec
-exposure Time Control     >>exposure_mins
-                          >>exposure_sec
-                          >>exposure_millisec
-rotate Control            >>speed
-mode Selection            >>Follow mode                   //control rotation follow polar alignment at taking photo.
-                          >>Unfollow mode                 //control rotation follow user setup anytime.
-auto aim polar alignment  >>call auto aim polar function. //自動對準極軸
+interval Time Control     >>01 interval_mins
+                          >>02 interval_sec
+                          >>03 nterval_millisec
+exposure Time Control     >>04 exposure_mins
+                          >>05 exposure_sec
+                          >>06 exposure_millisec
+rotate Control            >>07 speed
+mode Selection            >>08 Follow mode                   //control rotation follow polar alignment at taking photo.
+                          >>09 Unfollow mode                 //control rotation follow user setup anytime.
+auto aim polar alignment  >>10 call auto aim polar function. //自動對準極軸
 
 about the buttom(s)
 0{pervious meun}
@@ -275,7 +275,7 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
-
+            _display.showIntervalTimeChange(1, _intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
             break;
         case (intervalTimeControlMeun::interval_sec):
             switch (_buttomFunction)
@@ -290,6 +290,7 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
+            _display.showIntervalTimeChange(2, _intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
             break;
         case (intervalTimeControlMeun::interval_millisec):
             switch (_buttomFunction)
@@ -304,6 +305,7 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
+            _display.showIntervalTimeChange(3, _intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
             break;
 
         default:
