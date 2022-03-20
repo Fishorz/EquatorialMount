@@ -45,9 +45,9 @@ enum mainMenu
 
 void setup()
 {
-    Serial.begin(25000);
+    Serial.begin(9600);
     delay(100);
-    logger.print("startUp");
+    logger.println("startUp");
     tft.showStartMeun();
     buttom.setButtomPin(A3, A1, A2, A0);
 }
@@ -58,21 +58,4 @@ void loop()
     Serial.print("command = ");
     Serial.println(command);
     meun.getFunction(command);
-
-    // switch (meun.getMeunState())
-    // {
-    // case meunState::atMainMeun:
-    //     tft.showMainMeun(meun.getMainMeunOrder());
-    //     break;
-
-    // case meunState::atSubMeun:
-    //     tft.showSubMeun(meun.getSubMeunOrder());
-    //     break;
-
-    // case meunState::atTakingTimelapse:
-    //     tft.showTakingTimelapse();
-    //     break;
-    // default:
-    //     break;
-    // }
 }

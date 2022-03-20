@@ -50,7 +50,7 @@ public:
     void showIntervalTimeChange(int timeOrder); // layer 01
     void showExposureTimeChange(int timeOrder); // layer 02
     void showRotateChange(int speed);           // layer 03 speed change
-    void showRotateMode(bool mode);            // layer 04 mode select
+    void showRotateMode(bool mode);             // layer 04 mode select
     void autoAPA();                             // layer 05 auto aim polar alignment
 
     void showTakingTimelapse();
@@ -254,11 +254,14 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
     int selected_X = 30;
     int align_X = 20;
     int textSize = 1;
+    tft.initR(INITR_BLACKTAB); // Init ST7735S chip, black tab
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextWrap(false);
     tft.setCursor(20, 30);
     tft.setTextSize(textSize);
     tft.setTextColor(ST77XX_YELLOW);
+
+    logger.println("Set TFT background");
 
     tft.setCursor(align_X, 30);
     tft.println("Interval Time");
@@ -271,27 +274,34 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
     tft.setCursor(align_X, 110);
     tft.println("Auto Aim Polar Alignment");
 
+    logger.println("Switch func Meun");
+
     switch (mainMeunOrder)
     {
     case mainMenu::intervalTimeControl_mainMenu:
         tft.setCursor(selected_X, 30);
         tft.println("Interval Time");
+        logger.println("Display Interval Time.");
         break;
     case mainMenu::exposureTimeControl_mainMenu:
         tft.setCursor(selected_X, 50);
         tft.println("Exposure Time");
+        logger.println("Display Exposure Time.");
         break;
     case mainMenu::rotateEnableControl_mainMenu:
         tft.setCursor(selected_X, 70);
         tft.println("Rotate Speed");
+        logger.println("Display Rotate Speed.");
         break;
     case mainMenu::modeSelection_mainMenu:
         tft.setCursor(selected_X, 90);
         tft.println("Mode Selection");
+        logger.println("Display Mode Selection.");
         break;
     case mainMenu::autoAimPolarAlignment:
         tft.setCursor(selected_X, 110);
         tft.println("Auto Aim Polar Alignment");
+        logger.println("Display Auto APA.");
         break;
     default:
         break;
