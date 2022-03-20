@@ -81,6 +81,5 @@ int Buttom::commandHandler()
         _command = buttomFunction::select;
         return (_command);
     }
-    // delay(100);
     return (buttomFunction::idle);
 }
