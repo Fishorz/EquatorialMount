@@ -47,9 +47,11 @@ public:
     void showMainMeun(int mainMeunOrder);
     void showSubMeun(int subMeunOrder); // abandon
 
-    void showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec); // function 01
-    void showExposureTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec);
-    void showRotateChange(int speed); // speed change
+    void showIntervalTimeChange(int timeOrder); // layer 01
+    void showExposureTimeChange(int timeOrder); // layer 02
+    void showRotateChange(int speed);           // layer 03 speed change
+    void showRotateMode(bool mode);            // layer 04 mode select
+    void autoAPA();                             // layer 05 auto aim polar alignment
 
     void showTakingTimelapse();
     void getTime(int mins, int sec, int oneTenthSec);
@@ -75,13 +77,6 @@ void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
     _oneTenthSec = oneTenthSec;
 }
 
-void TFTLCD::showTakingTimelapse()
-{
-    logger.println("Display Taking Timelapse");
-    tft.setCursor(20, 30);
-    tft.setTextSize(2);
-    tft.println("Display Taking Timelapse");
-}
 void TFTLCD::setup()
 {
     tft.initR(INITR_BLACKTAB); // Init ST7735S chip, black tab
@@ -139,7 +134,7 @@ void TFTLCD::showSubMeun(int subMeunOrder)
     // _isDisplayReflash = true;
 }
 
-void TFTLCD::showExposureTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec)
+void TFTLCD::showExposureTimeChange(int timeOrder)
 {
     int selected_Y = 50;
     int align_Y = 40;
@@ -156,31 +151,31 @@ void TFTLCD::showExposureTimeChange(int timeOrder, int inputmins, int inputSec, 
     case 1:
         // display interval time changing mins
         tft.setCursor(20, selected_Y);
-        tft.println(inputmins);
+        tft.println(_mins);
         tft.setCursor(50, align_Y);
-        tft.println(inputSec);
+        tft.println(_sec);
         tft.setCursor(80, align_Y);
-        tft.println(oneTenthSec);
+        tft.println(_oneTenthSec);
         break;
 
     case 2:
         // display interval time changing sec
         tft.setCursor(20, align_Y);
-        tft.println(inputmins);
+        tft.println(_mins);
         tft.setCursor(50, selected_Y);
-        tft.println(inputSec);
+        tft.println(_sec);
         tft.setCursor(80, align_Y);
-        tft.println(oneTenthSec);
+        tft.println(_oneTenthSec);
         break;
 
     case 3:
         // display interval time changing oneTenthSec
         tft.setCursor(20, align_Y);
-        tft.println(inputmins);
+        tft.println(_mins);
         tft.setCursor(50, align_Y);
-        tft.println(inputSec);
+        tft.println(_sec);
         tft.setCursor(80, selected_Y);
-        tft.println(oneTenthSec);
+        tft.println(_oneTenthSec);
         break;
 
     default:
@@ -188,7 +183,7 @@ void TFTLCD::showExposureTimeChange(int timeOrder, int inputmins, int inputSec, 
     }
 }
 
-void TFTLCD::showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, int oneTenthSec)
+void TFTLCD::showIntervalTimeChange(int timeOrder)
 {
     int selected_Y = 50;
     int align_Y = 40;
@@ -205,36 +200,52 @@ void TFTLCD::showIntervalTimeChange(int timeOrder, int inputmins, int inputSec, 
     case 1:
         // display interval time changing mins
         tft.setCursor(20, selected_Y);
-        tft.println(inputmins);
+        tft.println(_mins);
         tft.setCursor(50, align_Y);
-        tft.println(inputSec);
-        tft.setCursor(80, align_Y);
-        tft.println(oneTenthSec);
+        tft.println(_sec);
+        tft.setCursor(80, selected_Y);
+        tft.println(_oneTenthSec);
         break;
 
     case 2:
         // display interval time changing sec
         tft.setCursor(20, align_Y);
-        tft.println(inputmins);
+        tft.println(_mins);
         tft.setCursor(50, selected_Y);
-        tft.println(inputSec);
+        tft.println(_sec);
         tft.setCursor(80, align_Y);
-        tft.println(oneTenthSec);
+        tft.println(_oneTenthSec);
         break;
 
     case 3:
         // display interval time changing oneTenthSec
         tft.setCursor(20, align_Y);
-        tft.println(inputmins);
+        tft.println(_mins);
         tft.setCursor(50, align_Y);
-        tft.println(inputSec);
+        tft.println(_sec);
         tft.setCursor(80, selected_Y);
-        tft.println(oneTenthSec);
+        tft.println(_oneTenthSec);
         break;
 
     default:
         break;
     }
+}
+
+void TFTLCD::showRotateChange(int speed)
+{
+}
+
+void TFTLCD::showRotateMode(bool mode)
+{
+}
+
+void TFTLCD::showTakingTimelapse()
+{
+    logger.println("Display Taking Timelapse");
+    tft.setCursor(20, 30);
+    tft.setTextSize(2);
+    tft.println("Display Taking Timelapse");
 }
 
 void TFTLCD::showMainMeun(int mainMeunOrder)

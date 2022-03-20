@@ -275,7 +275,8 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
-            _display.showIntervalTimeChange(1, _intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.showIntervalTimeChange(1);
             break;
         case (intervalTimeControlMeun::interval_sec):
             switch (_buttomFunction)
@@ -290,7 +291,8 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
-            _display.showIntervalTimeChange(2, _intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.showIntervalTimeChange(2);
             break;
         case (intervalTimeControlMeun::interval_millisec):
             switch (_buttomFunction)
@@ -305,7 +307,8 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
-            _display.showIntervalTimeChange(3, _intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.showIntervalTimeChange(3);
             break;
 
         default:
@@ -329,6 +332,8 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
+            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.showExposureTimeChange(1);
             break;
         case (exposureTimeControl::exposure_sec):
             switch (_buttomFunction)
@@ -343,6 +348,8 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
+            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.showExposureTimeChange(2);
             break;
         case (exposureTimeControl::exposure_millisec):
             switch (_buttomFunction)
@@ -357,6 +364,8 @@ void Meun::subMeunFunctionControl()
             default:
                 break;
             }
+            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.showExposureTimeChange(3);
             break;
         default:
             break;
@@ -377,6 +386,7 @@ void Meun::subMeunFunctionControl()
         default:
             break;
         }
+        _display.showRotateChange(_speed);
         break;
 
     case (mainMenu::modeSelection_mainMenu):
@@ -384,9 +394,11 @@ void Meun::subMeunFunctionControl()
         {
         case (buttomFunction::increase):
             _StepperMotor.setMode(true);
+            _display.showRotateMode(true);
             break;
         case (buttomFunction::decrease):
             _StepperMotor.setMode(false);
+            _display.showRotateMode(false);
             break;
         default:
             break;
