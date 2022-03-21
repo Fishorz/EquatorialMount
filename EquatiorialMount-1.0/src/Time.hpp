@@ -19,7 +19,7 @@ public:
     int getMins();
     int getSec();
     int getOneTenthSec();
-    int calculateMillisecTime(int mins, int sec, int oneTenthSec);
+    int calculateMillisecTime(unsigned mins, unsigned sec, unsigned oneTenthSec);
     int getMillisecTime();
 };
 
