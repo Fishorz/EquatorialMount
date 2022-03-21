@@ -280,10 +280,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
         tft.setCursor(20, 30);
         tft.setTextSize(textSize);
         tft.setTextColor(ST77XX_YELLOW);
-
-        logger.println("Set TFT background");
-
-        logger.println("Switch func Meun");
+        logger.println("Setted TFT background");
 
         switch (mainMeunOrder)
         {
