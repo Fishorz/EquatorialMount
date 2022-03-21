@@ -283,17 +283,6 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
 
         logger.println("Set TFT background");
 
-        tft.setCursor(align_X, 30);
-        tft.println("Interval Time");
-        tft.setCursor(align_X, 50);
-        tft.println("Exposure Time");
-        tft.setCursor(align_X, 70);
-        tft.println("Rotate Speed");
-        tft.setCursor(align_X, 90);
-        tft.println("Mode Selection");
-        tft.setCursor(align_X, 110);
-        tft.println("Auto Aim Polar Alignment");
-
         logger.println("Switch func Meun");
 
         switch (mainMeunOrder)
@@ -301,24 +290,64 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
         case mainMenu::intervalTimeControl_mainMenu:
             tft.setCursor(selected_X, 30);
             tft.println("Interval Time");
+            tft.setCursor(align_X, 50);
+            tft.println("Exposure Time");
+            tft.setCursor(align_X, 70);
+            tft.println("Rotate Speed");
+            tft.setCursor(align_X, 90);
+            tft.println("Mode Selection");
+            tft.setCursor(align_X, 110);
+            tft.println("Auto Aim Polar Alignment");
             logger.println("Display Interval Time.");
             break;
         case mainMenu::exposureTimeControl_mainMenu:
+            tft.setCursor(align_X, 30);
+            tft.println("Interval Time");
             tft.setCursor(selected_X, 50);
             tft.println("Exposure Time");
+            tft.setCursor(align_X, 70);
+            tft.println("Rotate Speed");
+            tft.setCursor(align_X, 90);
+            tft.println("Mode Selection");
+            tft.setCursor(align_X, 110);
+            tft.println("Auto Aim Polar Alignment");
             logger.println("Display Exposure Time.");
             break;
         case mainMenu::rotateEnableControl_mainMenu:
+            tft.setCursor(align_X, 30);
+            tft.println("Interval Time");
+            tft.setCursor(align_X, 50);
+            tft.println("Exposure Time");
             tft.setCursor(selected_X, 70);
             tft.println("Rotate Speed");
+            tft.setCursor(align_X, 90);
+            tft.println("Mode Selection");
+            tft.setCursor(align_X, 110);
+            tft.println("Auto Aim Polar Alignment");
             logger.println("Display Rotate Speed.");
             break;
         case mainMenu::modeSelection_mainMenu:
+            tft.setCursor(align_X, 30);
+            tft.println("Interval Time");
+            tft.setCursor(align_X, 50);
+            tft.println("Exposure Time");
+            tft.setCursor(align_X, 70);
+            tft.println("Rotate Speed");
             tft.setCursor(selected_X, 90);
             tft.println("Mode Selection");
+            tft.setCursor(align_X, 110);
+            tft.println("Auto Aim Polar Alignment");
             logger.println("Display Mode Selection.");
             break;
         case mainMenu::autoAimPolarAlignment:
+            tft.setCursor(align_X, 30);
+            tft.println("Interval Time");
+            tft.setCursor(align_X, 50);
+            tft.println("Exposure Time");
+            tft.setCursor(align_X, 70);
+            tft.println("Rotate Speed");
+            tft.setCursor(align_X, 90);
+            tft.println("Mode Selection");
             tft.setCursor(selected_X, 110);
             tft.println("Auto Aim Polar Alignment");
             logger.println("Display Auto APA.");
