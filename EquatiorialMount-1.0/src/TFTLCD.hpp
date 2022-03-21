@@ -295,7 +295,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
             tft.println("Mode Selection");
             tft.setCursor(align_X, 110);
             tft.println("Auto Aim Polar Alignment");
-            logger.println("Display Interval Time.");
+            logger.println("Select Interval Time.");
             break;
         case mainMenu::exposureTimeControl_mainMenu:
             tft.setCursor(align_X, 30);
@@ -308,7 +308,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
             tft.println("Mode Selection");
             tft.setCursor(align_X, 110);
             tft.println("Auto Aim Polar Alignment");
-            logger.println("Display Exposure Time.");
+            logger.println("Select Exposure Time.");
             break;
         case mainMenu::rotateEnableControl_mainMenu:
             tft.setCursor(align_X, 30);
@@ -321,7 +321,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
             tft.println("Mode Selection");
             tft.setCursor(align_X, 110);
             tft.println("Auto Aim Polar Alignment");
-            logger.println("Display Rotate Speed.");
+            logger.println("Select Rotate Speed.");
             break;
         case mainMenu::modeSelection_mainMenu:
             tft.setCursor(align_X, 30);
@@ -334,7 +334,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
             tft.println("Mode Selection");
             tft.setCursor(align_X, 110);
             tft.println("Auto Aim Polar Alignment");
-            logger.println("Display Mode Selection.");
+            logger.println("Select Mode Selection.");
             break;
         case mainMenu::autoAimPolarAlignment:
             tft.setCursor(align_X, 30);
@@ -347,7 +347,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
             tft.println("Mode Selection");
             tft.setCursor(selected_X, 110);
             tft.println("Auto Aim Polar Alignment");
-            logger.println("Display Auto APA.");
+            logger.println("Select Auto APA.");
             break;
         default:
             break;

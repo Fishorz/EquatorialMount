@@ -56,39 +56,44 @@ void Buttom::getButtomStatus()
 int Buttom::commandHandler()
 {
     getButtomStatus();
-    if (_perviousButtomStatus && _selectButtomStatus)
-    {
-        _command = buttomFunction::start;
-        return (_command);
-    }
+
+    // if (_perviousButtomStatus && _selectButtomStatus)
+    // {
+    //     _command = buttomFunction::start;
+    //     return (_command);
+    // }
 
     if (_numIncreaseButtomStatus == LOW && _lastNumIncreaseButtomStatus)
     {
         _command = buttomFunction::increase;
+        _lastNumIncreaseButtomStatus = LOW;
         return (_command);
     }
 
     if (_numDecreaseButtomStatus == LOW && _lastNumDecreaseButtomStatus)
     {
         _command = buttomFunction::decrease;
+        _lastNumDecreaseButtomStatus = LOW;
         return (_command);
     }
 
     if (_perviousButtomStatus == LOW && _lastPerviousButtomStatus)
     {
         _command = buttomFunction::perviousMeun;
+        _lastPerviousButtomStatus = LOW;
         return (_command);
     }
 
     if (_selectButtomStatus == LOW && _lastSelectButtomStatus)
     {
         _command = buttomFunction::select;
+        _lastSelectButtomStatus = LOW;
         return (_command);
     }
-
+    _lastSelectButtomStatus = _selectButtomStatus;
     _lastNumIncreaseButtomStatus = _numIncreaseButtomStatus;
     _lastNumDecreaseButtomStatus = _numDecreaseButtomStatus;
     _lastPerviousButtomStatus = _perviousButtomStatus;
-    _lastSelectButtomStatus = _selectButtomStatus;
+
     return (buttomFunction::idle);
 }

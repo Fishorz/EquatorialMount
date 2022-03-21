@@ -54,6 +54,8 @@ private:
     int _speed;
     void _indexLimit();
     void subMeunFunctionControl();
+    void switchAtMainMeun();
+    void switchAtSubMeun();
     int _LCDinit = false;
 
     enum meunState
@@ -155,6 +157,66 @@ int Meun::getMeunState()
 
     return (_atMainMeun);
 }
+void Meun::switchAtMainMeun()
+{
+    _display.showMainMeun(_mainMeunIntex);
+    if (_buttomFunction == buttomFunction::select)
+    {
+        _atMainMeun = meunState::atSubMeun; // go to sub meun
+        _display.displayReflash();
+        _display.showSubMeun(_subMeunIntex);
+        logger.println("From Main Meun to Sub Meun.");
+    }
+
+    switch (_buttomFunction)
+    {
+    case (buttomFunction::increase):
+        _mainMeunIntex++;
+        _display.displayReflash();
+        break;
+    case (buttomFunction::decrease):
+        _mainMeunIntex--;
+        _display.displayReflash();
+        break;
+    default:
+        break;
+    }
+}
+
+void Meun::switchAtSubMeun()
+{
+    if (_buttomFunction == buttomFunction::perviousMeun)
+    {
+        _subMeunIntex = 0;                   // recovery sub meun intex to 0 order
+        _atMainMeun = meunState::atMainMeun; // go to main meun
+        logger.println("From Sub Meun go to Main Meun.");
+        _display.displayReflash();
+        _display.showMainMeun(_mainMeunIntex);
+        return;
+    }
+    else if (_buttomFunction == buttomFunction::select)
+    {
+        _atMainMeun = meunState::changeTimeOrState;
+        return;
+    }
+
+    switch (_buttomFunction)
+    {
+    case (buttomFunction::increase):
+        _subMeunIntex++;
+        _display.displayReflash();
+        break;
+    case (buttomFunction::decrease):
+        _subMeunIntex--;
+        _display.displayReflash();
+        break;
+    default:
+        break;
+    }
+    logger.print("Show Sub meun. Sub meun =");
+    logger.println(_subMeunIntex);
+    _display.showSubMeun(_subMeunIntex);
+}
 
 void Meun::meunControlor()
 {
@@ -168,61 +230,15 @@ void Meun::meunControlor()
     {
         //-----------------------------------at main meun
     case meunState::atMainMeun:
-        _display.showMainMeun(_mainMeunIntex);
-        if (_buttomFunction == buttomFunction::select)
-        {
-            _atMainMeun = meunState::atSubMeun; // go to sub meun
-            _display.displayReflash();
-            _display.showSubMeun(_subMeunIntex);
-            logger.println("From Main Meun to Sub Meun.");
-        }
-
-        switch (_buttomFunction)
-        {
-        case (buttomFunction::increase):
-            _mainMeunIntex++;
-            _display.displayReflash();
-            break;
-        case (buttomFunction::decrease):
-            _mainMeunIntex--;
-            _display.displayReflash();
-            break;
-        default:
-            break;
-        }
+        switchAtMainMeun();
         break;
     //-----------------------------------at main meun
     //------------------------------------at sub meun
     case (meunState::atSubMeun):
-        _display.showSubMeun(_subMeunIntex);
-        if (_buttomFunction == buttomFunction::perviousMeun)
-        {
-            _subMeunIntex = 0;                   // recovery sub meun intex to 0 order
-            _atMainMeun = meunState::atMainMeun; // go to main meun
-            logger.println("From Sub Meun go to Main Meun.");
-            _display.displayReflash();
-            _display.showMainMeun(_mainMeunIntex);
-        }
-        else if (_buttomFunction == buttomFunction::select)
-        {
-            _atMainMeun = meunState::changeTimeOrState;
-        }
-
-        switch (_buttomFunction)
-        {
-        case (buttomFunction::increase):
-            _subMeunIntex++;
-            _display.displayReflash();
-            break;
-        case (buttomFunction::decrease):
-            _subMeunIntex--;
-            _display.displayReflash();
-            break;
-        default:
-            break;
-        }
-        //------------------------------------at sub meun
-        //------------------------------------at changeTimeOrState
+        switchAtSubMeun();
+        break;
+    //------------------------------------at sub meun
+    //------------------------------------at changeTimeOrState
     case (meunState::changeTimeOrState):
         subMeunFunctionControl();
         break;

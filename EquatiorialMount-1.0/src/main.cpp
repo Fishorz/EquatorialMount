@@ -55,7 +55,7 @@ void setup()
 void loop()
 {
     int command = buttom.commandHandler();
-    Serial.print("command = ");
-    Serial.println(command);
+    // Serial.print("command = ");
+    // Serial.println(command);
     meun.getFunction(command);
 }
