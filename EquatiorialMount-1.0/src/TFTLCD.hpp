@@ -394,7 +394,5 @@ tft.setCursor(0, 30);
 tft.setTextColor(ST77XX_RED);
 tft.setTextSize(1);
 tft.println("Hello World!");
-
-
 */
 #endif
