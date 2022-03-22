@@ -106,32 +106,6 @@ void TFTLCD::showSubMeun(int subMeunOrder)
         tft.setCursor(20, 30);
         tft.setTextSize(2);
         tft.setTextColor(ST77XX_YELLOW);
-
-        switch (subMeunOrder)
-        {
-        case mainMenu::intervalTimeControl_mainMenu:
-            tft.setCursor(connerX, connerY);
-            tft.println("Interval Time");
-            break;
-        case mainMenu::exposureTimeControl_mainMenu:
-            tft.setCursor(connerX, connerY);
-            tft.println("Exposure Time");
-            break;
-        case mainMenu::rotateEnableControl_mainMenu:
-            tft.setCursor(connerX, connerY);
-            tft.println("Rotate Speed");
-            break;
-        case mainMenu::modeSelection_mainMenu:
-            tft.setCursor(connerX, connerY);
-            tft.println("Mode Selection");
-            break;
-        case mainMenu::autoAimPolarAlignment:
-            tft.setCursor(connerX, connerY);
-            tft.println("Auto Aim Polar Alignment");
-            break;
-        default:
-            break;
-        }
     }
     _isDisplayReflash = true;
 }
@@ -206,17 +180,17 @@ void TFTLCD::showIntervalTimeChange(int timeOrder)
 
         switch (timeOrder)
         {
-        case 1:
+        case 0:
             // display interval time changing mins
             tft.setCursor(20, selected_Y);
             tft.println(_mins);
             tft.setCursor(50, align_Y);
             tft.println(_sec);
-            tft.setCursor(80, selected_Y);
+            tft.setCursor(80, align_Y);
             tft.println(_oneTenthSec);
             break;
 
-        case 2:
+        case 1:
             // display interval time changing sec
             tft.setCursor(20, align_Y);
             tft.println(_mins);
@@ -226,7 +200,7 @@ void TFTLCD::showIntervalTimeChange(int timeOrder)
             tft.println(_oneTenthSec);
             break;
 
-        case 3:
+        case 2:
             // display interval time changing oneTenthSec
             tft.setCursor(20, align_Y);
             tft.println(_mins);
@@ -304,7 +278,7 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
         tft.setCursor(20, 30);
         tft.setTextSize(textSize);
         tft.setTextColor(ST77XX_YELLOW);
-        logger.println("Setted TFT background");
+        // logger.println("Setted TFT background");
 
         switch (mainMeunOrder)
         {
