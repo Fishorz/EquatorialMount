@@ -39,7 +39,7 @@ int Time::getOneTenthSec()
 void Time::minsChange(bool direction)
 {
     (direction) ? _mins++ : _mins--;
-    secLimit(_mins);
+    minsLimit(_mins);
 }
 
 void Time::secChange(bool direction)
@@ -51,7 +51,7 @@ void Time::secChange(bool direction)
 void Time::oneTenthSecChange(bool direction)
 {
     (direction) ? _oneTenthSec++ : _oneTenthSec--;
-    secLimit(_oneTenthSec);
+    oneTenthSecLimit(_oneTenthSec);
 }
 
 int Time::getMillisecTime()
