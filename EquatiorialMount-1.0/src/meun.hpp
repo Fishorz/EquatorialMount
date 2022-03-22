@@ -38,7 +38,7 @@ private:
     byte _lastMeun;
     int _atMainMeun = meunState::atMainMeun; // True is at main meun; False is at sub meun
     bool _takingTimelapse = false;           // True is taking timelapse, false is in setting.
-    byte _mainMeunIntex = 0;
+    byte _mainMeunIndex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
     int _exposureTime;
@@ -52,11 +52,12 @@ private:
     TFTLCD _display;
     motorControl _StepperMotor;
     int _speed;
-    void _indexLimit();
+    void mainMeunIndexLimit();
     void subMeunFunctionControl();
     void switchAtMainMeun();
     void switchAtSubMeun();
     int _LCDinit = false;
+    void subMeunIndexLimit(int max, int min);
 
     enum meunState
     {
@@ -120,17 +121,22 @@ public:
 // void manualControl::getButtomStatus(){
 //     _buttomStatus[0] = digitalRead(_buttomPin[0])};
 
-void Meun::_indexLimit()
+void Meun::subMeunIndexLimit(int max, int min)
 {
-    if (_mainMeunIntex > 4)
+    _subMeunIntex = constrain(_subMeunIntex, min, max);
+}
+
+void Meun::mainMeunIndexLimit()
+{
+    if (_mainMeunIndex > 4)
     {
-        _mainMeunIntex = 4;
+        _mainMeunIndex = 4;
         logger.println("Main meun intex out of range, reset to 4");
         return;
     }
-    if (_mainMeunIntex < 0)
+    if (_mainMeunIndex < 0)
     {
-        _mainMeunIntex = 0;
+        _mainMeunIndex = 0;
         logger.println("Main meun intex out of range, reset to 0");
         return;
     }
@@ -159,7 +165,7 @@ int Meun::getMeunState()
 }
 void Meun::switchAtMainMeun()
 {
-    _display.showMainMeun(_mainMeunIntex);
+    _display.showMainMeun(_mainMeunIndex);
     if (_buttomFunction == buttomFunction::select)
     {
         _atMainMeun = meunState::atSubMeun; // go to sub meun
@@ -171,11 +177,11 @@ void Meun::switchAtMainMeun()
     switch (_buttomFunction)
     {
     case (buttomFunction::increase):
-        _mainMeunIntex++;
+        _mainMeunIndex++;
         _display.displayReflash();
         break;
     case (buttomFunction::decrease):
-        _mainMeunIntex--;
+        _mainMeunIndex--;
         _display.displayReflash();
         break;
     default:
@@ -191,7 +197,7 @@ void Meun::switchAtSubMeun()
         _atMainMeun = meunState::atMainMeun; // go to main meun
         logger.println("From Sub Meun go to Main Meun.");
         _display.displayReflash();
-        _display.showMainMeun(_mainMeunIntex);
+        _display.showMainMeun(_mainMeunIndex);
         return;
     }
     else if (_buttomFunction == buttomFunction::select)
@@ -213,6 +219,7 @@ void Meun::switchAtSubMeun()
     default:
         break;
     }
+    subMeunIndexLimit(5, 0);
     logger.print("Show Sub meun. Sub meun =");
     logger.println(_subMeunIntex);
     _display.showSubMeun(_subMeunIntex);
@@ -246,12 +253,12 @@ void Meun::meunControlor()
     default:
         break;
     }
-    _indexLimit();
+    mainMeunIndexLimit();
 }
 
 int Meun::getMainMeunOrder()
 {
-    int MainMeunOrder = _mainMeunIntex;
+    int MainMeunOrder = _mainMeunIndex;
     return (MainMeunOrder);
 }
 
@@ -303,6 +310,10 @@ void Meun::subMeunFunctionControl()
                 _display.displayReflash();
                 _intervalTimeController.minsChange(LOW);
                 break;
+            case (buttomFunction::perviousMeun):
+                _display.displayReflash();
+                _atMainMeun = meunState::atSubMeun;
+                break;
             default:
                 break;
             }
@@ -321,6 +332,10 @@ void Meun::subMeunFunctionControl()
                 _intervalTimeController.secChange(LOW);
                 _display.displayReflash();
                 break;
+            case (buttomFunction::perviousMeun):
+                _display.displayReflash();
+                _atMainMeun = meunState::atSubMeun;
+                break;
             default:
                 break;
             }
@@ -338,6 +353,10 @@ void Meun::subMeunFunctionControl()
             case (buttomFunction::decrease):
                 _intervalTimeController.oneTenthSecChange(LOW);
                 _display.displayReflash();
+                break;
+            case (buttomFunction::perviousMeun):
+                _display.displayReflash();
+                _atMainMeun = meunState::atSubMeun;
                 break;
             default:
                 break;
@@ -364,11 +383,15 @@ void Meun::subMeunFunctionControl()
             case (buttomFunction::decrease):
                 _exposureTimeController.minsChange(LOW);
                 break;
+            case (buttomFunction::perviousMeun):
+                _display.displayReflash();
+                _atMainMeun = meunState::atSubMeun;
+                break;
             default:
                 break;
             }
             _display.displayReflash();
-            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
             _display.showExposureTimeChange(1);
             break;
         case (exposureTimeControl::exposure_sec):
@@ -381,11 +404,15 @@ void Meun::subMeunFunctionControl()
             case (buttomFunction::decrease):
                 _exposureTimeController.secChange(LOW);
                 break;
+            case (buttomFunction::perviousMeun):
+                _display.displayReflash();
+                _atMainMeun = meunState::atSubMeun;
+                break;
             default:
                 break;
             }
             _display.displayReflash();
-            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
             _display.showExposureTimeChange(2);
             break;
         case (exposureTimeControl::exposure_millisec):
@@ -398,11 +425,15 @@ void Meun::subMeunFunctionControl()
             case (buttomFunction::decrease):
                 _exposureTimeController.oneTenthSecChange(LOW);
                 break;
+            case (buttomFunction::perviousMeun):
+                _display.displayReflash();
+                _atMainMeun = meunState::atSubMeun;
+                break;
             default:
                 break;
             }
             _display.displayReflash();
-            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+            _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
             _display.showExposureTimeChange(3);
             break;
         default:
@@ -420,6 +451,10 @@ void Meun::subMeunFunctionControl()
         case (buttomFunction::decrease):
             _speed--;
             _StepperMotor.setSpeed(_speed);
+            break;
+        case (buttomFunction::perviousMeun):
+            _display.displayReflash();
+            _atMainMeun = meunState::atSubMeun;
             break;
         default:
             break;
@@ -440,6 +475,10 @@ void Meun::subMeunFunctionControl()
             _StepperMotor.setMode(false);
             _display.displayReflash();
             _display.showRotateMode(false);
+            break;
+        case (buttomFunction::perviousMeun):
+            _display.displayReflash();
+            _atMainMeun = meunState::atSubMeun;
             break;
         default:
             break;

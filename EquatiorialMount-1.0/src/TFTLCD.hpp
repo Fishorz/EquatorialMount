@@ -140,7 +140,7 @@ void TFTLCD::showExposureTimeChange(int timeOrder)
 {
     if (_isDisplayReflash == false)
     {
-        int selected_Y = 50;
+        int selected_Y = 45;
         int align_Y = 40;
         int textSize = 1;
         tft.fillScreen(ST77XX_BLACK);
@@ -191,7 +191,7 @@ void TFTLCD::showExposureTimeChange(int timeOrder)
 
 void TFTLCD::showIntervalTimeChange(int timeOrder)
 {
-    int selected_Y = 50;
+    int selected_Y = 45;
     int align_Y = 40;
     int textSize = 1;
     if (_isDisplayReflash == false)
@@ -245,15 +245,39 @@ void TFTLCD::showIntervalTimeChange(int timeOrder)
 
 void TFTLCD::showRotateChange(int speed)
 {
+    int textSize = 1;
     if (_isDisplayReflash == false)
     {
+        tft.fillScreen(ST77XX_BLACK);
+        tft.setTextWrap(false);
+        tft.setCursor(10, 10);
+        tft.setTextSize(textSize);
+        tft.setTextColor(ST77XX_YELLOW);
+        tft.println("Rotate Speed");
+
+        tft.setCursor(30, 30);
+        tft.println("Speed = ");
+        tft.setCursor(50, 30);
+        tft.println(speed);
     }
 }
 
 void TFTLCD::showRotateMode(bool mode)
 {
+    int textSize = 1;
     if (_isDisplayReflash == false)
     {
+        tft.fillScreen(ST77XX_BLACK);
+        tft.setTextWrap(false);
+        tft.setCursor(10, 10);
+        tft.setTextSize(textSize);
+        tft.setTextColor(ST77XX_YELLOW);
+        tft.println("Rotate Mode");
+
+        tft.setCursor(30, 30);
+        tft.println("Mode = ");
+        tft.setCursor(50, 30);
+        mode ? tft.println("Follow") : tft.println("UnFollw");
     }
 }
 
