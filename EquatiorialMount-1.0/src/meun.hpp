@@ -58,12 +58,15 @@ private:
     void mainMeunButtonControl();
     void submeunButtonControl();
 
-    void intervalTimeButtonControl();
-    int _intervalTimeChangeIndex = 0;
+    void timeSelectingButtonControl();
+    int timeSelectChangeIndex = 0;
     void timeChangeButtonControl();
     void exposureTimeButtonControl();
     int _exposureTimeChangeIndex = 0;
     void exposureTimeChangeButtonControl();
+
+    void switchWhichTimeSelectToChange(bool dir);
+    void switchWhichTimeSelectedToShow();
 
     void rotateSpeedButtonControl();
     void rotateModeButtonControl();
@@ -222,10 +225,10 @@ void Meun::submeunButtonControl()
     {
     case mainMenu::intervalTimeControl_mainMenu:
         //_display.showIntervalTimeChange(0);
-        intervalTimeButtonControl();
+        timeSelectingButtonControl();
         break;
     case mainMenu::exposureTimeControl_mainMenu:
-        _display.showExposureTimeChange(0);
+        timeSelectingButtonControl();
         break;
     case mainMenu::rotateEnableControl_mainMenu:
         logger.println("change rotate speed.");
@@ -239,7 +242,7 @@ void Meun::submeunButtonControl()
     }
 }
 
-void Meun::intervalTimeButtonControl()
+void Meun::timeSelectingButtonControl()
 {
     switch (_buttonFunction)
     {
@@ -247,12 +250,12 @@ void Meun::intervalTimeButtonControl()
         _meunState = meunState::atMainMeun;
         break;
     case buttomFunction::increase:
-        _intervalTimeChangeIndex++;
+        timeSelectChangeIndex++;
         _display.displayReflash();
         logger.println("TimeChangeIndex++");
         break;
     case buttomFunction::decrease:
-        _intervalTimeChangeIndex--;
+        timeSelectChangeIndex--;
         _display.displayReflash();
         logger.println("TimeChangeIndex--");
         break;
@@ -262,8 +265,78 @@ void Meun::intervalTimeButtonControl()
     default:
         break;
     }
-    _intervalTimeChangeIndex = IndexLimit(_intervalTimeChangeIndex, 2, 0);
-    _display.showIntervalTimeChange(_intervalTimeChangeIndex);
+
+    timeSelectChangeIndex = IndexLimit(timeSelectChangeIndex, 2, 0);
+    if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
+    {
+        _display.showIntervalTimeChange(timeSelectChangeIndex);
+    }
+    else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
+    {
+        _display.showExposureTimeChange(timeSelectChangeIndex);
+    }
+}
+
+void Meun::switchWhichTimeSelectedToShow()
+{
+    if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
+    {
+        _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+        _display.displayReflash();
+        _display.showIntervalTimeChange(timeSelectChangeIndex);
+    }
+    else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
+    {
+        _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
+        _display.displayReflash();
+        _display.showExposureTimeChange(_exposureTimeChangeIndex);
+    }
+}
+
+void Meun::switchWhichTimeSelectToChange(bool dir)
+{
+    switch (timeSelectChangeIndex)
+    {
+    case 0:
+        if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
+        {
+            _intervalTimeController.minsChange(dir);
+            logger.println("changing int mins time");
+        }
+        else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
+        {
+            _exposureTimeController.minsChange(dir);
+            logger.println("changing exp mins time");
+        }
+        break;
+    case 1:
+        if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
+        {
+            _intervalTimeController.secChange(dir);
+            logger.println("changing int sec time");
+        }
+        else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
+        {
+            _exposureTimeController.secChange(dir);
+            logger.println("changing exp sec time");
+        }
+        break;
+    case 2:
+        if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
+        {
+            _intervalTimeController.oneTenthSecChange(dir);
+            logger.println("changing int OTS time");
+        }
+        else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
+        {
+            _exposureTimeController.oneTenthSecChange(dir);
+            logger.println("changing exp OTS time");
+        }
+        break;
+
+    default:
+        break;
+    }
 }
 
 void Meun::timeChangeButtonControl() // true is change interval.
@@ -275,43 +348,12 @@ void Meun::timeChangeButtonControl() // true is change interval.
         _meunState = meunState::atSubMeun;
         break;
     case buttomFunction::increase:
-        if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
-        {
-            _intervalTimeController.minsChange(true);
-            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
-            _display.displayReflash();
-            _display.showIntervalTimeChange(_intervalTimeChangeIndex);
-            logger.println("increase int mins time");
-            // logger.println(_intervalTimeController.getMins());
-            // logger.println(_intervalTimeController.getSec());
-        }
-        else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
-        {
-            _exposureTimeController.minsChange(true);
-            _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
-            _display.displayReflash();
-            _display.showExposureTimeChange(_exposureTimeChangeIndex);
-            logger.println("increase exp mins time");
-        }
-
+        switchWhichTimeSelectToChange(HIGH);
+        switchWhichTimeSelectedToShow();
         break;
     case buttomFunction::decrease:
-        if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
-        {
-            _intervalTimeController.minsChange(false);
-            _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
-            _display.displayReflash();
-            _display.showIntervalTimeChange(_intervalTimeChangeIndex);
-            logger.println("decrease int mins time");
-        }
-        else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
-        {
-            _exposureTimeController.minsChange(false);
-            _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
-            _display.displayReflash();
-            _display.showExposureTimeChange(_exposureTimeChangeIndex);
-            logger.println("decrease exp mins time");
-        }
+        switchWhichTimeSelectToChange(LOW);
+        switchWhichTimeSelectedToShow();
         break;
     case buttomFunction::select:
         logger.println("Not in use.");
