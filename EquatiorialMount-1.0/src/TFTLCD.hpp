@@ -126,7 +126,7 @@ void TFTLCD::showExposureTimeChange(int timeOrder)
 
         switch (timeOrder)
         {
-        case 1:
+        case 0:
             // display interval time changing mins
             tft.setCursor(20, selected_Y);
             tft.println(_mins);
@@ -136,7 +136,7 @@ void TFTLCD::showExposureTimeChange(int timeOrder)
             tft.println(_oneTenthSec);
             break;
 
-        case 2:
+        case 1:
             // display interval time changing sec
             tft.setCursor(20, align_Y);
             tft.println(_mins);
@@ -146,7 +146,7 @@ void TFTLCD::showExposureTimeChange(int timeOrder)
             tft.println(_oneTenthSec);
             break;
 
-        case 3:
+        case 2:
             // display interval time changing oneTenthSec
             tft.setCursor(20, align_Y);
             tft.println(_mins);
