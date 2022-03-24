@@ -89,7 +89,7 @@ private:
     {
         intervalTimeControl_mainMenu,
         exposureTimeControl_mainMenu,
-        rotateEnableControl_mainMenu,
+        rotateSpeedControl_mainMenu,
         modeSelection_mainMenu,
         autoAimPolarAlignment,
     };
