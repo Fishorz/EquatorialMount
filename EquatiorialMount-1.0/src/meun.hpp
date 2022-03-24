@@ -226,22 +226,76 @@ void Meun::submeunButtonControl()
     switch (_mainMeunIndex)
     {
     case mainMenu::intervalTimeControl_mainMenu:
+        // logger.println("intervalTimeControl_mainMenu.");
         //_display.showIntervalTimeChange(0);
         timeSelectingButtonControl();
         break;
     case mainMenu::exposureTimeControl_mainMenu:
+        // logger.println("exposureTimeControl_mainMenu.");
         timeSelectingButtonControl();
         break;
-    case mainMenu::rotateEnableControl_mainMenu:
-        logger.println("change rotate speed.");
+    case mainMenu::rotateSpeedControl_mainMenu:
+        rotateSpeedButtonControl();
         break;
     case mainMenu::modeSelection_mainMenu:
-        logger.println("change rotate mode.");
+        rotateModeButtonControl();
+        break;
+    case mainMenu::autoAimPolarAlignment:
+        logger.println("autoAimPolarAlignment.");
         break;
 
     default:
         break;
     }
+}
+
+void Meun::rotateModeButtonControl()
+{
+    // logger.println("rotateModeButtonControl");
+    switch (_buttonFunction)
+    {
+    case buttomFunction::perviousMeun:
+        _display.displayReflash();
+        _meunState = meunState::atMainMeun;
+        break;
+    case buttomFunction::increase:
+        _rotateDirection = true;
+        _display.displayReflash();
+        logger.println("change rotate mode");
+        break;
+    case buttomFunction::decrease:
+        _rotateDirection = false;
+        _display.displayReflash();
+        logger.println("change rotate mode");
+        break;
+    default:
+        break;
+    }
+    _display.showRotateMode(_rotateDirection);
+}
+
+void Meun::rotateSpeedButtonControl()
+{
+    // logger.println("rotateSpeedButtonControl");
+    switch (_buttonFunction)
+    {
+    case buttomFunction::perviousMeun:
+        _meunState = meunState::atMainMeun;
+        break;
+    case buttomFunction::increase:
+        _speed++;
+        _display.displayReflash();
+        logger.println("increasing rotate speed.");
+        break;
+    case buttomFunction::decrease:
+        _speed--;
+        _display.displayReflash();
+        logger.println("decreasing rotate speed.--");
+        break;
+    default:
+        break;
+    }
+    _display.showRotateChange(_speed);
 }
 
 void Meun::timeSelectingButtonControl()
@@ -290,7 +344,7 @@ void Meun::showIntervalTimeChangeWithTime()
 void Meun::showExposureTimeChangeWithTime()
 {
     _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
-    _display.showExposureTimeChange(_exposureTimeChangeIndex);
+    _display.showExposureTimeChange(timeSelectChangeIndex);
 }
 
 void Meun::switchWhichTimeSelectedToShow()
