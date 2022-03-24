@@ -62,7 +62,6 @@ private:
     int timeSelectChangeIndex = 0;
     void timeChangeButtonControl();
     void exposureTimeButtonControl();
-    int _exposureTimeChangeIndex = 0;
     void exposureTimeChangeButtonControl();
 
     void showIntervalTimeChangeWithTime();
