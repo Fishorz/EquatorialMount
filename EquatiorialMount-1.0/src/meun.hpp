@@ -65,6 +65,9 @@ private:
     int _exposureTimeChangeIndex = 0;
     void exposureTimeChangeButtonControl();
 
+    void showIntervalTimeChangeWithTime();
+    void showExposureTimeChangeWithTime();
+
     void switchWhichTimeSelectToChange(bool dir);
     void switchWhichTimeSelectedToShow();
 
@@ -247,6 +250,7 @@ void Meun::timeSelectingButtonControl()
     switch (_buttonFunction)
     {
     case buttomFunction::perviousMeun:
+        timeSelectChangeIndex = 0;
         _meunState = meunState::atMainMeun;
         break;
     case buttomFunction::increase:
@@ -267,29 +271,40 @@ void Meun::timeSelectingButtonControl()
     }
 
     timeSelectChangeIndex = IndexLimit(timeSelectChangeIndex, 2, 0);
+    // Because here is showing the meun, so can not add reflash func here.
     if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
     {
-        _display.showIntervalTimeChange(timeSelectChangeIndex);
+        showIntervalTimeChangeWithTime();
     }
     else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
     {
-        _display.showExposureTimeChange(timeSelectChangeIndex);
+        showExposureTimeChangeWithTime();
     }
+}
+
+void Meun::showIntervalTimeChangeWithTime()
+{
+    _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
+    _display.showIntervalTimeChange(timeSelectChangeIndex);
+}
+
+void Meun::showExposureTimeChangeWithTime()
+{
+    _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
+    _display.showExposureTimeChange(_exposureTimeChangeIndex);
 }
 
 void Meun::switchWhichTimeSelectedToShow()
 {
     if (_mainMeunIndex == mainMenu::intervalTimeControl_mainMenu)
     {
-        _display.getTime(_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec());
         _display.displayReflash();
-        _display.showIntervalTimeChange(timeSelectChangeIndex);
+        showIntervalTimeChangeWithTime();
     }
     else if (_mainMeunIndex == mainMenu::exposureTimeControl_mainMenu)
     {
-        _display.getTime(_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec());
         _display.displayReflash();
-        _display.showExposureTimeChange(_exposureTimeChangeIndex);
+        showExposureTimeChangeWithTime();
     }
 }
 
@@ -397,18 +412,18 @@ void Meun::meunControlor()
     case (meunState::atTakingTimelapse):
         logger.println("Show Timelapse");
         logger.println("Display Time setting");
-        logger.println("Exposure min = ");
+        logger.print("Exposure min = ");
         logger.print(_exposureTimeController.getMins());
         logger.print(" sec = ");
         logger.print(_exposureTimeController.getSec());
         logger.print(" onetenthsec = ");
-        logger.print(_exposureTimeController.getOneTenthSec());
-        logger.println("Interval min = ");
+        logger.println(_exposureTimeController.getOneTenthSec());
+        logger.print("Interval min = ");
         logger.print(_intervalTimeController.getMins());
-        logger.print(" Interval = ");
+        logger.print(" sec = ");
         logger.print(_intervalTimeController.getSec());
-        logger.print(" Interval = ");
-        logger.print(_intervalTimeController.getOneTenthSec());
+        logger.print(" onetenthsec = ");
+        logger.println(_intervalTimeController.getOneTenthSec());
         if (_buttonFunction == buttomFunction::perviousMeun)
         {
             _meunState = meunState::atMainMeun;
