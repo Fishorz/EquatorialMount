@@ -45,7 +45,7 @@ public:
     void showStartMeun();
     // void showPerviousTime(int mins, int sec, int oneTenthSec);
     void showMainMeun(int mainMeunOrder);
-    void showSubMeun(int subMeunOrder); // abandon
+    // void showSubMeun(int subMeunOrder); // abandon
 
     void showIntervalTimeChange(int timeOrder); // layer 01
     void showExposureTimeChange(int timeOrder); // layer 02
@@ -93,22 +93,22 @@ void TFTLCD::showStartMeun()
     delay(200);
 }
 
-void TFTLCD::showSubMeun(int subMeunOrder)
-{
-    if (_isDisplayReflash == false)
-    {
-        _lastSubMeunOrder = subMeunOrder;
-        int connerX = 30;
-        int connerY = 30;
-        logger.print("subMeunOrder");
-        tft.fillScreen(ST77XX_BLACK);
-        tft.setTextWrap(false);
-        tft.setCursor(20, 30);
-        tft.setTextSize(2);
-        tft.setTextColor(ST77XX_YELLOW);
-    }
-    _isDisplayReflash = true;
-}
+// void TFTLCD::showSubMeun(int subMeunOrder)
+// {
+//     if (_isDisplayReflash == false)
+//     {
+//         _lastSubMeunOrder = subMeunOrder;
+//         int connerX = 30;
+//         int connerY = 30;
+//         logger.print("subMeunOrder");
+//         tft.fillScreen(ST77XX_BLACK);
+//         tft.setTextWrap(false);
+//         tft.setCursor(20, 30);
+//         tft.setTextSize(2);
+//         tft.setTextColor(ST77XX_YELLOW);
+//     }
+//     _isDisplayReflash = true;
+// }
 
 void TFTLCD::showExposureTimeChange(int timeOrder)
 {
