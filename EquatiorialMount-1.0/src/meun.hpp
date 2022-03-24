@@ -371,6 +371,11 @@ void Meun::meunControlor()
         _LCDinit = true;
         logger.println("init display.");
     }
+    if (_buttonFunction == buttomFunction::start)
+    {
+        _meunState = meunState::atTakingTimelapse;
+    }
+
     switch (_meunState)
     {
         //-----------------------------------at main meun
@@ -387,6 +392,27 @@ void Meun::meunControlor()
     case (meunState::changingTime):
         // logger.println("changingTime");
         timeChangeButtonControl();
+        break;
+
+    case (meunState::atTakingTimelapse):
+        logger.println("Show Timelapse");
+        logger.println("Display Time setting");
+        logger.println("Exposure min = ");
+        logger.print(_exposureTimeController.getMins());
+        logger.print(" sec = ");
+        logger.print(_exposureTimeController.getSec());
+        logger.print(" onetenthsec = ");
+        logger.print(_exposureTimeController.getOneTenthSec());
+        logger.println("Interval min = ");
+        logger.print(_intervalTimeController.getMins());
+        logger.print(" Interval = ");
+        logger.print(_intervalTimeController.getSec());
+        logger.print(" Interval = ");
+        logger.print(_intervalTimeController.getOneTenthSec());
+        if (_buttonFunction == buttomFunction::perviousMeun)
+        {
+            _meunState = meunState::atMainMeun;
+        }
         break;
     default:
         break;
