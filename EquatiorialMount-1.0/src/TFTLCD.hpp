@@ -159,8 +159,8 @@ void TFTLCD::showExposureTimeChange(int timeOrder)
         default:
             break;
         }
+        _isDisplayReflash = true;
     }
-    _isDisplayReflash = true;
 }
 
 void TFTLCD::showIntervalTimeChange(int timeOrder)
@@ -213,8 +213,8 @@ void TFTLCD::showIntervalTimeChange(int timeOrder)
         default:
             break;
         }
+        _isDisplayReflash = true;
     }
-    _isDisplayReflash = true;
 }
 
 void TFTLCD::showRotateChange(int speed)
@@ -228,11 +228,12 @@ void TFTLCD::showRotateChange(int speed)
         tft.setTextSize(textSize);
         tft.setTextColor(ST77XX_YELLOW);
         tft.println("Rotate Speed");
-
         tft.setCursor(30, 30);
         tft.println("Speed = ");
-        tft.setCursor(50, 30);
+        tft.setCursor(80, 30);
         tft.println(speed);
+
+        _isDisplayReflash = true;
     }
 }
 
@@ -249,9 +250,11 @@ void TFTLCD::showRotateMode(bool mode)
         tft.println("Rotate Mode");
 
         tft.setCursor(30, 30);
-        tft.println("Mode = ");
-        tft.setCursor(50, 30);
+        tft.println("Mode V V V ");
+        tft.setCursor(40, 50);
         mode ? tft.println("Follow") : tft.println("UnFollw");
+
+        _isDisplayReflash = true;
     }
 }
 
