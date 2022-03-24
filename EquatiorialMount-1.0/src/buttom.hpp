@@ -57,11 +57,11 @@ int Buttom::commandHandler()
 {
     getButtomStatus();
 
-    // if (_perviousButtomStatus && _selectButtomStatus)
-    // {
-    //     _command = buttomFunction::start;
-    //     return (_command);
-    // }
+    if (_perviousButtomStatus && _selectButtomStatus)
+    {
+        _command = buttomFunction::start;
+        return (_command);
+    }
 
     if (_numIncreaseButtomStatus == LOW && _lastNumIncreaseButtomStatus)
     {
