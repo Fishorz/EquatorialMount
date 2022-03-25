@@ -25,7 +25,7 @@ Logger logger;
 Buttom buttom;
 Meun meun;
 TFTLCD tft;
-GY91sensor GY91T;
+// GY91sensor GY91T;
 
 enum meunState
 {
@@ -51,7 +51,7 @@ void setup()
     logger.println("startUp");
     tft.showStartMeun();
     buttom.setButtomPin(A3, A1, A2, A0);
-    GY91T.setPin(A4, A5);
+    // GY91T.setPin(A4, A5);
 }
 
 void loop()
@@ -60,6 +60,4 @@ void loop()
     // Serial.print("command = ");
     // Serial.println(command);
     meun.getFunction(command);
-    Serial.print("getmDirection");
-    Serial.println(GY91T.getmDirection());
 }

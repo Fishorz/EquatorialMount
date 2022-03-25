@@ -6,7 +6,7 @@
 #include "Time.hpp"
 #include "TFTLCD.hpp"
 #include "motorControl.hpp"
-
+#include "GY91sensor.hpp"
 /*meun description------------------------------------------------------------------
 
 --mainMeun--              --sub meun--
@@ -50,6 +50,7 @@ private:
     Time _intervalTimeController;
     Time _exposureTimeController;
     TFTLCD _display;
+    GY91sensor GY91;
     motorControl _StepperMotor;
     int _speed;
     void mainMeunIndexLimit();
@@ -74,7 +75,7 @@ private:
     void rotateModeButtonControl();
     void autoAPAButtonControl();
 
-    int _LCDinit = false;
+    int initSetup = false;
     int IndexLimit(int index, int max, int min);
 
     enum meunState
@@ -444,11 +445,12 @@ void Meun::timeChangeButtonControl() // true is change interval.
 
 void Meun::meunControlor()
 {
-    if (_LCDinit == false)
+    if (initSetup == false)
     {
+        GY91.setup();
         _display.setup();
-        _LCDinit = true;
-        logger.println("init display.");
+        initSetup = true;
+        logger.println("init setup finish.");
     }
     if (_buttonFunction == buttomFunction::start)
     {

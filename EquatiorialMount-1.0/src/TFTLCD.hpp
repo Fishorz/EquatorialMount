@@ -37,6 +37,8 @@ private:
     int _mins;
     int _sec;
     int _oneTenthSec;
+    int _magHorizDirection;
+    int _angle;
     bool _isDisplayReflash = false; // is the display refash yet?
     // bool reflashControl();
 
@@ -57,6 +59,7 @@ public:
 
     void showTakingTimelapse();
     void getTime(int mins, int sec, int oneTenthSec);
+    void getAutoAPAData(int magHorizDirection, int angle);
     enum mainMenu
     {
         intervalTimeControl_mainMenu,
@@ -70,6 +73,12 @@ public:
 void TFTLCD::displayReflash()
 {
     _isDisplayReflash = false;
+}
+
+void TFTLCD::getAutoAPAData(int magHorizDirection, int angle)
+{
+    _magHorizDirection = magHorizDirection;
+    _angle = angle;
 }
 
 void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
@@ -125,7 +134,9 @@ void TFTLCD::showAutoAPA()
     tft.setTextColor(ST77XX_YELLOW);
     tft.println("magHorizDirection");
     tft.setCursor(10, 30);
-    // tft.println(GY91.getmDirection());
+    tft.println(_magHorizDirection);
+    logger.print("magHorizDirection = ");
+    logger.println(_magHorizDirection);
 }
 
 void TFTLCD::showExposureTimeChange(int timeOrder)

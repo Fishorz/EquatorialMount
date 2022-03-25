@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Time_h
+#define Time_h
 #include <Arduino.h>
 #include "Logger.hpp"
 
@@ -115,3 +116,5 @@ void Time::secLimit(unsigned sec)
     // return (_sec);
     _sec = constrain(sec, 0, 59);
 }
+
+#endif

@@ -3,6 +3,10 @@
 #include <Arduino.h>
 #include <MPU9250_asukiaaa.h>
 #include <Adafruit_BMP280.h>
+
+#define SDA_PIN A4
+#define SCL_PIN A5 // Or set to -1 and connect to Arduino RESET pin
+
 class GY91sensor
 {
 private:
@@ -13,14 +17,14 @@ private:
     void getData();
 
 public:
-    void setPin(byte SDA_PIN, byte SCL_PIN);
+    void setup();
     int getmDirection();
 };
 
-void GY91sensor::setPin(byte SDA_PIN, byte SCL_PIN)
+void GY91sensor::setup()
 {
-    _SDA_PIN = SDA_PIN;
-    _SCL_PIN = SCL_PIN;
+    // _SDA_PIN = SDA_PIN;
+    // _SCL_PIN = SCL_PIN;
     Wire.begin();
     MPU9250.setWire(&Wire);
 
