@@ -7,6 +7,7 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Time.hpp>
+#include <GY91sensor.hpp>
 
 #if defined(ARDUINO_FEATHER_ESP32) // Feather Huzzah32
 #define TFT_CS 14
@@ -29,6 +30,7 @@
 class TFTLCD
 {
 private:
+    // GY91sensor GY91;
     Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
     int _lastMainMeunOrder;
     int _lastSubMeunOrder;
@@ -51,7 +53,7 @@ public:
     void showExposureTimeChange(int timeOrder); // layer 02
     void showRotateChange(int speed);           // layer 03 speed change
     void showRotateMode(bool mode);             // layer 04 mode select
-    void autoAPA();                             // layer 05 auto aim polar alignment
+    void showAutoAPA();                         // layer 05 auto aim polar alignment
 
     void showTakingTimelapse();
     void getTime(int mins, int sec, int oneTenthSec);
@@ -80,6 +82,7 @@ void TFTLCD::getTime(int mins, int sec, int oneTenthSec)
 void TFTLCD::setup()
 {
     tft.initR(INITR_BLACKTAB); // Init ST7735S chip, black tab
+    // GY91.setPin(A4, A5);
 }
 
 void TFTLCD::showStartMeun()
@@ -109,6 +112,21 @@ void TFTLCD::showStartMeun()
 //     }
 //     _isDisplayReflash = true;
 // }
+
+void TFTLCD::showAutoAPA()
+{
+    // int selected_Y = 45;
+    // int align_Y = 40;
+    int textSize = 1;
+    tft.fillScreen(ST77XX_BLACK);
+    tft.setTextWrap(false);
+    tft.setCursor(10, 10);
+    tft.setTextSize(textSize);
+    tft.setTextColor(ST77XX_YELLOW);
+    tft.println("magHorizDirection");
+    tft.setCursor(10, 30);
+    // tft.println(GY91.getmDirection());
+}
 
 void TFTLCD::showExposureTimeChange(int timeOrder)
 {

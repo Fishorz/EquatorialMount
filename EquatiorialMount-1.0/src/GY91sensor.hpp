@@ -1,5 +1,5 @@
-#ifndef meun_h
-#define meun_h
+#ifndef GY91sensor_h
+#define GY91sensor_h
 #include <Arduino.h>
 #include <MPU9250_asukiaaa.h>
 #include <Adafruit_BMP280.h>
@@ -14,6 +14,7 @@ private:
 
 public:
     void setPin(byte SDA_PIN, byte SCL_PIN);
+    int getmDirection();
 };
 
 void GY91sensor::setPin(byte SDA_PIN, byte SCL_PIN)
@@ -65,5 +66,11 @@ void GY91sensor::getData()
         // Serial.print("\tmagZ: " + String(mZ));
         // Serial.print("\thorizontalDirection: " + String(mDirection));
     }
+}
+
+int GY91sensor::getmDirection()
+{
+    getData();
+    return (_mDirection);
 }
 #endif

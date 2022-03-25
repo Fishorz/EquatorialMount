@@ -83,6 +83,7 @@ private:
         atSubMeun, // selecing time, that mean selecting change sec or mins some else.
         atTakingTimelapse,
         changingTime, // selected sec or mins else, and here can increase or decrease sec or which sub meun selected.
+        atAutoAPA,
     };
 
     enum mainMenu
@@ -241,12 +242,22 @@ void Meun::submeunButtonControl()
         rotateModeButtonControl();
         break;
     case mainMenu::autoAimPolarAlignment:
-        logger.println("autoAimPolarAlignment.");
+        Meun::autoAPAButtonControl();
         break;
 
     default:
         break;
     }
+}
+
+void Meun::autoAPAButtonControl()
+{
+    if (_buttonFunction == buttomFunction::perviousMeun)
+    {
+        _display.displayReflash();
+        _meunState = meunState::atMainMeun;
+    }
+    _display.showAutoAPA();
 }
 
 void Meun::rotateModeButtonControl()
@@ -290,7 +301,7 @@ void Meun::rotateSpeedButtonControl()
     case buttomFunction::decrease:
         _speed--;
         _display.displayReflash();
-        logger.println("decreasing rotate speed.--");
+        logger.println("decreasing rotate speed");
         break;
     default:
         break;
