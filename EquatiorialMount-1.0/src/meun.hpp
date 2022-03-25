@@ -258,6 +258,7 @@ void Meun::autoAPAButtonControl()
         _display.displayReflash();
         _meunState = meunState::atMainMeun;
     }
+    _display.getAutoAPAData(GY91.getmDirection(), 0);
     _display.showAutoAPA();
 }
 
