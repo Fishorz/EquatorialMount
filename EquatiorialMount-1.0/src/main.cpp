@@ -15,14 +15,14 @@
 #include "TimeLapseControl.hpp"
 #include "kickTrigger.hpp"
 #include "meun.hpp"
-#include "buttom.hpp"
+#include "button.hpp"
 #include "Time.hpp"
 #include "motorControl.hpp"
 #include "Logger.hpp"
 #include "TFTLCD.hpp"
 kickTrigger Triggertest;
 Logger logger;
-Buttom buttom;
+button button;
 Meun meun;
 TFTLCD tft;
 // GY91sensor GY91T;
@@ -50,13 +50,14 @@ void setup()
     delay(100);
     logger.println("startUp");
     tft.showStartMeun();
-    buttom.setButtomPin(A3, A1, A2, A0);
+    // button.setbuttonPin(A3, A1, A2, A0);
+    button.setbuttonPin(34, 35, 25, 33);
     // GY91T.setPin(A4, A5);
 }
 
 void loop()
 {
-    int command = buttom.commandHandler();
+    int command = button.commandHandler();
     // Serial.print("command = ");
     // Serial.println(command);
     meun.getFunction(command);
