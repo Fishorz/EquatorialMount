@@ -102,7 +102,7 @@ void TFTLCD::showStartMeun()
     tft.setCursor(0, 30);
     tft.setTextSize(2);
     tft.println("EQ Mount V0.1");
-    delay(200);
+    delay(50);
 }
 
 // void TFTLCD::showSubMeun(int subMeunOrder)
