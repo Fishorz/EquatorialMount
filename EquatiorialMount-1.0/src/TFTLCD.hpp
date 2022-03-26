@@ -56,8 +56,8 @@ public:
     void showRotateChange(int speed);           // layer 03 speed change
     void showRotateMode(bool mode);             // layer 04 mode select
     void showAutoAPA();                         // layer 05 auto aim polar alignment
+    void showTakingTimelapse(int intervalTime[3], int exposureTime[3], int number);
 
-    void showTakingTimelapse();
     void getTime(int mins, int sec, int oneTenthSec);
     void getAutoAPAData(int magHorizDirection, int angle);
     enum mainMenu
@@ -287,12 +287,41 @@ void TFTLCD::showRotateMode(bool mode)
     }
 }
 
-void TFTLCD::showTakingTimelapse()
+void TFTLCD::showTakingTimelapse(int intervalTime[3], int exposureTime[3], int photoNumber)
 {
-    logger.println("Display Taking Timelapse");
-    tft.setCursor(20, 30);
-    tft.setTextSize(2);
-    tft.println("Display Taking Timelapse");
+    if (_isDisplayReflash == false)
+    {
+        int Xspacing = 20;
+        logger.println("Display Taking Timelapse");
+        tft.fillScreen(ST77XX_BLACK);
+        tft.setTextWrap(false);
+        tft.setTextColor(ST77XX_RED);
+        tft.setCursor(10, 10);
+        tft.setTextSize(1);
+        tft.println("Taking Timelapse");
+        tft.setCursor(10, 30);
+        tft.println("Interval Time");
+        tft.setCursor(10 + Xspacing, 45);
+        tft.println(intervalTime[0]);
+        tft.setCursor(10 + 2 * Xspacing, 45);
+        tft.println(intervalTime[1]);
+        tft.setCursor(10 + 3 * Xspacing, 45);
+        tft.println(intervalTime[2]);
+        tft.setCursor(10, 60);
+        tft.println("Exposure Time");
+        tft.setCursor(10 + Xspacing, 75);
+        tft.println(exposureTime[0]);
+        tft.setCursor(10 + 2 * Xspacing, 75);
+        tft.println(exposureTime[1]);
+        tft.setCursor(10 + 3 * Xspacing, 75);
+        tft.println(exposureTime[2]);
+        tft.setCursor(10, 90);
+        tft.println("Photo:");
+        tft.setCursor(45, 90);
+        tft.println(photoNumber);
+
+        _isDisplayReflash = true;
+    }
 }
 
 void TFTLCD::showMainMeun(int mainMeunOrder)
