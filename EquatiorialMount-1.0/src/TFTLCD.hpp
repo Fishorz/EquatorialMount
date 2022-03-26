@@ -22,9 +22,9 @@
 #else
 // For the breakout board, you can use any 2 or 3 pins.
 // These pins will also work for the 1.8" TFT shield.
-#define TFT_CS 4
-#define TFT_RST 6 // Or set to -1 and connect to Arduino RESET pin
-#define TFT_DC 5
+#define TFT_CS 14
+#define TFT_RST 15 // Or set to -1 and connect to Arduino RESET pin
+#define TFT_DC 32
 #endif
 
 class TFTLCD
