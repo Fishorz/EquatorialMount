@@ -21,7 +21,7 @@ public:
     int getSec();
     int getOneTenthSec();
     int calculateMillisecTime(unsigned mins, unsigned sec, unsigned oneTenthSec);
-    int getMillisecTime();
+    unsigned long int getMillisecTime();
 };
 
 int Time::getMins()
@@ -55,7 +55,7 @@ void Time::oneTenthSecChange(bool direction)
     oneTenthSecLimit(_oneTenthSec);
 }
 
-int Time::getMillisecTime()
+unsigned long int Time::getMillisecTime()
 {
     // secLimit(_sec);
     // minsLimit(_mins);
