@@ -7,8 +7,8 @@ class Time
 {
 private:
     unsigned int _mins;
-    unsigned int _sec;
-    unsigned int _oneTenthSec;
+    unsigned int _sec = 5;
+    unsigned int _oneTenthSec = 7;
     void secLimit(unsigned sec);
     void minsLimit(unsigned mins);
     void oneTenthSecLimit(unsigned oneTenthSec);
