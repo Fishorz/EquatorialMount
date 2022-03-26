@@ -444,18 +444,48 @@ void Meun::timeChangeButtonControl() // true is change interval.
     }
 }
 
+void Meun::takingTimelapseButtonControl()
+{
+    if (timelapseInit == false)
+    {
+        // timelapse.setNumbers();
+        _display.displayReflash();
+        timelapse.setTimes(_intervalTimeController.getMillisecTime(), _exposureTimeController.getMillisecTime());
+        timelapseInit = true;
+    }
+    if (_lastTimelapseNumber != timelapse.getNumber())
+    {
+        _display.displayReflash();
+        _lastTimelapseNumber = timelapse.getNumber();
+    }
+    timelapse.runTimelapse();
+    int intervalTimeArray[3] = {_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec()};
+    int exposureTimeArray[3] = {_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec()};
+    int photoNumber = timelapse.getNumber();
+
+    _display.showTakingTimelapse(intervalTimeArray, exposureTimeArray, photoNumber);
+    if (_buttonFunction == buttonFunction::perviousMeun)
+    {
+        _display.displayReflash();
+        timelapseInit = false;
+        _meunState = meunState::atMainMeun;
+    }
+}
+
 void Meun::meunControlor()
 {
     if (initSetup == false)
     {
+        timelapse.setpin(26);
         GY91.setup();
         _display.setup();
         initSetup = true;
         logger.println("init setup finish.");
     }
-    if (_buttonFunction == buttomFunction::start)
+    if (_buttonFunction == buttonFunction::start)
     {
         _meunState = meunState::atTakingTimelapse;
+        // logger.println("go to time lapse");
     }
 
     switch (_meunState)
