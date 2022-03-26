@@ -21,7 +21,7 @@ mode Selection            >>08 Follow mode                   //control rotation 
                           >>09 Unfollow mode                 //control rotation follow user setup anytime.
 auto aim polar alignment  >>10 call auto aim polar function. //自動對準極軸
 
-about the buttom(s)
+about the button(s)
 0{pervious meun}
 1{i-- / meun-}  // time++ or meun++
 2{i++ / meun+}  //time-- or meun--
@@ -47,12 +47,18 @@ private:
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
     int _mainMeun;
     int _buttonFunction;
+    int _speed;
+
     Time _intervalTimeController;
     Time _exposureTimeController;
     TFTLCD _display;
     GY91sensor GY91;
     motorControl _StepperMotor;
-    int _speed;
+    timeLapseControl timelapse;
+    int _lastTimelapseNumber;
+
+    bool timelapseInit = false;
+
     void mainMeunIndexLimit();
     void subMeunFunctionControl();
 
@@ -64,6 +70,7 @@ private:
     void timeChangeButtonControl();
     void exposureTimeButtonControl();
     void exposureTimeChangeButtonControl();
+    void takingTimelapseButtonControl();
 
     void showIntervalTimeChangeWithTime();
     void showExposureTimeChangeWithTime();
@@ -110,7 +117,7 @@ private:
         exposure_millisec,
     };
 
-    enum buttomFunction
+    enum buttonFunction
     {
         perviousMeun,
         increase,
@@ -127,9 +134,9 @@ public:
     int getMainMeunOrder();
     int getSubMeunOrder();
     // int getMeunState();
-    void getFunction(int getbuttomFunction)
+    void getFunction(int getbuttonFunction)
     {
-        _buttonFunction = getbuttomFunction;
+        _buttonFunction = getbuttonFunction;
         meunControlor();
         // if (_atMainMeun == meunState::atSubMeun)
         // {
@@ -138,8 +145,8 @@ public:
     };
 };
 
-// void manualControl::getButtomStatus(){
-//     _buttomStatus[0] = digitalRead(_buttomPin[0])};
+// void manualControl::getbuttonStatus(){
+//     _buttonStatus[0] = digitalRead(_buttonPin[0])};
 
 int Meun::IndexLimit(int index, int max, int min)
 {
@@ -187,7 +194,7 @@ void Meun::mainMeunIndexLimit()
 void Meun::mainMeunButtonControl()
 {
     _display.showMainMeun(_mainMeunIndex);
-    if (_buttonFunction == buttomFunction::select)
+    if (_buttonFunction == buttonFunction::select)
     {
         _meunState = meunState::atSubMeun; // go to sub meun
         _display.displayReflash();
@@ -198,11 +205,11 @@ void Meun::mainMeunButtonControl()
 
     switch (_buttonFunction)
     {
-    case (buttomFunction::increase):
+    case (buttonFunction::increase):
         _mainMeunIndex++;
         _display.displayReflash();
         break;
-    case (buttomFunction::decrease):
+    case (buttonFunction::decrease):
         _mainMeunIndex--;
         _display.displayReflash();
         break;
@@ -214,7 +221,7 @@ void Meun::mainMeunButtonControl()
 
 void Meun::submeunButtonControl()
 {
-    if (_buttonFunction == buttomFunction::perviousMeun)
+    if (_buttonFunction == buttonFunction::perviousMeun)
     {
         _subMeunIntex = 0;                  // recovery sub meun intex to 0 order
         _meunState = meunState::atMainMeun; // go to main meun
@@ -253,7 +260,7 @@ void Meun::submeunButtonControl()
 
 void Meun::autoAPAButtonControl()
 {
-    if (_buttonFunction == buttomFunction::perviousMeun)
+    if (_buttonFunction == buttonFunction::perviousMeun)
     {
         _display.displayReflash();
         _meunState = meunState::atMainMeun;
@@ -267,16 +274,16 @@ void Meun::rotateModeButtonControl()
     // logger.println("rotateModeButtonControl");
     switch (_buttonFunction)
     {
-    case buttomFunction::perviousMeun:
+    case buttonFunction::perviousMeun:
         _display.displayReflash();
         _meunState = meunState::atMainMeun;
         break;
-    case buttomFunction::increase:
+    case buttonFunction::increase:
         _rotateDirection = true;
         _display.displayReflash();
         logger.println("change rotate mode");
         break;
-    case buttomFunction::decrease:
+    case buttonFunction::decrease:
         _rotateDirection = false;
         _display.displayReflash();
         logger.println("change rotate mode");
@@ -292,15 +299,15 @@ void Meun::rotateSpeedButtonControl()
     // logger.println("rotateSpeedButtonControl");
     switch (_buttonFunction)
     {
-    case buttomFunction::perviousMeun:
+    case buttonFunction::perviousMeun:
         _meunState = meunState::atMainMeun;
         break;
-    case buttomFunction::increase:
+    case buttonFunction::increase:
         _speed++;
         _display.displayReflash();
         logger.println("increasing rotate speed.");
         break;
-    case buttomFunction::decrease:
+    case buttonFunction::decrease:
         _speed--;
         _display.displayReflash();
         logger.println("decreasing rotate speed");
@@ -315,21 +322,21 @@ void Meun::timeSelectingButtonControl()
 {
     switch (_buttonFunction)
     {
-    case buttomFunction::perviousMeun:
+    case buttonFunction::perviousMeun:
         timeSelectChangeIndex = 0;
         _meunState = meunState::atMainMeun;
         break;
-    case buttomFunction::increase:
+    case buttonFunction::increase:
         timeSelectChangeIndex++;
         _display.displayReflash();
         logger.println("TimeChangeIndex++");
         break;
-    case buttomFunction::decrease:
+    case buttonFunction::decrease:
         timeSelectChangeIndex--;
         _display.displayReflash();
         logger.println("TimeChangeIndex--");
         break;
-    case buttomFunction::select:
+    case buttonFunction::select:
         _meunState = meunState::changingTime;
         break;
     default:
@@ -425,18 +432,18 @@ void Meun::timeChangeButtonControl() // true is change interval.
 
     switch (_buttonFunction)
     {
-    case buttomFunction::perviousMeun:
+    case buttonFunction::perviousMeun:
         _meunState = meunState::atSubMeun;
         break;
-    case buttomFunction::increase:
+    case buttonFunction::increase:
         switchWhichTimeSelectToChange(HIGH);
         switchWhichTimeSelectedToShow();
         break;
-    case buttomFunction::decrease:
+    case buttonFunction::decrease:
         switchWhichTimeSelectToChange(LOW);
         switchWhichTimeSelectedToShow();
         break;
-    case buttomFunction::select:
+    case buttonFunction::select:
         logger.println("Not in use.");
         break;
     default:
@@ -507,24 +514,7 @@ void Meun::meunControlor()
         break;
 
     case (meunState::atTakingTimelapse):
-        logger.println("Show Timelapse");
-        logger.println("Display Time setting");
-        logger.print("Exposure min = ");
-        logger.print(_exposureTimeController.getMins());
-        logger.print(" sec = ");
-        logger.print(_exposureTimeController.getSec());
-        logger.print(" onetenthsec = ");
-        logger.println(_exposureTimeController.getOneTenthSec());
-        logger.print("Interval min = ");
-        logger.print(_intervalTimeController.getMins());
-        logger.print(" sec = ");
-        logger.print(_intervalTimeController.getSec());
-        logger.print(" onetenthsec = ");
-        logger.println(_intervalTimeController.getOneTenthSec());
-        if (_buttonFunction == buttomFunction::perviousMeun)
-        {
-            _meunState = meunState::atMainMeun;
-        }
+        takingTimelapseButtonControl();
         break;
     default:
         break;
@@ -578,15 +568,15 @@ void Meun::subMeunFunctionControl()
         case (intervalTimeControlMeun::interval_mins):
             switch (_buttonFunction)
             {
-            case (buttomFunction::increase):
+            case (buttonFunction::increase):
                 _display.displayReflash();
                 _intervalTimeController.minsChange(HIGH);
                 break;
-            case (buttomFunction::decrease):
+            case (buttonFunction::decrease):
                 _display.displayReflash();
                 _intervalTimeController.minsChange(LOW);
                 break;
-            case (buttomFunction::perviousMeun):
+            case (buttonFunction::perviousMeun):
                 _display.displayReflash();
                 _meunState = meunState::atSubMeun;
                 break;
@@ -599,16 +589,16 @@ void Meun::subMeunFunctionControl()
         case (intervalTimeControlMeun::interval_sec):
             switch (_buttonFunction)
             {
-            case (buttomFunction::increase):
+            case (buttonFunction::increase):
                 // intervalTime.mins(1);
                 _intervalTimeController.secChange(HIGH);
                 _display.displayReflash();
                 break;
-            case (buttomFunction::decrease):
+            case (buttonFunction::decrease):
                 _intervalTimeController.secChange(LOW);
                 _display.displayReflash();
                 break;
-            case (buttomFunction::perviousMeun):
+            case (buttonFunction::perviousMeun):
                 _display.displayReflash();
                 _meunState = meunState::atSubMeun;
                 break;
@@ -621,16 +611,16 @@ void Meun::subMeunFunctionControl()
         case (intervalTimeControlMeun::interval_millisec):
             switch (_buttonFunction)
             {
-            case (buttomFunction::increase):
+            case (buttonFunction::increase):
                 // intervalTime.mins(1);
                 _intervalTimeController.oneTenthSecChange(HIGH);
                 _display.displayReflash();
                 break;
-            case (buttomFunction::decrease):
+            case (buttonFunction::decrease):
                 _intervalTimeController.oneTenthSecChange(LOW);
                 _display.displayReflash();
                 break;
-            case (buttomFunction::perviousMeun):
+            case (buttonFunction::perviousMeun):
                 _display.displayReflash();
                 _meunState = meunState::atSubMeun;
                 break;
@@ -652,14 +642,14 @@ void Meun::subMeunFunctionControl()
         case (exposureTimeControl::exposure_mins):
             switch (_buttonFunction)
             {
-            case (buttomFunction::increase):
+            case (buttonFunction::increase):
                 // intervalTime.mins(1);
                 _exposureTimeController.minsChange(HIGH);
                 break;
-            case (buttomFunction::decrease):
+            case (buttonFunction::decrease):
                 _exposureTimeController.minsChange(LOW);
                 break;
-            case (buttomFunction::perviousMeun):
+            case (buttonFunction::perviousMeun):
                 _display.displayReflash();
                 _meunState = meunState::atSubMeun;
                 break;
@@ -673,14 +663,14 @@ void Meun::subMeunFunctionControl()
         case (exposureTimeControl::exposure_sec):
             switch (_buttonFunction)
             {
-            case (buttomFunction::increase):
+            case (buttonFunction::increase):
                 // intervalTime.mins(1);
                 _exposureTimeController.secChange(HIGH);
                 break;
-            case (buttomFunction::decrease):
+            case (buttonFunction::decrease):
                 _exposureTimeController.secChange(LOW);
                 break;
-            case (buttomFunction::perviousMeun):
+            case (buttonFunction::perviousMeun):
                 _display.displayReflash();
                 _meunState = meunState::atSubMeun;
                 break;
@@ -694,14 +684,14 @@ void Meun::subMeunFunctionControl()
         case (exposureTimeControl::exposure_millisec):
             switch (_buttonFunction)
             {
-            case (buttomFunction::increase):
+            case (buttonFunction::increase):
                 // intervalTime.mins(1);
                 _exposureTimeController.oneTenthSecChange(HIGH);
                 break;
-            case (buttomFunction::decrease):
+            case (buttonFunction::decrease):
                 _exposureTimeController.oneTenthSecChange(LOW);
                 break;
-            case (buttomFunction::perviousMeun):
+            case (buttonFunction::perviousMeun):
                 _display.displayReflash();
                 _meunState = meunState::atSubMeun;
                 break;
@@ -720,15 +710,15 @@ void Meun::subMeunFunctionControl()
     case (mainMenu::rotateEnableControl_mainMenu):
         switch (_buttonFunction)
         {
-        case (buttomFunction::increase):
+        case (buttonFunction::increase):
             _speed++;
             _StepperMotor.setSpeed(_speed);
             break;
-        case (buttomFunction::decrease):
+        case (buttonFunction::decrease):
             _speed--;
             _StepperMotor.setSpeed(_speed);
             break;
-        case (buttomFunction::perviousMeun):
+        case (buttonFunction::perviousMeun):
             _display.displayReflash();
             _meunState = meunState::atSubMeun;
             break;
@@ -742,17 +732,17 @@ void Meun::subMeunFunctionControl()
     case (mainMenu::modeSelection_mainMenu):
         switch (_buttonFunction)
         {
-        case (buttomFunction::increase):
+        case (buttonFunction::increase):
             _StepperMotor.setMode(true);
             _display.displayReflash();
             _display.showRotateMode(true);
             break;
-        case (buttomFunction::decrease):
+        case (buttonFunction::decrease):
             _StepperMotor.setMode(false);
             _display.displayReflash();
             _display.showRotateMode(false);
             break;
-        case (buttomFunction::perviousMeun):
+        case (buttonFunction::perviousMeun):
             _display.displayReflash();
             _meunState = meunState::atSubMeun;
             break;
