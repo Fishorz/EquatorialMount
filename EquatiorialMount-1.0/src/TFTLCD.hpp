@@ -292,7 +292,7 @@ void TFTLCD::showTakingTimelapse(int intervalTime[3], int exposureTime[3], int p
     if (_isDisplayReflash == false)
     {
         int Xspacing = 20;
-        logger.println("Display Taking Timelapse");
+        // logger.println("Display Taking Timelapse");
         tft.fillScreen(ST77XX_BLACK);
         tft.setTextWrap(false);
         tft.setTextColor(ST77XX_RED);
