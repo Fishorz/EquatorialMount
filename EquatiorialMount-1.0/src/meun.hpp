@@ -36,8 +36,9 @@ class Meun
 {
 private:
     byte _lastMeun;
-    int _meunState = meunState::atMainMeun; // True is at main meun; False is at sub meun
-    bool _takingTimelapse = false;          // True is taking timelapse, false is in setting.
+    int _meunState = meunState::atTakingTimelapse;
+    // int _meunState = meunState::atMainMeun; // True is at main meun; False is at sub meun
+    bool _takingTimelapse = false; // True is taking timelapse, false is in setting.
     byte _mainMeunIndex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
