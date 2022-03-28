@@ -13,19 +13,16 @@
 */
 #include <Arduino.h>
 #include "TimeLapseControl.hpp"
-#include "kickTrigger.hpp"
 #include "meun.hpp"
 #include "button.hpp"
-#include "Time.hpp"
-#include "motorControl.hpp"
+// #include "Time.hpp"
+// #include "motorControl.hpp"
 #include "Logger.hpp"
 #include "TFTLCD.hpp"
-kickTrigger Triggertest;
 Logger logger;
 button button;
 Meun meun;
 TFTLCD tft;
-// GY91sensor GY91T;
 
 enum meunState
 {

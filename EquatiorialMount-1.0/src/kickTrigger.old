@@ -6,6 +6,7 @@
 // for canon 16 pulse delayMicroseconds(7330) 16 pulse
 // each pulse is 11us HIGH and 11us LOW
 
+
 class kickTrigger
 {
 private:
