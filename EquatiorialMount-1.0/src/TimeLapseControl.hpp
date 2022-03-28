@@ -1,5 +1,5 @@
 #pragma once
-#include "kickTrigger2.hpp"
+#include "kickTrigger2.h"
 #include "Logger.hpp"
 
 class timeLapseControl
@@ -28,7 +28,7 @@ public:
     void setpin(int pin)
     {
         _pin = pin;
-        takePhoto.taskSetup();
+        // takePhoto.taskSetup();
     }
 };
 
