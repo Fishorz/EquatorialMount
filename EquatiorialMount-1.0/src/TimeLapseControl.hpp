@@ -1,5 +1,5 @@
 #pragma once
-#include "kickTrigger2.h"
+#include "kickTrigger.hpp"
 #include "Logger.hpp"
 
 class timeLapseControl
@@ -11,7 +11,7 @@ private:
     int _exposureTime = 4000;
     int _phtotNumber;
     int _pin;
-    kickTrigger2 takePhoto;
+    kickTrigger takePhoto;
     Logger logger;
     bool isTriggerDone = false;
     bool isExposuring = true;
@@ -28,7 +28,7 @@ public:
     void setpin(int pin)
     {
         _pin = pin;
-        // takePhoto.taskSetup();
+        takePhoto.setPin(_pin);
     }
 };
 

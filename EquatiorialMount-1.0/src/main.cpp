@@ -18,12 +18,15 @@
 // #include "Time.hpp"
 // #include "motorControl.hpp"
 // #include "testClass.hpp"
+// #include "TestCoreTwo.hpp"
 #include "Logger.hpp"
 #include "TFTLCD.hpp"
 Logger logger;
 button button;
 Meun meun;
 TFTLCD tft;
+
+// TaskHandle_t Task1;
 
 enum meunState
 {
@@ -42,6 +45,10 @@ enum mainMenu
     autoAimPolarAlignment,
 };
 
+// void Task1code(void *pvParameters)
+// {
+// }
+
 void setup()
 {
     Serial.begin(9600);
@@ -51,6 +58,15 @@ void setup()
     // button.setbuttonPin(A3, A1, A2, A0);
     button.setbuttonPin(34, 35, 25, 33);
     // GY91T.setPin(A4, A5);
+
+    // xTaskCreatePinnedToCore(
+    //     Task1code, /* Function to implement the task */
+    //     "Task1",   /* Name of the task */
+    //     10000,     /* Stack size in words */
+    //     NULL,      /* Task input parameter */
+    //     1,         /* Priority of the task */
+    //     &Task1,    /* Task handle. TaskHandle_t name */ 
+    //     1);        /* Core where the task should run */
 }
 
 void loop()

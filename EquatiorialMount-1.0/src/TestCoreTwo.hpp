@@ -1,20 +1,16 @@
 #include <Arduino.h>
 
-class kickTrigger2
+class TestCoreTwo
 {
 private:
     TaskHandle_t Task1;
-    byte _IRpin;
-    void setup()
-    {
-    }
+
     /* Core where the task should run */
 
 public:
     void Task1code(void *parameter);
-    void setupTriggerPin(byte pin);
 
-    kickTrigger2()
+    TestCoreTwo()
     {
         xTaskCreatePinnedToCore(
             Task1code, /* Function to implement the task */
