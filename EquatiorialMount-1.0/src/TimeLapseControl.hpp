@@ -88,7 +88,7 @@ void timeLapseControl::runTimelapse()
 
     if (isTriggerDone == false)
     {
-        takePhoto.trigger(NULL);
+        // takePhoto.trigger(NULL);
     }
     // if (currentTimes - _previousStartTakePhotoTime > _exposureTime && isExposuring == true) // to control exposure
     // {
