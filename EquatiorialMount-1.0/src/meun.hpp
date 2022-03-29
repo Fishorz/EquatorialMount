@@ -455,7 +455,7 @@ void Meun::timeChangeButtonControl() // true is change interval.
 
 void Meun::takingTimelapseButtonControl()
 {
-    if (timelapseInit == false)
+    if (!timelapseInit)
     {
         // timelapse.setNumbers();
         _display.displayReflash();

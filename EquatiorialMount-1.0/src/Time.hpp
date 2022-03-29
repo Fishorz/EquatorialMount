@@ -26,7 +26,8 @@ public:
 
 int Time::getMins()
 {
-    return (_mins);
+    // this._mins;
+    return (this->_mins);
 }
 int Time::getSec()
 {
@@ -52,7 +53,7 @@ void Time::secChange(bool direction)
 void Time::oneTenthSecChange(bool direction)
 {
     (direction) ? _oneTenthSec++ : _oneTenthSec--;
-    oneTenthSecLimit(_oneTenthSec);
+    this->oneTenthSecLimit(_oneTenthSec);
 }
 
 unsigned long int Time::getMillisecTime()
