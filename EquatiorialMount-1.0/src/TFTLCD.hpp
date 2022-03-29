@@ -56,7 +56,7 @@ public:
     void showRotateChange(int speed);           // layer 03 speed change
     void showRotateMode(bool mode);             // layer 04 mode select
     void showAutoAPA();                         // layer 05 auto aim polar alignment
-    void showTakingTimelapse(int intervalTime[3], int exposureTime[3], int number);
+    void showTakingTimelapse(Time &intervalTime, Time &exposureTime, int number);
 
     void getTime(int mins, int sec, int oneTenthSec);
     void getAutoAPAData(int magHorizDirection, int angle);
@@ -287,8 +287,9 @@ void TFTLCD::showRotateMode(bool mode)
     }
 }
 
-void TFTLCD::showTakingTimelapse(int intervalTime[3], int exposureTime[3], int photoNumber)
+void TFTLCD::showTakingTimelapse(Time &intervalTime, Time &exposureTime, int photoNumber)
 {
+    Time _intervalTime;
     if (_isDisplayReflash == false)
     {
         int Xspacing = 20;
@@ -302,19 +303,19 @@ void TFTLCD::showTakingTimelapse(int intervalTime[3], int exposureTime[3], int p
         tft.setCursor(10, 30);
         tft.println("Interval Time");
         tft.setCursor(10 + Xspacing, 45);
-        tft.println(intervalTime[0]);
+        tft.println(intervalTime->getMins());
         tft.setCursor(10 + 2 * Xspacing, 45);
-        tft.println(intervalTime[1]);
+        tft.println(intervalTime->getSec());
         tft.setCursor(10 + 3 * Xspacing, 45);
-        tft.println(intervalTime[2]);
+        tft.println(intervalTime->getOneTenthSec());
         tft.setCursor(10, 60);
         tft.println("Exposure Time");
         tft.setCursor(10 + Xspacing, 75);
-        tft.println(exposureTime[0]);
+        tft.println(exposureTime->getMins());
         tft.setCursor(10 + 2 * Xspacing, 75);
-        tft.println(exposureTime[1]);
+        tft.println(exposureTime->getSec());
         tft.setCursor(10 + 3 * Xspacing, 75);
-        tft.println(exposureTime[2]);
+        tft.println(exposureTime->getOneTenthSec());
         tft.setCursor(10, 90);
         tft.println("Photo:");
         tft.setCursor(45, 90);

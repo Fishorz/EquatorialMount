@@ -468,11 +468,9 @@ void Meun::takingTimelapseButtonControl()
         _lastTimelapseNumber = timelapse.getNumber();
     }
     timelapse.runTimelapse();
-    int intervalTimeArray[3] = {_intervalTimeController.getMins(), _intervalTimeController.getSec(), _intervalTimeController.getOneTenthSec()};
-    int exposureTimeArray[3] = {_exposureTimeController.getMins(), _exposureTimeController.getSec(), _exposureTimeController.getOneTenthSec()};
     int photoNumber = timelapse.getNumber();
 
-    _display.showTakingTimelapse(intervalTimeArray, exposureTimeArray, photoNumber);
+    _display.showTakingTimelapse(_intervalTimeController, _exposureTimeController, photoNumber);
     if (_buttonFunction == buttonFunction::perviousMeun)
     {
         _display.displayReflash();
