@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Logger.hpp"
 
-class button
+class Button
 {
 private:
     int _perviousButtonPin;
@@ -36,7 +36,7 @@ public:
     // buttonPin.buttonPin();
 };
 
-void button::setbuttonPin(byte pervious, byte decrease, byte increase, byte select)
+void Button::setbuttonPin(byte pervious, byte decrease, byte increase, byte select)
 {
     _perviousButtonPin = pervious;
     _numIncreaseButtonPin = increase;
@@ -49,7 +49,7 @@ void button::setbuttonPin(byte pervious, byte decrease, byte increase, byte sele
     pinMode(_selectbuttonPin, INPUT);
 }
 
-void button::getButtonStatus()
+void Button::getButtonStatus()
 {
     // logger.println("getbuttonStatus");
     _perviousButtonStatus = digitalRead(_perviousButtonPin);
@@ -58,7 +58,7 @@ void button::getButtonStatus()
     _selectbuttonStatus = digitalRead(_selectbuttonPin);
 }
 
-int button::commandHandler()
+int Button::commandHandler()
 {
     getButtonStatus();
 
