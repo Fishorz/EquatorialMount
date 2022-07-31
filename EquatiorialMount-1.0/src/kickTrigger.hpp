@@ -36,19 +36,19 @@ void kickTrigger::setPin(int triggerPin)
     pinMode(triggerPin, OUTPUT);
     digitalWrite(_triggerPin, LOW);
 
-    xTaskCreatePinnedToCore(
-        kickTrigger::Task1code, /* Function to implement the task */
-        "Task1",                /* Name of the task */
-        10000,                  /* Stack size in words */
-        NULL,                   /* Task input parameter */
-        1,                      /* Priority of the task */
-        &Task1,                 /* Task handle. TaskHandle_t name */
-        1);                     /* Core where the task should run */
+    // xTaskCreatePinnedToCore(
+    //     kickTrigger::Task1code, /* Function to implement the task */
+    //     "Task1",                /* Name of the task */
+    //     10000,                  /* Stack size in words */
+    //     NULL,                   /* Task input parameter */
+    //     1,                      /* Priority of the task */
+    //     &Task1,                 /* Task handle. TaskHandle_t name */
+    //     1);                     /* Core where the task should run */
 }
 
-void kickTrigger::Task1code(void *pvParameters)
-{
-}
+// void kickTrigger::Task1code(void *pvParameters)
+// {
+// }
 
 bool kickTrigger::trigger()
 {
