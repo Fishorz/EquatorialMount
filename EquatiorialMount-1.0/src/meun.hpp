@@ -481,7 +481,7 @@ void Meun::takingTimelapseButtonControl()
 
 void Meun::meunControlor()
 {
-    if (initSetup == false)
+    if (!initSetup)
     {
         timelapse.setpin(26);
         GY91.setup();
