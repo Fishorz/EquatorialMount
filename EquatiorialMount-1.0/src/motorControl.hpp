@@ -97,7 +97,7 @@ void motorControl::run()
         _stepPreviousTime = micros();
         (_stepperHigh) ? digitalWrite(_stepPin, HIGH) : digitalWrite(_stepPin, LOW);
         _stepperHigh = !_stepperHigh;
-        logger.println("running stepper stepperTime = ");
-        logger.print(stepperTime);
+        logger.print("running stepper stepperTime = ");
+        logger.println(stepperTime);
     }
 }
