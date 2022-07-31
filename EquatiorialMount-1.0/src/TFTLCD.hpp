@@ -290,8 +290,7 @@ void TFTLCD::showRotateMode(bool mode)
 void TFTLCD::showTakingTimelapse(Time &intervalTime, Time &exposureTime, int photoNumber)
 {
     Time *_intervalTime = &intervalTime;
-    // Time *_exposureTime;
-    // tft.println(_intervalTime->getMins());
+    Time *_exposureTime = &exposureTime;
     if (_isDisplayReflash == false)
     {
         int Xspacing = 20;
@@ -306,20 +305,18 @@ void TFTLCD::showTakingTimelapse(Time &intervalTime, Time &exposureTime, int pho
         tft.println("Interval Time");
         tft.setCursor(10 + Xspacing, 45);
         tft.println(_intervalTime->getMins());
-        logger.println("_intervalTime->getMins() = ");
-        logger.println(_intervalTime->getMins());
         tft.setCursor(10 + 2 * Xspacing, 45);
-        // tft.println(intervalTime->getSec());
+        tft.println(_intervalTime->getSec());
         tft.setCursor(10 + 3 * Xspacing, 45);
-        // tft.println(intervalTime->getOneTenthSec());
+        tft.println(_intervalTime->getOneTenthSec());
         tft.setCursor(10, 60);
         tft.println("Exposure Time");
         tft.setCursor(10 + Xspacing, 75);
-        // tft.println(exposureTime->getMins());
+        tft.println(_exposureTime->getMins());
         tft.setCursor(10 + 2 * Xspacing, 75);
-        // tft.println(exposureTime->getSec());
+        tft.println(_exposureTime->getSec());
         tft.setCursor(10 + 3 * Xspacing, 75);
-        // tft.println(exposureTime->getOneTenthSec());
+        tft.println(_exposureTime->getOneTenthSec());
         tft.setCursor(10, 90);
         tft.println("Photo:");
         tft.setCursor(45, 90);

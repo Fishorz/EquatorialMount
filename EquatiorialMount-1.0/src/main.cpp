@@ -22,7 +22,7 @@
 #include "Logger.hpp"
 #include "TFTLCD.hpp"
 Logger logger;
-Button button;
+button button;
 Meun meun;
 TFTLCD tft;
 

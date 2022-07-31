@@ -37,19 +37,19 @@ class Meun
 {
 private:
     byte _lastMeun;
-    int _meunState = meunState::atTakingTimelapse;
-    // int _meunState = meunState::atMainMeun; // True is at main meun; False is at sub meun
-    bool _takingTimelapse = false; // True is taking timelapse, false is in setting.
+    // int _meunState = meunState::atTakingTimelapse;
+    int _meunState = meunState::atMainMeun; // True is at main meun; False is at sub meun
+    bool _takingTimelapse = false;          // True is taking timelapse, false is in setting.
     byte _mainMeunIndex = 0;
     byte _subMeunIntex = 0;
     int _intervalTime;
     int _exposureTime;
-    bool _rotateDirection;                     // ture is clockwise, false is anti-clockwise
+    bool _rotateDirection = true;              // ture is clockwise, false is anti-clockwise
     bool _rotateAtPhotoingStatus;              // ture is take photos with rotate, false is take photo without rotate
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
     int _mainMeun;
     int _buttonFunction;
-    int _speed;
+    int _speed = 0;
 
     Time _intervalTimeController;
     Time _exposureTimeController;
@@ -73,6 +73,7 @@ private:
     void exposureTimeButtonControl();
     void exposureTimeChangeButtonControl();
     void takingTimelapseButtonControl();
+    void motorHandler();
 
     void showIntervalTimeChangeWithTime();
     void showExposureTimeChangeWithTime();
@@ -281,11 +282,13 @@ void Meun::rotateModeButtonControl()
         _meunState = meunState::atMainMeun;
         break;
     case buttonFunction::increase:
+        // rotate follow PA
         _rotateDirection = true;
         _display.displayReflash();
         logger.println("change rotate mode");
         break;
     case buttonFunction::decrease:
+        // rotate unfollow PA and follow by users speed.
         _rotateDirection = false;
         _display.displayReflash();
         logger.println("change rotate mode");
@@ -453,6 +456,31 @@ void Meun::timeChangeButtonControl() // true is change interval.
     }
 }
 
+void Meun::motorHandler()
+{
+    // check the motor is Follow PA or not. if true is follow PA.
+    if (_rotateDirection)
+    {
+        _StepperMotor.setMode(true);
+        // logger.println("set stepper follow PA");
+        return;
+    }
+    else
+    {
+        _StepperMotor.setMode(false);
+        if (_speed != 0)
+        {
+            // (_stepperHigh) ? digitalWrite(_stepPin, HIGH) : digitalWrite(_stepPin, LOW);
+            (_speed > 0) ? _StepperMotor.setDirection(HIGH) : _StepperMotor.setDirection(LOW);
+            _StepperMotor.setSpeed(abs(_speed));
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
 void Meun::takingTimelapseButtonControl()
 {
     if (!timelapseInit)
@@ -461,6 +489,7 @@ void Meun::takingTimelapseButtonControl()
         _display.displayReflash();
         timelapse.setTimes(_intervalTimeController.getMillisecTime(), _exposureTimeController.getMillisecTime());
         timelapseInit = true;
+        motorHandler();
     }
     if (_lastTimelapseNumber != timelapse.getNumber())
     {
@@ -468,6 +497,7 @@ void Meun::takingTimelapseButtonControl()
         _lastTimelapseNumber = timelapse.getNumber();
     }
     timelapse.runTimelapse();
+    _StepperMotor.run();
     int photoNumber = timelapse.getNumber();
 
     _display.showTakingTimelapse(_intervalTimeController, _exposureTimeController, photoNumber);
@@ -481,12 +511,13 @@ void Meun::takingTimelapseButtonControl()
 
 void Meun::meunControlor()
 {
-    if (!initSetup)
+    if (initSetup == false)
     {
         timelapse.setpin(26);
         GY91.setup();
         _display.setup();
         initSetup = true;
+        _StepperMotor.setPin(5, 19);
         logger.println("init setup finish.");
     }
     if (_buttonFunction == buttonFunction::start)
