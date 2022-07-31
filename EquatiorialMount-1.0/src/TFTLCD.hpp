@@ -418,10 +418,6 @@ void TFTLCD::showMainMeun(int mainMeunOrder)
     _isDisplayReflash = true;
 }
 
-// void TFTLCD::showPerviousTime(int mins, int sec, int oneTenthSec)
-// {
-// }
-
 void TFTLCD::showTest()
 {
     tft.fillScreen(ST77XX_BLACK);

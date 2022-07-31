@@ -39,8 +39,8 @@ int timeLapseControl::getNumber()
 
 void timeLapseControl::setTimes(unsigned long int intervalTime, unsigned long int exposureTime)
 {
-    // _intervalTime = intervalTime;
-    // _exposureTime = exposureTime;
+    _intervalTime = intervalTime;
+    _exposureTime = exposureTime;
 }
 
 void timeLapseControl::setNumbers(int number)

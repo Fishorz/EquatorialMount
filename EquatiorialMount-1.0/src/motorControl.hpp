@@ -22,12 +22,6 @@ public:
     void setMode(bool mode); // if true rotate Follow Polar Ailgnment With TakingPhoto.
     void setPin(byte dir, byte step);
     void run();
-
-    // enum mode
-    // {
-    //     rotateFollowPolarAilgnmentWithTakingPhoto,
-    //     rotateFollowInputWithoutTakingPhoto,
-    // };
 };
 
 void motorControl::setSpeed(int speed)
@@ -58,27 +52,11 @@ void motorControl::setPin(byte dir, byte step)
 void motorControl::rotateFollowPolarAilgnmentWithTakingPhoto()
 {
     digitalWrite(_dirPin, HIGH);
-    // unsigned long currentTimes = micros();
-    // if (currentTimes - _stepIntervalTimePolarAilgnmentSpeed > _stepPreviousTime)
-    // {
-    //     // stepper motor move half step.
-    //     _stepPreviousTime = micros();
-    //     (_stepperHigh) ? digitalWrite(_stepPin, HIGH) : digitalWrite(_stepPin, LOW);
-    //     _stepperHigh = !_stepperHigh;
-    // }
 }
 
 void motorControl::rotateFollowInputWithoutTakingPhoto()
 {
     digitalWrite(_dirPin, _direction);
-    // unsigned long currentTimes = micros();
-    // if (currentTimes - _stepIntervalTimeInputSpeed > _stepPreviousTime)
-    // {
-    //     // stepper motor move half step.
-    //     _stepPreviousTime = micros();
-    //     (_stepperHigh) ? digitalWrite(_stepPin, HIGH) : digitalWrite(_stepPin, LOW);
-    //     _stepperHigh = !_stepperHigh;
-    // }
 }
 
 void motorControl::run()

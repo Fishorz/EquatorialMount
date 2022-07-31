@@ -1,8 +1,7 @@
+#ifndef kickTrigger_h
+#define kickTrigger_h
 #pragma once
 #include "Logger.hpp"
-// #ifndef takePhoto
-// #define takePhoto
-
 // for canon 16 pulse delayMicroseconds(7330) 16 pulse
 // each pulse is 11us HIGH and 11us LOW
 
@@ -11,6 +10,7 @@ class kickTrigger
 private:
     unsigned long time;
     int _triggerPin;
+    // int _IRledPulse = 11; // us
     int _IRledPulse = 11; // us
     unsigned long _previousTime = 0;
     int _pulseTimes = 16;
@@ -24,10 +24,8 @@ private:
     bool gen16Pulse(); // gen the Hgih Low signal and finish the kick motion
 
 public:
-    TaskHandle_t Task1;
     void setPin(int triggerPin);
     bool trigger();
-    void Task1code(void *pvParameters);
 };
 
 void kickTrigger::setPin(int triggerPin)
@@ -35,27 +33,11 @@ void kickTrigger::setPin(int triggerPin)
     _triggerPin = triggerPin;
     pinMode(triggerPin, OUTPUT);
     digitalWrite(_triggerPin, LOW);
-
-    //     xTaskCreatePinnedToCore(
-    //         this->kickTrigger::Task1code, /* Function to implement the task */
-    //         "Task1",                      /* Name of the task */
-    //         10000,                        /* Stack size in words */
-    //         this,                         /* Task input parameter */
-    //         1,                            /* Priority of the task */
-    //         &Task1,                       /* Task handle. TaskHandle_t name */
-    //         1);                           /* Core where the task should run */
-}
-
-void kickTrigger::Task1code(void *pvParameters)
-{
-    // AsyncHTTPSRequest *l_pThis = (AsyncHTTPSRequest *)pvParameters;
-    // gen16Pulse *l_pThis = (gen16Pulse *)pvParameters;
 }
 
 bool kickTrigger::trigger()
 {
     unsigned long currentTimes = micros();
-    // isPulseDone = gen16Pulse();
     if (isPulseDone && currentTimes - lastGenPulseTime >= 25000)
     {
         lastGenPulseTime = currentTimes;
@@ -126,4 +108,4 @@ bool kickTrigger::gen16Pulse()
         // It mean kicking the button and it doesn't finish to kick the button
     }
 }
-// #endif
+#endif

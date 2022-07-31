@@ -26,7 +26,6 @@ public:
 
 int Time::getMins()
 {
-    // this._mins;
     return (this->_mins);
 }
 int Time::getSec()
@@ -58,9 +57,6 @@ void Time::oneTenthSecChange(bool direction)
 
 unsigned long int Time::getMillisecTime()
 {
-    // secLimit(_sec);
-    // minsLimit(_mins);
-    // oneTenthSecLimit(_oneTenthSec);
     int val = calculateMillisecTime(_mins, _sec, _oneTenthSec);
     return (val);
 }
@@ -74,47 +70,16 @@ int Time::calculateMillisecTime(unsigned mins, unsigned sec, unsigned oneTenthSe
 
 void Time::oneTenthSecLimit(unsigned oneTenthSec)
 {
-    // if (oneTenthSec > 9)
-    // {
-    //     oneTenthSec = 9;
-    // }
-    // else if (oneTenthSec < 0)
-    // {
-    //     oneTenthSec = 0;
-    // }
-    // _oneTenthSec = oneTenthSec;
-    // return (_oneTenthSec);
-
     _oneTenthSec = constrain(_oneTenthSec, 0, 9);
 }
 
 void Time::minsLimit(unsigned mins)
 {
-    // if (mins > 59)
-    // {
-    //     mins = 59;
-    // }
-    // else if (mins < 0)
-    // {
-    //     mins = 0;
-    // }
-    // _mins = mins;
-    // return (_mins);
     _mins = constrain(mins, 0, 59);
 }
 
 void Time::secLimit(unsigned sec)
 {
-    // if (sec > 59)
-    // {
-    //     sec = 59;
-    // }
-    // else if (sec < 0)
-    // {
-    //     sec = 0;
-    // }
-    // _sec = sec;
-    // return (_sec);
     _sec = constrain(sec, 0, 59);
 }
 
