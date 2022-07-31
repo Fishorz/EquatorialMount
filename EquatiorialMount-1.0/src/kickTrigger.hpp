@@ -36,19 +36,21 @@ void kickTrigger::setPin(int triggerPin)
     pinMode(triggerPin, OUTPUT);
     digitalWrite(_triggerPin, LOW);
 
-//     xTaskCreatePinnedToCore(
-//         kickTrigger::Task1code, /* Function to implement the task */
-//         "Task1",                /* Name of the task */
-//         10000,                  /* Stack size in words */
-//         NULL,                   /* Task input parameter */
-//         1,                      /* Priority of the task */
-//         &Task1,                 /* Task handle. TaskHandle_t name */
-//         1);                     /* Core where the task should run */
+    //     xTaskCreatePinnedToCore(
+    //         this->kickTrigger::Task1code, /* Function to implement the task */
+    //         "Task1",                      /* Name of the task */
+    //         10000,                        /* Stack size in words */
+    //         this,                         /* Task input parameter */
+    //         1,                            /* Priority of the task */
+    //         &Task1,                       /* Task handle. TaskHandle_t name */
+    //         1);                           /* Core where the task should run */
 }
 
-// void kickTrigger::Task1code(void *pvParameters)
-// {
-// }
+void kickTrigger::Task1code(void *pvParameters)
+{
+    // AsyncHTTPSRequest *l_pThis = (AsyncHTTPSRequest *)pvParameters;
+    // gen16Pulse *l_pThis = (gen16Pulse *)pvParameters;
+}
 
 bool kickTrigger::trigger()
 {
@@ -60,7 +62,7 @@ bool kickTrigger::trigger()
         isPulseDone = false;
         gen16PulseTimes++;
         // logger.print("pulseTime = ");
-        // logger.println(pulseTimes);
+        // logger.println(lastGenPulseTime);
         // logger.print("currentTimes = ");
         // logger.println(currentTimes);
     }
@@ -95,16 +97,16 @@ bool kickTrigger::gen16Pulse()
             digitalWrite(_triggerPin, HIGH);
             _pulseState = HIGH;
             _genHighLowPulseTimes++;
-            // Serial.println("Pinout High");
+            // logger.println("Pinout High");
         }
         else if (_pulseState == HIGH)
         {
             digitalWrite(_triggerPin, LOW);
             _pulseState = LOW;
-            // Serial.println("Pinout LOW");
+            // logger.println("Pinout LOW");
         }
-        // Serial.print("_previousPulseTimes =");
-        // Serial.println(_previousPulseTimes);
+        // logger.print("_previousPulseTimes =");
+        // logger.println(currentTimes - _previousTime);
     }
 
     if (_genHighLowPulseTimes >= 16)

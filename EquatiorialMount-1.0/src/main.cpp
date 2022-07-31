@@ -51,8 +51,8 @@ enum mainMenu
 
 void setup()
 {
-    Serial.begin(9600);
-    delay(100);
+    Serial.begin(250000);
+    // delay(100);
     logger.println("startUp");
     tft.showStartMeun();
     // button.setbuttonPin(A3, A1, A2, A0);

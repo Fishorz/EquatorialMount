@@ -33,7 +33,7 @@ public:
 void motorControl::setSpeed(int speed)
 {
     _speed = speed;
-    _stepIntervalTimeInputSpeed = _speed * 100;
+    _stepIntervalTimeInputSpeed = _speed * 10;
 }
 
 void motorControl::setDirection(bool direction)
@@ -87,7 +87,7 @@ void motorControl::run()
     int stepperTime;
     if (_speed == 0 && _mode == false)
     {
-        logger.println("speed = 0 and return");
+        // logger.println("speed = 0 and return");
         return;
     }
     stepperTime = (_mode) ? _stepIntervalTimePolarAilgnmentSpeed : _stepIntervalTimeInputSpeed;
@@ -97,7 +97,7 @@ void motorControl::run()
         _stepPreviousTime = micros();
         (_stepperHigh) ? digitalWrite(_stepPin, HIGH) : digitalWrite(_stepPin, LOW);
         _stepperHigh = !_stepperHigh;
-        logger.print("running stepper stepperTime = ");
-        logger.println(stepperTime);
+        // logger.print("running stepper stepperTime = ");
+        // logger.println(stepperTime);
     }
 }

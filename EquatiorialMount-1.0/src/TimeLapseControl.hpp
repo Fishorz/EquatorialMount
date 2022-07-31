@@ -7,7 +7,7 @@ class timeLapseControl
 private:
     unsigned long time;
     int _istrigger = false;
-    int _intervalTime = 3000;
+    int _intervalTime = 2000;
     int _exposureTime = 4000;
     int _phtotNumber;
     int _pin;
@@ -88,40 +88,6 @@ void timeLapseControl::runTimelapse()
 
     if (isTriggerDone == false)
     {
-        // takePhoto.trigger(NULL);
+        isTriggerDone = takePhoto.trigger();
     }
-    // if (currentTimes - _previousStartTakePhotoTime > _exposureTime && isExposuring == true) // to control exposure
-    // {
-    //     if (isTriggerDone == false)
-    //     {
-    //         isTriggerDone = takePhoto.trigger();
-    //         // logger.println("gen signal to ------------------START Exposure");
-    //     }
-    //     else
-    //     {
-    //         isExposuring = false;
-    //         isTriggerDone = false;
-    //         waitingExposure = true; // go to idle a intervalTimes
-    //         logger.println("interval count Times");
-    //     }
-    //     // logger.println("exposure Start");
-    // }
-    // if (currentTimes - _previousStartTakePhotoTime > _intervalTime && waitingExposure == true) // to control idle status
-    // {
-    //     if (isTriggerDone == false)
-    //     {
-    //         isTriggerDone = takePhoto.trigger();
-    //         _number++;
-    //         _previousStartTakePhotoTime = millis();
-    //         // logger.println("gen signal to ---------------------------------------------END Exposure");
-    //     }
-    //     else
-    //     {
-    //         waitingExposure = false;
-    //         isTriggerDone = false;
-    //         isExposuring = true; // next go to exposure
-    //         logger.println("exposure count time");
-    //     }
-    //     // logger.println("exposure End");
-    // }
 }
