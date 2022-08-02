@@ -38,10 +38,10 @@ void kickTrigger::setPin(int triggerPin)
 bool kickTrigger::trigger()
 {
     unsigned long currentTimes = micros();
-    if (isPulseDone && currentTimes - lastGenPulseTime >= 25000)
+    if (isPulseDone && currentTimes - lastGenPulseTime >= 7330)
     {
-        lastGenPulseTime = currentTimes;
-        isPulseDone = false;
+        // lastGenPulseTime = currentTimes;
+        isPulseDone = false; 
         gen16PulseTimes++;
         // logger.print("pulseTime = ");
         // logger.println(lastGenPulseTime);
@@ -58,6 +58,11 @@ bool kickTrigger::trigger()
     if (isPulseDone == false)
     {
         isPulseDone = gen16Pulse();
+        if (isPulseDone)
+        {
+            lastGenPulseTime = currentTimes;
+        }
+        // lastGenPulseTime = currentTimes
         // logger.print("isPulseDone?");
         // logger.println(isPulseDone ? "T" : "F");
     }

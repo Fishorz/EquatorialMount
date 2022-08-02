@@ -42,8 +42,8 @@ private:
     bool _takingTimelapse = false;          // True is taking timelapse, false is in setting.
     byte _mainMeunIndex = 0;
     byte _subMeunIntex = 0;
-    int _intervalTime;
-    int _exposureTime;
+    // int _intervalTime = 1000;
+    // int _exposureTime = 1000;
     bool _rotateDirection = true;              // ture is clockwise, false is anti-clockwise
     bool _rotateAtPhotoingStatus;              // ture is take photos with rotate, false is take photo without rotate
     void _semiAutomaticAlignmentOfpolarAxis(); // auto find polar axis function >> to be class?
@@ -487,6 +487,7 @@ void Meun::takingTimelapseButtonControl()
     {
         // timelapse.setNumbers();
         _display.displayReflash();
+        timelapse.setNumbers(0);
         timelapse.setTimes(_intervalTimeController.getMillisecTime(), _exposureTimeController.getMillisecTime());
         timelapseInit = true;
         motorHandler();

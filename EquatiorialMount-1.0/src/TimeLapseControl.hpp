@@ -7,8 +7,8 @@ class timeLapseControl
 private:
     unsigned long time;
     int _istrigger = false;
-    int _intervalTime = 2000;
-    int _exposureTime = 4000;
+    int _intervalTime;
+    int _exposureTime;
     int _phtotNumber;
     int _pin;
     kickTrigger takePhoto;
