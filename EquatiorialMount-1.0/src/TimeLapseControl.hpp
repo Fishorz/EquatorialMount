@@ -81,7 +81,7 @@ void timeLapseControl::runTimelapse()
             logger.println("release the shutter");
             _previousEndTakePhotoTime = currentTimes;
             _phtotNumber++;
-            isTriggerDone = false;
+            // isTriggerDone = false;
         }
         _buttonState = !_buttonState;
     }
