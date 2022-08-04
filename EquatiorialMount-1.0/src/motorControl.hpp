@@ -9,6 +9,7 @@ private:
     bool _stepperHigh = true;
     byte _dirPin;
     byte _stepPin;
+    byte _enPin;
     const int _speedBelongPolarAilgnment = 1000;
     void rotateFollowPolarAilgnmentWithTakingPhoto();
     void rotateFollowInputWithoutTakingPhoto();
@@ -20,7 +21,7 @@ public:
     void setSpeed(int speed);
     void setDirection(bool direction);
     void setMode(bool mode); // if true rotate Follow Polar Ailgnment With TakingPhoto.
-    void setPin(byte dir, byte step);
+    void setPin(byte dir, byte step, byte en);
     void run();
 };
 
@@ -41,12 +42,14 @@ void motorControl::setMode(bool mode)
     (mode) ? rotateFollowPolarAilgnmentWithTakingPhoto() : rotateFollowInputWithoutTakingPhoto();
 }
 
-void motorControl::setPin(byte dir, byte step)
+void motorControl::setPin(byte dir, byte step, byte en)
 {
     _dirPin = dir;
     _stepPin = step;
+    _enPin = en;
     pinMode(dir, OUTPUT);
     pinMode(step, OUTPUT);
+    pinMode(en, OUTPUT);
 }
 
 void motorControl::rotateFollowPolarAilgnmentWithTakingPhoto()
