@@ -518,7 +518,7 @@ void Meun::meunControlor()
         GY91.setup();
         _display.setup();
         initSetup = true;
-        _StepperMotor.setPin(5, 19);
+        _StepperMotor.setPin(5, 19, 17);
         logger.println("init setup finish.");
     }
     if (_buttonFunction == buttonFunction::start)
