@@ -39,8 +39,10 @@ int timeLapseControl::getNumber()
 
 void timeLapseControl::setTimes(unsigned long int intervalTime, unsigned long int exposureTime)
 {
-    _intervalTime = intervalTime;
-    _exposureTime = exposureTime;
+    // _intervalTime = intervalTime;
+    // _exposureTime = exposureTime;
+    _intervalTime = 5000;
+    _exposureTime = 0;
 }
 
 void timeLapseControl::setNumbers(int number)
@@ -71,14 +73,14 @@ void timeLapseControl::runTimelapse()
 
         if (pressShutter)
         {
-            logger.println("Press the shutter");
+            // logger.println("Press the shutter");
             _previousStartTakePhotoTime = currentTimes;
             isTriggerDone = false;
         }
 
         if (releaseShutter)
         {
-            logger.println("release the shutter");
+            // logger.println("release the shutter");
             _previousEndTakePhotoTime = currentTimes;
             _phtotNumber++;
             // isTriggerDone = false;

@@ -16,8 +16,8 @@ private:
     int _pulseTimes = 16;
     bool _pulseState = LOW;
     int _genHighLowPulseTimes = 0;
-    bool isPulseDone;
-    int gen16PulseTimes;
+    bool _isPulseDone;
+    int _gen16PulseTimes;
     unsigned long lastGenPulseTime;
     bool _istrigger = false;
     bool _istriggedPrinted = false;
@@ -38,27 +38,28 @@ void kickTrigger::setPin(int triggerPin)
 bool kickTrigger::trigger()
 {
     unsigned long currentTimes = micros();
-    if (isPulseDone && currentTimes - lastGenPulseTime >= 7330)
+    if (_isPulseDone && currentTimes - lastGenPulseTime >= 7330)
     {
         // lastGenPulseTime = currentTimes;
-        isPulseDone = false; 
-        gen16PulseTimes++;
+        _isPulseDone = false;
+        _gen16PulseTimes++;
         // logger.print("pulseTime = ");
         // logger.println(lastGenPulseTime);
         // logger.print("currentTimes = ");
         // logger.println(currentTimes);
     }
 
-    if (gen16PulseTimes == 2)
+    if (_gen16PulseTimes == 2)
     {
-        gen16PulseTimes = 0;
+        _gen16PulseTimes = 0;
         return (true);
     }
 
-    if (isPulseDone == false)
+    if (_isPulseDone == false)
     {
-        isPulseDone = gen16Pulse();
-        if (isPulseDone)
+        _isPulseDone = gen16Pulse();
+        // logger.println("gen16PulseCore2");
+        if (_isPulseDone)
         {
             lastGenPulseTime = currentTimes;
         }
@@ -96,7 +97,7 @@ bool kickTrigger::gen16Pulse()
         // logger.println(currentTimes - _previousTime);
     }
 
-    if (_genHighLowPulseTimes >= 16)
+    if (_genHighLowPulseTimes >= _pulseTimes)
     {
         _genHighLowPulseTimes = 0;
         _pulseState = LOW;

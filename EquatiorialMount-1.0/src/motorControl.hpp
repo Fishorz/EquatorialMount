@@ -17,18 +17,51 @@ private:
     const int _stepIntervalTimePolarAilgnmentSpeed = _speedBelongPolarAilgnment;
     unsigned long _stepPreviousTime = 0;
 
+    // test code -v-v-v-v-
+    int testVar = 0;
+    // char request[100] = "";
+    volatile bool taskFinished = true;
+
+    static void _run(void *pvParameters)
+    {
+        motorControl *l_pThis = (motorControl *)pvParameters;
+        l_pThis->testVar = 1;
+        l_pThis->taskFinished = true;
+    }
+
 public:
     void setSpeed(int speed);
     void setDirection(bool direction);
     void setMode(bool mode); // if true rotate Follow Polar Ailgnment With TakingPhoto.
     void setPin(byte dir, byte step, byte en);
     void run();
+
+    // test code -v-v-v-v-
+    const int taskCore = 1;
+    const int taskPriority = 1;
+    TaskHandle_t Task1;
+    motorControl(void){};
+
+    void Start(void)
+    {
+        taskFinished = false;
+        // Start Task with input parameter set to "this" class
+        xTaskCreatePinnedToCore(
+            this->_run,   // Function to implement the task
+            "_run",       // Name of the task
+            5000,         // Stack size in words
+            this,         // Task input parameter
+            taskPriority, // Priority of the task
+            &Task1,       // Task handle.
+            taskCore);    // Core where the task should run
+        vTaskDelete(NULL);
+    }
 };
 
 void motorControl::setSpeed(int speed)
 {
     _speed = speed;
-    _stepIntervalTimeInputSpeed = _speed * 10;
+    _stepIntervalTimeInputSpeed = _speed * 5;
 }
 
 void motorControl::setDirection(bool direction)
