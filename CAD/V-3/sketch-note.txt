@@ -1,0 +1,48 @@
+x = (45*cos(t))-(6.5*cos(t+arctan(sin((1-16)*t)/((45/(1.5*16))-cos((1-16)*t)))))-(1.5*cos(16*t))
+y = (-45*sin(t))+(6.5*sin(t+arctan(sin((1-16)*t)/((45/(1.5*16))-cos((1-16)*t)))))+(1.5*sin(16*t))
+
+x = (R*cos(t))-(Rr*cos(t+arctan(sin((1-N)*t)/((R/(E*N))-cos((1-N)*t)))))-(E*cos(N*t))
+y = (-R*sin(t))+(Rr*sin(t+arctan(sin((1-N)*t)/((R/(E*N))-cos((1-N)*t)))))+(E*sin(N*t))
+
+N - Number of rollers
+Rr - Radius of the roller
+R - Radius of the rollers PCD (Pitch Circle Diamater)
+E - Eccentricity - offset from input shaft to a cycloidal disk
+
+N - 48
+Rr - 2.5
+R - 45/2 = 22.5
+E < Rr - 1.2
+
+x = (22.5*cos(t))-(3*cos(t+arctan(sin((1-12)*t)/((22.5/(1.2 *12))-cos((1-12)*t)))))-(1.2 *cos(12*t))
+y = (-22.5*sin(t))+(3*sin(t+arctan(sin((1-12)*t)/((22.5/(1.2 *12))-cos((1-12)*t)))))+(1.2 *sin(12*t))
+
+N = 12
+Rr = 3
+R = 22.5
+E = 1.2 
+
+
+x = (28*cos(t))-(3*cos(t+arctan(sin((1-14)*t)/((28/(1.5*14))-cos((1-14)*t)))))-(1.5*cos(14*t))
+y = (-28*sin(t))+(3*sin(t+arctan(sin((1-14)*t)/((28/(1.5*14))-cos((1-14)*t)))))+(1.5*sin(14*t))
+
+
+N = 14
+Rr = 3
+R = 28
+E = 1.5
+
+
+x = (28*cos(t))-(3*cos(t+arctan(sin((1-13)*t)/((28/(1.5*15))-cos((1-13)*t)))))-(1.5*cos(13*t))
+y = (-28*sin(t))+(3*sin(t+arctan(sin((1-13)*t)/((28/(1.5*15))-cos((1-13)*t)))))+(1.5*sin(13*t))
+
+N = 13
+Rr = 3
+R = 28
+E = 1.5
+
+x = (28*cos(t))-(3*cos(t+arctan(sin((1-13)*t)/((28/(1.5*15))-cos((1-13)*t)))))-(1.5*cos(13*t))
+y = (-28*sin(t))+(3*sin(t+arctan(sin((1-13)*t)/((28/(1.5*15))-cos((1-13)*t)))))+(1.5*sin(13*t))
+
+Rr = 2
+R = 25
